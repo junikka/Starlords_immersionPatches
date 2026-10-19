@@ -1,5 +1,7 @@
 package starlords.ui;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.SettingsAPI;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
@@ -64,48 +66,43 @@ public class RequestIntelPlugin extends BaseIntelPlugin {
 					Lord captor = LordController.getLordById(originator.getCaptor());
 					Color captorUiColor = captor.getFaction().getBaseUIColor();
 					log.info("[Star Lords] Request Intel Plugin rendering text");
-					String captorString = captor.getLordAPI().getNameString() + " of " + captor.getFaction().getDisplayNameWithArticle();
-					info.addPara("Hello, " + Global.getSector().getPlayerPerson().getNameString() + ". We don't know each other very well. "
-							+ "I'm " + originator.getLordAPI().getNameString() + " and have been imprisoned by ", opad);
-					info.addPara(captorString, captorUiColor, opad);
-					info.addPara("I've been rotting in this prison for far too long. The other lords have abandoned me, left me here to rot."
-							+ "If you defeat " + captor.getLordAPI().getNameString() + " and release me I will join you as a loyal lord of the realm. "
-							+ ". So what do you say?", opad);
+					String captorString = captor.getLordAPI().getNameString() + Presentation.text("request.of") + captor.getFaction().getDisplayNameWithArticle();
+                    info.addPara(Presentation.format("request.prison.intro", "player", Global.getSector().getPlayerPerson().getNameString(),
+                            "commander", originator.getLordAPI().getNameString()), opad);
+                    info.addPara(captorString, captorUiColor, opad);
+                    info.addPara(Presentation.format("request.prison.offer", "captor", captor.getLordAPI().getNameString()), opad);
 
 					Utils.addShipHullsWithCodex(info, originator, pad);
 
 					if (request.hasPlayerAgreed() == true) {
 
-						info.addPara("Accepted", Color.GREEN, opad);
-						info.addPara("Excellent! See you soon!", opad);
-						info.addPara(captorString + " current location: " + Utils.getNearbyDescription(this.location), opad);
-						info.addPara(captorString + " current orders: " + Utils.getLordCurrOrders(captor, -100), opad);
+						info.addPara(Presentation.text("request.accepted"), Color.GREEN, opad);
+						info.addPara(Presentation.text("request.excellent_see_you_soon"), opad);
+						info.addPara(captorString + Presentation.text("request.current_location") + Utils.getNearbyDescription(this.location), opad);
+						info.addPara(captorString + Presentation.text("request.current_orders") + Utils.getLordCurrOrders(captor, -100), opad);
 
 					}
 
 					if (request.hasPlayerAgreed() == false) {
-						ButtonAPI button = info.addButton("Accept", ACCEPT, getFactionForUIColors().getBaseUIColor(),
+						ButtonAPI button = info.addButton(Presentation.text("request.accept"), ACCEPT, getFactionForUIColors().getBaseUIColor(),
 								getFactionForUIColors().getDarkUIColor(), (int) width, 20, opad);
 						button.setShortcut(Keyboard.KEY_T, true);
-						ButtonAPI button2 = info.addButton("Reject", ABANDON, getFactionForUIColors().getBaseUIColor(),
+						ButtonAPI button2 = info.addButton(Presentation.text("request.reject"), ABANDON, getFactionForUIColors().getBaseUIColor(),
 								getFactionForUIColors().getDarkUIColor(), (int) width, 20, opad);
 						button2.setShortcut(Keyboard.KEY_U, true);
 					}
 					break;
 				case LordRequest.FIEF_FOR_DEFECTION:
 					log.info("[Star Lords] Request Intel Plugin rendering text");
-					info.addPara("Hello, " + Global.getSector().getPlayerPerson().getNameString() + ". We don't know each other very well. "
-							+ "I'm " + originator.getLordAPI().getNameString() + ". I've been serving " + originator.getFaction().getDisplayNameWithArticle()
-							+ " honourably for quite a while now and what do I have to show for my sacrifices and efforts? Nothing. And my ambition grows together with my discontent."
-							+ "If you agree to gift one of your fiefs I will join you as a loyal lord of the realm."
-							+ ". So what do you say?", opad);
+                    info.addPara(Presentation.format("request.holding.offer", "player", Global.getSector().getPlayerPerson().getNameString(),
+                            "commander", originator.getLordAPI().getNameString(), "faction", originator.getFaction().getDisplayNameWithArticle()), opad);
 
 					Utils.addShipHullsWithCodex(info, originator, pad);
 
 					if (request.hasPlayerAgreed() == true) {
 
-						info.addPara("Accepted", Color.GREEN, opad);
-						info.addPara("Excellent! Which shall be my new demesne?", opad);
+						info.addPara(Presentation.text("request.accepted"), Color.GREEN, opad);
+						info.addPara(Presentation.text("request.excellent_which_shall_be_my_new_demesne"), opad);
 						for (SectorEntityToken fief : LordController.getPlayerLord().getFiefs()) {
 							info.addButton(fief.getName(), fief.getMarket(), getFactionForUIColors().getBaseUIColor(),
 									getFactionForUIColors().getDarkUIColor(), (int) width, 20, opad);
@@ -113,10 +110,10 @@ public class RequestIntelPlugin extends BaseIntelPlugin {
 					}
 
 					if (request.hasPlayerAgreed() == false) {
-						ButtonAPI button = info.addButton("Accept", ACCEPT, getFactionForUIColors().getBaseUIColor(),
+						ButtonAPI button = info.addButton(Presentation.text("request.accept"), ACCEPT, getFactionForUIColors().getBaseUIColor(),
 								getFactionForUIColors().getDarkUIColor(), (int) width, 20, opad);
 						button.setShortcut(Keyboard.KEY_T, true);
-						ButtonAPI button2 = info.addButton("Reject", ABANDON, getFactionForUIColors().getBaseUIColor(),
+						ButtonAPI button2 = info.addButton(Presentation.text("request.reject"), ABANDON, getFactionForUIColors().getBaseUIColor(),
 								getFactionForUIColors().getDarkUIColor(), (int) width, 20, opad);
 						button2.setShortcut(Keyboard.KEY_U, true);
 					}
@@ -153,7 +150,7 @@ public class RequestIntelPlugin extends BaseIntelPlugin {
 			case LordRequest.FIEF_FOR_DEFECTION:
 
 				String days = String.valueOf(Math.round(getTimeRemainingFraction()));
-				String remaining = days + " days remaining";
+				String remaining = days + Presentation.text("request.days_remaining");
 
 				info.addPara(remaining, pad, tc, Misc.getHighlightColor(), days);
 				break;
@@ -161,10 +158,10 @@ public class RequestIntelPlugin extends BaseIntelPlugin {
 				break;
 		}
 
-		String str = "Status: ";
+		String str = Presentation.text("request.status");
 		String status = "";
 		if (request.hasPlayerAgreed())
-			status = "Accepted";
+			status = Presentation.text("request.accepted");
 
 		if (request.hasPlayerAgreed())
 			info.addPara(str + status, pad, tc, Misc.getHighlightColor(), status);
@@ -223,9 +220,9 @@ public class RequestIntelPlugin extends BaseIntelPlugin {
 	}
 
 	private void notifyExpiration() {
-		Global.getSector().getCampaignUI().addMessage(this.request.getRequestCapitalized() + " Request from "
+		Global.getSector().getCampaignUI().addMessage(this.request.getRequestCapitalized() + Presentation.text("request.request_from")
 				+ this.request.getOriginator().getLordAPI().getNameString()
-				+ " HAS EXPIRED.", Color.LIGHT_GRAY);
+				+ Presentation.text("request.has_expired"), Color.LIGHT_GRAY);
 	}
 
 	private void updateLocation() {
@@ -258,7 +255,7 @@ public class RequestIntelPlugin extends BaseIntelPlugin {
 
 	@Override
 	public String getName() {
-		String name = "Lord Request - " + request.getRequestCapitalized() + " from " + request.getOriginator().getLordAPI().getNameString();
+		String name = Presentation.text("request.lord_request") + request.getRequestCapitalized() + Presentation.text("request.from") + request.getOriginator().getLordAPI().getNameString();
 		return name;
 	}
 
@@ -295,7 +292,7 @@ public class RequestIntelPlugin extends BaseIntelPlugin {
 		if (isNew()) {
 			tags.add(Tags.INTEL_NEW);
 		}
-		tags.add("Lord Requests");
+		tags.add(Presentation.text("request.lord_requests"));
 		if (request.hasPlayerAgreed() == true)
 			tags.add(Tags.INTEL_ACCEPTED);
 		return tags;

@@ -1,5 +1,7 @@
 package starlords.console;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.util.Misc;
 import org.lazywizard.console.BaseCommand;
@@ -19,7 +21,7 @@ public class PrintLordTravel implements BaseCommand {
         }
         if (lord == null) {
             lord = LordController.getPlayerLord();
-            Console.showMessage("No Lord provided. Using player");
+            Console.showMessage(Presentation.text("print_lord_travel.no_lord_provided_using_player"));
         }
         SectorEntityToken token;
 
@@ -31,19 +33,19 @@ public class PrintLordTravel implements BaseCommand {
         }
 
         if (token == null) {
-            Console.showMessage("Lord has no current target.");
+            Console.showMessage(Presentation.text("print_lord_travel.lord_has_no_current_target"));
             return CommandResult.ERROR;
         }
 
         float distanceLY = Misc.getDistanceLY(lord.getFleet(),token);
         float speed = lord.getFleet().getTravelSpeed();
 
-        Console.showMessage("Lord " + lord.getLordAPI().getNameString()
-                + "traveling to " + token.getName() + " "
-                + "distance: " + distanceLY + " "
-                + "speed: " + speed + " "
-                + "time at current speed: " + (distanceLY / speed) * 200 + " days "
-                + "time at average speed: " + Utils.getTravelTime(lord.getFleet(),token) + " days ");
+        Console.showMessage(Presentation.text("print_lord_travel.lord") + lord.getLordAPI().getNameString()
+                + Presentation.text("print_lord_travel.traveling_to") + token.getName() + " "
+                + Presentation.text("print_lord_travel.distance") + distanceLY + " "
+                + Presentation.text("print_lord_travel.speed") + speed + " "
+                + Presentation.text("print_lord_travel.time_at_current_speed") + (distanceLY / speed) * 200 + Presentation.text("print_lord_travel.days")
+                + Presentation.text("print_lord_travel.time_at_average_speed") + Utils.getTravelTime(lord.getFleet(),token) + Presentation.text("print_lord_travel.days"));
         return CommandResult.SUCCESS;
     }
 }

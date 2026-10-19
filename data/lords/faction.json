@@ -12,47 +12,83 @@
     "leaderID": "daud",
     "rank_0": "Lord Admiral",
     "rank_1": "Lord High Admiral",
-    "rank_2": "First Star Lord"
+    "rank_2": "First Star Lord",
+    "startingPolicies": {
+      "crown_authority": "HIGH",
+      "noble_authority": "HIGH",
+      "trade_law": "MEDIUM",
+      "feast_law": "MEDIUM"
+    }
   },
   "luddic_church": {
     "rank_0": "Bishop",
     "rank_1": "Archbishop",
-    "rank_2": "Cardinal"
-
+    "rank_2": "Cardinal",
+    "startingPolicies": {
+      "crown_authority": "HIGH",
+      "noble_authority": "MEDIUM",
+      "trade_law": "HIGH",
+      "feast_law": "HIGH"
+    }
   },
   "persean": {
     "leaderID": "reynard_hannan",
     "rank_0": "Megas Doux",
     "rank_1": "Doux",
-    "rank_2": "Megas Doux"
-
+    "rank_2": "Megas Doux",
+    "startingPolicies": {
+      "crown_authority": "LOW",
+      "noble_authority": "VERY_HIGH",
+      "trade_law": "LOW",
+      "feast_law": "LOW"
+    }
   },
   "sindrian_diktat": {
     "leaderID": "andrada",
     "rank_0": "Deputy Star Marshal",
     "rank_1": "Star Marshal",
-    "rank_2": "Generalissimo"
-
+    "rank_2": "Generalissimo",
+    "startingPolicies": {
+      "crown_authority": "VERY_HIGH",
+      "noble_authority": "MEDIUM",
+      "trade_law": "HIGH",
+      "feast_law": "MEDIUM"
+    }
   },
   "tritachyon": {
     "leaderID": "sun",
     "rank_0": "SVP",
     "rank_1": "Executive",
-    "rank_2": "COO"
-
+    "rank_2": "COO",
+    "startingPolicies": {
+      "crown_authority": "MEDIUM",
+      "noble_authority": "LOW",
+      "trade_law": "VERY_LOW",
+      "feast_law": "VERY_LOW"
+    }
   },
   "luddic_path": {
     "leaderID": "cotton",
     "rank_0": "Brother",
     "rank_1": "Brother",
-    "rank_2": "Brother"
-
+    "rank_2": "Brother",
+    "startingPolicies": {
+      "crown_authority": "VERY_HIGH",
+      "noble_authority": "VERY_LOW",
+      "trade_law": "VERY_HIGH",
+      "feast_law": "VERY_HIGH"
+    }
   },
   "pirates": {
     "rank_0": "Pirate Lord",
     "rank_1": "Pirate Lord",
-    "rank_2": "Pirate Lord"
-
+    "rank_2": "Pirate Lord",
+    "startingPolicies": {
+      "crown_authority": "VERY_LOW",
+      "noble_authority": "LOW",
+      "trade_law": "VERY_HIGH",
+      "feast_law": "VERY_LOW"
+    }
   },
   "independent": {
     "canGivesFiefs": false,

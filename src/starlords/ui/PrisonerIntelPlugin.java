@@ -1,5 +1,7 @@
 package starlords.ui;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
@@ -33,12 +35,12 @@ public class PrisonerIntelPlugin extends BaseIntelPlugin {
                 lord.getLordAPI().getPortraitSprite());
         if (lord.getCurrAction() != LordAction.IMPRISONED
                 || !Global.getSector().getPlayerPerson().getId().equals(lord.getCaptor())) {
-            info.addPara("This prisoner was recently freed.", opad);
+            info.addPara(Presentation.text("prisoner.this_prisoner_was_recently_freed"), opad);
             return;
         }
-        info.addPara("You are currently holding " + lord.getLordAPI().getNameString()
-                + " prisoner. Talk to them to ransom them or set them free for future goodwill.", opad);
-        ButtonAPI button = info.addButton("Open Comms", OPEN_COMMS_BUTTON, 150, 20, opad);
+        info.addPara(Presentation.text("prisoner.you_are_currently_holding") + lord.getLordAPI().getNameString()
+                + Presentation.text("prisoner.prisoner_talk_to_them_to_ransom_them_or_set_them_free_for_future"), opad);
+        ButtonAPI button = info.addButton(Presentation.text("prisoner.open_comms"), OPEN_COMMS_BUTTON, 150, 20, opad);
         button.setShortcut(Keyboard.KEY_C, true);
     }
 
@@ -75,7 +77,7 @@ public class PrisonerIntelPlugin extends BaseIntelPlugin {
 
     @Override
     public String getName() {
-        return "Prisoner: " + LordController.getLordById(lordStr).getLordAPI().getNameString();
+        return Presentation.text("prisoner.prisoner") + LordController.getLordById(lordStr).getLordAPI().getNameString();
     }
 
     @Override
@@ -95,7 +97,7 @@ public class PrisonerIntelPlugin extends BaseIntelPlugin {
     @Override
     public Set<String> getIntelTags(SectorMapAPI map) {
         Set<String> tags = super.getIntelTags(map);
-        tags.add("Prisoners");
+        tags.add(Presentation.text("prisoner.prisoners"));
         return tags;
     }
 }

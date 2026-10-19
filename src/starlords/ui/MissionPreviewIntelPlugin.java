@@ -1,5 +1,7 @@
 package starlords.ui;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
@@ -54,7 +56,7 @@ public class MissionPreviewIntelPlugin extends BaseIntelPlugin {
             String post = "one";
             if (person.getPost() != null) post = person.getPost().toLowerCase();
             if (post == null && person.getRank() != null) post = person.getRank().toLowerCase();
-            info.addPara("Mission offered by " + post + " " + person.getNameString() + ", affiliated with " +
+            info.addPara(Presentation.text("mission_preview.mission_offered_by") + post + " " + person.getNameString() + Presentation.text("mission_preview.affiliated_with") +
                             faction.getDisplayNameWithArticle() + ".",
                     opad, faction.getBaseUIColor(), faction.getDisplayNameWithArticleWithoutArticle());
         }
@@ -76,7 +78,7 @@ public class MissionPreviewIntelPlugin extends BaseIntelPlugin {
             mission.setCurrentStage(mission.getStartingStage(), null, null);
             mission.addDescriptionForCurrentStage(info, width, height);
         } catch (Exception e) {
-            info.addPara("Error: Could not get mission description.", opad);
+            info.addPara(Presentation.text("mission_preview.error_could_not_get_mission_description"), opad);
         }
         Object stage = mission.getStartingStage();
         try {
@@ -88,10 +90,10 @@ public class MissionPreviewIntelPlugin extends BaseIntelPlugin {
             mission.setStartingStage(stage);
 
         }
-        ButtonAPI button = info.addButton("Accept", ACCEPT, getFactionForUIColors().getBaseUIColor(),
+        ButtonAPI button = info.addButton(Presentation.text("mission_preview.accept"), ACCEPT, getFactionForUIColors().getBaseUIColor(),
                 getFactionForUIColors().getDarkUIColor(), (int) width, 20, opad);
         button.setShortcut(Keyboard.KEY_T, true);
-        ButtonAPI button2 = info.addButton("Reject", ABANDON, getFactionForUIColors().getBaseUIColor(),
+        ButtonAPI button2 = info.addButton(Presentation.text("mission_preview.reject"), ABANDON, getFactionForUIColors().getBaseUIColor(),
                 getFactionForUIColors().getDarkUIColor(), (int) width, 20, opad);
         button2.setShortcut(Keyboard.KEY_U, true);
     }
@@ -120,7 +122,7 @@ public class MissionPreviewIntelPlugin extends BaseIntelPlugin {
 
     @Override
     protected String getName() {
-        return mission.getBaseName() + " - Mission Offer";
+        return mission.getBaseName() + Presentation.text("mission_preview.mission_offer");
     }
 
     @Override

@@ -1,5 +1,7 @@
 package starlords.console;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.JumpPointAPI;
@@ -20,7 +22,7 @@ public class WarpLord implements BaseCommand {
     public CommandResult runCommand(String args, CommandContext context) {
         String[] argsArr = args.split(" ");
         if (argsArr.length != 1) {
-            Console.showMessage("WarpLord requires 1 argument.");
+            Console.showMessage(Presentation.text("warp_lord.warplord_requires_1_argument"));
             return CommandResult.BAD_SYNTAX;
         }
         Lord lord = LordController.getLordByFirstName(argsArr[0]);
@@ -28,11 +30,11 @@ public class WarpLord implements BaseCommand {
             lord = LordController.getLordById(argsArr[0]);
         }
         if (lord == null || lord.isPlayer()) {
-            Console.showMessage("Lord not found.");
+            Console.showMessage(Presentation.text("warp_lord.lord_not_found"));
             return CommandResult.ERROR;
         }
         if (lord.getFleet() == null || !lord.getFleet().isAlive()) {
-            Console.showMessage("Lord currently has no fleet.");
+            Console.showMessage(Presentation.text("warp_lord.lord_currently_has_no_fleet"));
             return CommandResult.ERROR;
         }
 
@@ -48,7 +50,7 @@ public class WarpLord implements BaseCommand {
         //MemoryAPI mem = lord.getFleet().getMemory();
         //Misc.setFlagWithReason(mem,MemFlags.FLEET_BUSY, LordAI.BUSY_REASON,true,1f);
 
-        Console.showMessage("Warped lord " + lord.getLordAPI().getNameString() + " to player.");
+        Console.showMessage(Presentation.text("warp_lord.warped_lord") + lord.getLordAPI().getNameString() + Presentation.text("warp_lord.to_player"));
         return CommandResult.SUCCESS;
     }
 }

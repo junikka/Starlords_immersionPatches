@@ -32,6 +32,7 @@ import java.util.Iterator;
 
 public class StoredSettings {
     public static void getSettings(){
+        starlords.presentation.Presentation.reload();
         getUniversalSettings();
         if (Global.getSettings().getModManager().isModEnabled("lunalib")){
             getLunaSettings();

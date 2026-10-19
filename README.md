@@ -1,5 +1,11 @@
 # Star Lords
 
+Development: see [BUILDING.md](BUILDING.md) for the reproducible source build and [the immersion design](docs/immersion-audit/MODULAR_PRESENTATION_PROPOSAL.md) for the accepted overhaul plan.
+
+Each successful build updates `jars/StarLords.jar` and creates an installable ZIP. See [TESTING.md](TESTING.md) for a brief new-campaign test using Console Commands and Nexerelin. This fork may require new campaigns between development phases.
+
+Phase 2 provides space-naval terminology (holdings, expeditions, raves, tournaments), per-faction rank ladders, a hand-written dialogue pass and safe dialogue tokens. [PRESENTATION.md](PRESENTATION.md) explains the runtime JSON files and what the next phases add. The original feature and authoring documentation below retains upstream terminology and screenshots.
+
 Star Lords attempts to bring the world of [Starsector](https://fractalsoftworks.com/) to life with many character-centric features. No longer will your only allies be nameless faction fleets who you'll meet once and never again. The core mechanic is the addition of dozens of Lords to the game, each with their own personality, fleet composition, backstory, and agendas.
 
 ![](example/starlords_readme1.PNG)

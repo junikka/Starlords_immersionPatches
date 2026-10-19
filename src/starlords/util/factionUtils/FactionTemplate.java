@@ -1,6 +1,7 @@
 package starlords.util.factionUtils;
 
 import com.fs.starfarer.api.Global;
+import com.fs.starfarer.api.campaign.RepLevel;
 import com.fs.starfarer.api.characters.PersonAPI;
 import com.fs.starfarer.api.impl.campaign.ids.People;
 import com.fs.starfarer.api.util.Misc;
@@ -9,11 +10,15 @@ import lombok.SneakyThrows;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import starlords.ai.utils.TargetUtils;
+import starlords.faction.LawLevel;
+import starlords.faction.Lawset;
 import starlords.lunaSettings.StoredSettings;
 import starlords.plugins.LordInteractionDialogPluginImpl;
 import starlords.util.NexerlinUtilitys;
 import starlords.util.StringUtil;
 import starlords.util.Utils;
+
+import java.util.EnumMap;
 
 @Getter
 public class FactionTemplate {
@@ -74,6 +79,21 @@ public class FactionTemplate {
 
     protected double lordRepChangeFromKillsMulti;
     protected double lordFleetUpkeepCostMulti;
+
+    // policy levels a new campaign starts with; anything not listed starts at MEDIUM
+    protected EnumMap<Lawset.LawType, LawLevel> startingPolicies;
+
+    // requirements for the player to climb this faction's council, see PlayerProgression
+    protected int seatAfterDays;
+    protected RepLevel seatRep;
+    protected int tier1AfterDays;
+    protected RepLevel tier1Rep;
+    protected int tier1Battles;
+    protected int tier2AfterDays;
+    protected RepLevel tier2Rep;
+    protected int tier2Friends;
+    protected int tier2FriendRelation;
+    protected int promotionCooldownDays;
     //private double starlordsOnStartMulti = 1;
     //private double starlordsLifeMulti = 1;
     public FactionTemplate(String factionID){
@@ -127,6 +147,9 @@ public class FactionTemplate {
 
         setLordRepChangeFromKillsMulti("lordRepGainPerWin",json);
 
+        setStartingPolicies("startingPolicies",json);
+        setProgression("progression",json);
+
         insureAttackStatusCorrect();
 
         log.info("  leaderID "+this.leaderID);
@@ -159,6 +182,10 @@ public class FactionTemplate {
         log.info("  commissionIncomeMulti: "+this.lordCommissionedIncomeMulti);
         log.info("  fleetUpkeepCostMulti: "+this.lordFleetUpkeepCostMulti);
         log.info("  lordRepGainPerWinMulti: "+this.lordRepChangeFromKillsMulti);
+        log.info("  startingPolicies: "+this.startingPolicies);
+        log.info("  progression: seat after "+this.seatAfterDays+" days at "+this.seatRep+", tier 1 after "+this.tier1AfterDays+" days at "+this.tier1Rep
+                +" with "+this.tier1Battles+" battles, tier 2 after "+this.tier2AfterDays+" days at "+this.tier2Rep+" with "+this.tier2Friends
+                +" commanders at "+this.tier2FriendRelation+", cooldown "+this.promotionCooldownDays+" days");
 
     }
     /*@SneakyThrows
@@ -172,6 +199,48 @@ public class FactionTemplate {
         LordInteractionDialogPluginImpl.log.info("got leader as null");
         leader = null;
     }*/
+    @SneakyThrows
+    protected void setStartingPolicies(String key, JSONObject json){
+        startingPolicies = new EnumMap<>(Lawset.LawType.class);
+        if (json == null || !json.has(key)) return;
+        JSONObject policies = json.getJSONObject(key);
+        for (Lawset.LawType type : Lawset.LawType.values()) {
+            String id = type.toString().toLowerCase();
+            if (type.pref == null || !policies.has(id)) continue;
+            try {
+                startingPolicies.put(type, LawLevel.valueOf(policies.getString(id).toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                log.warn("unknown starting level " + policies.getString(id) + " for " + id + " in " + factionID);
+            }
+        }
+    }
+    public LawLevel getStartingPolicy(Lawset.LawType type){
+        LawLevel level = startingPolicies == null ? null : startingPolicies.get(type);
+        return level == null ? LawLevel.MEDIUM : level;
+    }
+    @SneakyThrows
+    protected void setProgression(String key, JSONObject json){
+        JSONObject progression = json != null && json.has(key) ? json.getJSONObject(key) : new JSONObject();
+        seatAfterDays = progression.optInt("seatAfterDays", 60);
+        seatRep = getRepLevel(progression, "seatRep", RepLevel.WELCOMING);
+        tier1AfterDays = progression.optInt("tier1AfterDays", 90);
+        tier1Rep = getRepLevel(progression, "tier1Rep", RepLevel.FRIENDLY);
+        tier1Battles = progression.optInt("tier1Battles", 3);
+        tier2AfterDays = progression.optInt("tier2AfterDays", 120);
+        tier2Rep = getRepLevel(progression, "tier2Rep", RepLevel.COOPERATIVE);
+        tier2Friends = progression.optInt("tier2Friends", 3);
+        tier2FriendRelation = progression.optInt("tier2FriendRelation", 25);
+        promotionCooldownDays = progression.optInt("promotionCooldownDays", 30);
+    }
+    private RepLevel getRepLevel(JSONObject json, String key, RepLevel fallback){
+        if (!json.has(key)) return fallback;
+        try {
+            return RepLevel.valueOf(json.optString(key).toUpperCase());
+        } catch (IllegalArgumentException e) {
+            log.warn("unknown reputation level " + json.optString(key) + " for " + key + " in " + factionID);
+            return fallback;
+        }
+    }
     public PersonAPI getLeader(){
         if (leaderID == null) return null;
         PersonAPI person = Global.getSector().getImportantPeople().getPerson(leaderID);

@@ -1,5 +1,7 @@
 package starlords.ui;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.impl.campaign.intel.BaseIntelPlugin;
@@ -43,12 +45,12 @@ public class ProposalIntelPlugin extends BaseIntelPlugin {
         } else {
             info.addImages(128, 128, pad, 0, originator.getLordAPI().getPortraitSprite());
         }
-        info.addPara("Proposal: " + proposal.getSummary(), uiColor, opad);
-        info.addPara("Proposed by: " + LordController.getLordOrPlayerById(
+        info.addPara(Presentation.text("proposal.proposal") + proposal.getSummary(), uiColor, opad);
+        info.addPara(Presentation.text("proposal.proposed_by") + LordController.getLordOrPlayerById(
                 proposal.getOriginator()).getLordAPI().getNameString(), uiColor, opad);
-        info.addPara("Total Support: " + proposal.getTotalSupport(), uiColor, opad);
+        info.addPara(Presentation.text("proposal.total_support") + proposal.getTotalSupport(), uiColor, opad);
 
-        LabelAPI supportText = info.addPara("Supporters: ", uiColor, opad);
+        LabelAPI supportText = info.addPara(Presentation.text("proposal.supporters"), uiColor, opad);
         if (!proposal.getSupporters().isEmpty() || proposal.isPlayerSupports()) {
             int addend = 0;
             if (proposal.isPlayerSupports()) {
@@ -63,14 +65,14 @@ public class ProposalIntelPlugin extends BaseIntelPlugin {
             }
             info.addImages(48 * portraits.length, 48, pad, 0, portraits);
         }
-        info.addButton("Support", SUPPORT_BUTTON,
+        info.addButton(Presentation.text("proposal.support"), SUPPORT_BUTTON,
                 faction.getBrightUIColor(), faction.getDarkUIColor(), 100, 20, opad);
-        ButtonAPI opposeButton = info.addButton("Oppose", OPPOSE_BUTTON,
+        ButtonAPI opposeButton = info.addButton(Presentation.text("proposal.oppose"), OPPOSE_BUTTON,
                 faction.getBrightUIColor(), faction.getDarkUIColor(), 100, 20, opad);
         if (proposal.getPledgedFor().contains(LordController.getPlayerLord().getLordAPI().getId())) {
             opposeButton.setEnabled(false);
             info.addTooltipToPrevious(new ToolTip(200,
-                    "You pledged to support this proposal."), TooltipMakerAPI.TooltipLocation.BELOW);
+                    Presentation.text("proposal.you_pledged_to_support_this_proposal")), TooltipMakerAPI.TooltipLocation.BELOW);
         }
     }
 

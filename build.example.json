@@ -1,0 +1,13 @@
+{
+  "jdkHome": "C:/path/to/jdk-17",
+  "javaRelease": 16,
+  "classpath": [
+    "E:/path/to/Starsector/starsector-core/*.jar",
+    "E:/path/to/Starsector/mods/Nexerelin/jars/*.jar",
+    "E:/path/to/Starsector/mods/LunaLib/jars/*.jar",
+    "E:/path/to/Starsector/mods/Console Commands/jars/*.jar",
+    "E:/path/to/Starsector/mods/SecondInCommand/jars/*.jar",
+    "E:/path/to/development/annotations-*.jar"
+  ],
+  "processorPath": ["E:/path/to/development/lombok-*.jar"]
+}

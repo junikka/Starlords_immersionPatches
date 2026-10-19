@@ -1,5 +1,7 @@
 package starlords.console;
 
+import starlords.presentation.Presentation;
+
 import org.lazywizard.console.BaseCommand;
 import org.lazywizard.console.Console;
 import starlords.util.Utils;
@@ -11,7 +13,7 @@ public class PrintLordsPrisonerProblems implements BaseCommand {
 
         Utils.printLordsWithPrisonerProblems(false, true);
 
-        Console.showMessage("Printed prisoner issues to log");
+        Console.showMessage(Presentation.text("print_lords_prisoner_problems.printed_prisoner_issues_to_log"));
         return CommandResult.SUCCESS;
     }
 }

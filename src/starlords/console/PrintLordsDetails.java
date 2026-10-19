@@ -1,5 +1,7 @@
 package starlords.console;
 
+import starlords.presentation.Presentation;
+
 import org.lazywizard.console.BaseCommand;
 import org.lazywizard.console.Console;
 import starlords.util.Utils;
@@ -11,7 +13,7 @@ public class PrintLordsDetails implements BaseCommand {
 
         Utils.printLordsDetails();
 
-        Console.showMessage("Print full lord list details to log");
+        Console.showMessage(Presentation.text("print_lords_details.print_full_lord_list_details_to_log"));
         return CommandResult.SUCCESS;
     }
 }

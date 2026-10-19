@@ -1,5 +1,7 @@
 package starlords.console;
 
+import starlords.presentation.Presentation;
+
 import org.lazywizard.console.BaseCommand;
 import org.lazywizard.console.Console;
 import starlords.controllers.LordController;
@@ -12,7 +14,7 @@ public class AddLordLoyalty implements BaseCommand {
     public CommandResult runCommand(String args, CommandContext context) {
         String[] argsArr = args.split(" ");
         if (argsArr.length != 2) {
-            Console.showMessage("AddLordLoyalty requires 2 arguments.");
+            Console.showMessage(Presentation.text("add_lord_loyalty.addlordloyalty_requires_2_arguments"));
             return CommandResult.BAD_SYNTAX;
         }
         Lord lord = LordController.getLordByFirstName(argsArr[0]);
@@ -20,7 +22,7 @@ public class AddLordLoyalty implements BaseCommand {
             lord = LordController.getLordById(argsArr[0]);
         }
         if (lord == null || lord.isPlayer()) {
-            Console.showMessage("Lord not found.");
+            Console.showMessage(Presentation.text("add_lord_loyalty.lord_not_found"));
             return CommandResult.ERROR;
         }
 
@@ -28,13 +30,13 @@ public class AddLordLoyalty implements BaseCommand {
         try {
             amount = Integer.parseInt(argsArr[1]);
         } catch (Exception e) {
-            Console.showMessage("Could not parse loyalty to add.");
+            Console.showMessage(Presentation.text("add_lord_loyalty.could_not_parse_loyalty_to_add"));
             return CommandResult.ERROR;
         }
 
         RelationController.modifyLoyalty(lord, amount);
-        Console.showMessage("Faction loyalty of " + lord.getLordAPI().getNameString()
-                + " is now " + RelationController.getLoyalty(lord));
+        Console.showMessage(Presentation.text("add_lord_loyalty.faction_loyalty_of") + lord.getLordAPI().getNameString()
+                + Presentation.text("add_lord_loyalty.is_now") + RelationController.getLoyalty(lord));
         return CommandResult.SUCCESS;
     }
 }

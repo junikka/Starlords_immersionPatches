@@ -80,6 +80,7 @@ public class LordsModPlugin extends BaseModPlugin {
             LordController.loadLords();
             log.info("loaded saved starlords...");
             log.info(LordController.getLordsList().size() + " Lords found");
+            for (Lord lord : LordController.getLordsList()) lord.syncVanillaRank();
             if (LordController.getPlayerLord() == null){
 
             }

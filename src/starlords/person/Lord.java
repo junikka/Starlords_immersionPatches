@@ -20,6 +20,7 @@ import starlords.controllers.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.lwjgl.util.vector.Vector2f;
+import starlords.presentation.Presentation;
 import starlords.ui.PrisonerIntelPlugin;
 import starlords.util.*;
 import starlords.util.factionUtils.FactionTemplateController;
@@ -137,6 +138,7 @@ public class Lord {
         fiefs = new ArrayList<>();
         prisoners = new ArrayList<>();
         ranking = template.ranking;
+        syncVanillaRank();
         persistentData.put("wealth", wealth);
         persistentData.put("ranking", template.ranking);
         persistentData.put("knownToPlayer", false);
@@ -395,6 +397,14 @@ public class Lord {
     public void setRanking(int ranking) {
         this.ranking = ranking;
         persistentData.put("ranking", ranking);
+        syncVanillaRank();
+    }
+
+    // The vanilla comm panel shows the PersonAPI rank, not getTitle(). The starlords_tier_N rank ids are
+    // named per faction in data/world/factions (generated from titles.json by tools/sync_ranks.py).
+    public void syncVanillaRank() {
+        if (lordAPI == null || isPlayer()) return;
+        lordAPI.setRankId("starlords_tier_" + Math.max(0, Math.min(2, ranking)));
     }
 
     public void setFeastInteracted(boolean bool) {
@@ -485,6 +495,9 @@ public class Lord {
     }
 
     public String getTitle() {
+        if (isPlayer && PlayerProgression.getStanding() == PlayerProgression.COMMISSIONED) {
+            return Presentation.text("progression.commissioned_title");
+        }
         return Utils.getFactionTitle(getFaction().getId(),ranking);
     }
 

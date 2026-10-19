@@ -1,6 +1,7 @@
 package starlords.ui;
 
 import com.fs.starfarer.api.Global;
+import starlords.presentation.Presentation;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
@@ -37,27 +38,25 @@ public class EventIntelPlugin extends BaseIntelPlugin {
                 originator.getLordAPI().getPortraitSprite());
         switch (event.getType()) {
             case LordEvent.CAMPAIGN:
-                info.addPara("Marshal " + originator.getLordAPI().getNameString()
-                        + " has raised the navy of the realm. All loyal subjects should rally to the banners!", opad);
-                info.addPara("Location: " + Utils.getNearbyDescription(originator.getFleet()), uiColor, opad);
-                String orderStr = "Assembling Navy";
+                info.addPara(Presentation.format("event.campaign.description", "commander", originator.getLordAPI().getNameString()), opad);
+                info.addPara(Presentation.format("event.location", "location", Utils.getNearbyDescription(originator.getFleet())), uiColor, opad);
+                String orderStr = Presentation.text("event.assembling");
                 if (event.getTarget() != null) {
                     MarketAPI target = event.getTarget().getMarket();
                     if (target.getFaction().isHostileTo(faction)) {
-                        orderStr = "Attacking " + target.getName();
+                        orderStr = Presentation.format("event.attacking", "market", target.getName());
                     } else {
-                        orderStr = "Defending " + target.getName();
+                        orderStr = Presentation.format("event.defending", "market", target.getName());
                     }
                 }
-                info.addPara("Orders: " + orderStr, uiColor, pad);
+                info.addPara(Presentation.format("event.orders", "orders", orderStr), uiColor, pad);
                 break;
             case LordEvent.FEAST:
-                info.addPara("You are cordially invited to the feast of " + originator.getLordAPI().getNameString()
-                        + ". Feasts are an opportunity to meet lords and build rapport.", opad);
-                info.addPara("Location: " + Utils.getNearbyDescription(originator.getFleet()), uiColor, opad);
+                info.addPara(Presentation.format("event.feast.description", "host", originator.getLordAPI().getNameString()), opad);
+                info.addPara(Presentation.format("event.location", "location", Utils.getNearbyDescription(originator.getFleet())), uiColor, opad);
                 break;
         }
-        LabelAPI supportText = info.addPara("Expected Attendees:", uiColor, pad);
+        LabelAPI supportText = info.addPara(Presentation.text("event.attendees"), uiColor, pad);
         int numPortraits = 0;
         int totalPortraits = 1 + event.getParticipants().size();
         String[] portraits = new String[Math.min(MAX_PORTRAITS_PER_ROW, totalPortraits - numPortraits)];
@@ -114,7 +113,7 @@ public class EventIntelPlugin extends BaseIntelPlugin {
 
     @Override
     public String getName() {
-        return "Ongoing " + Character.toUpperCase(event.getType().charAt(0)) + event.getType().substring(1);
+        return Presentation.text(LordEvent.FEAST.equals(event.getType()) ? "event.feast.heading" : "event.campaign.heading");
     }
 
     @Override

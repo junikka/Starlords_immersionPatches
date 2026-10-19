@@ -447,19 +447,9 @@ public class LordGenerator {
         AvailableShipData availableShipData = getAvailableShips(factionID,useAllShips);
         ArrayList<ShipData> ships = new ArrayList<>();
         if (availableShipData == null){
-            //the 'spawn of malice' are the custom people I asked malice to make for this easter egg. a reword for finding so many dammed crashes.
-            String[][] spawnOfMalice = {
-                    {"Lucious"," The Final Boss's","UnKite Plahanx","Lord who's desire can be explained in one word: \"Power\", - though seems to be that \"Knowledge - is Power\" is not in his book. Many deserters, smugglers and even full-fledged pirate warlords rushed to explore a dormant corpse of the former Domain of Man, many gained something in return - revolts, food shortages, women shortages(?) and essentially a headache. Others in most cases - gruesome death of suffocation, evaporation and boredom after all. But some of them could come across at very invaluable tech of the old, for example, domain nanoforge."},
-                    {"Grigoriy"," Aznaev's","Alex's Watcher PMC","Lord who knows something, something that they shouldn't. it was from the very start and it knows, that reality is not what it claims to be. It's revolting for them to think and feel at this point, a mere fleeting thought about this pleasant lie, which is \"life\", crossing its mind every night, but this is enough - They Has No Mouth, and They Must Scream and someone, who's named as \"Alex\" must pay for his suffering"},
-            };
-            //Lord who knows something, something that they shouldn't. it was from the very start and it knows, that reality is not what it claims to be. It's revolting for them to think and feel at this point, a mere fleeting thought about this pleasant lie, which is "life", crossing its mind every night, but this is enough - They Has No Mouth, and They Must Scream and someone, who's named as "Alex" must pay for his suffering
-            int person = Utils.nextInt(spawnOfMalice.length - 1);
-            lord.lore="Every time you so mush as think of this terrifying individual, you shudder in fear. you don't know what they are, or who sent them, but you do know they exist. and they are angry.";
-            if (LordController.getLordByFirstName(spawnOfMalice[person][0]) != null){
-                lord.name = spawnOfMalice[person][0] + spawnOfMalice[person][1];
-                if (spawnOfMalice[person][2] != null) lord.lore = spawnOfMalice[person][2];
-                lord.fleetName = spawnOfMalice[person][3];
-            }
+            // Missing ship data must not replace an authored commander's identity.
+            if (lord.lore == null || lord.lore.trim().isEmpty())
+                lord.lore = starlords.presentation.Presentation.text("generation.fallback.biography");
             log.info("WARNING: was forced to use the final emergency fleet generator for a starlords fleet");
             String finalBackup = "kite_pirates_Raider";//the ultimate weapon of the final war
             lord.shipPrefs = new HashMap<>();

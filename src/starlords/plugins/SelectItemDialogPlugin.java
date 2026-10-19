@@ -1,5 +1,7 @@
 package starlords.plugins;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.Script;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
@@ -64,7 +66,7 @@ public class SelectItemDialogPlugin implements InteractionDialogPlugin {
                 for (int i = 0; i < choices.size(); i++) {
                     options.addOption(choices.get(i), retVals.get(i));
                 }
-                options.addOption("Cancel", null);
+                options.addOption(Presentation.text("select_item.cancel"), null);
                 break;
             case END:
                 retVal = (String) optionData;

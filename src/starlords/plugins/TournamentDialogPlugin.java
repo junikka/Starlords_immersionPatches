@@ -1,5 +1,7 @@
 package starlords.plugins;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.*;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
@@ -108,9 +110,9 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
         conversationDelegate.init(dialog);
         Global.getSector().setPaused(true);
         advanceTournamentStage(false);
-        addText("The tournament is about to start! You eye your fifteen competitors as they take off in their " +
-                "competition-sponsored crafts. Each of them seems determined to take home the prize money " +
-                "and lay claim to the title of best pilot in " + market.getName());
+        addText(Presentation.text("tournament.the_tournament_is_about_to_start_you_eye_your_fifteen_competitor") +
+                Presentation.text("tournament.competition_sponsored_crafts_each_of_them_seems_determined_to_ta") +
+                Presentation.text("tournament.and_lay_claim_to_the_title_of_best_pilot_in") + market.getName());
     }
 
     public void advanceTournamentStage(boolean eliminate) {
@@ -135,12 +137,12 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
             }
             Collections.shuffle(participants);
             if (wager > 0) {
-                addText("Gained " + wager + " credits from wagers.", Color.GREEN);
+                addText(Presentation.text("tournament.gained") + wager + Presentation.text("tournament.credits_from_wagers"), Color.GREEN);
             }
             winnings += wager;
             placedWager = false;
             playerTeamLost = false;
-            addText("You've reached the Round of " + (participants.size() + 1));
+            addText(Presentation.text("tournament.you_ve_reached_the_round_of") + (participants.size() + 1));
         }
 
         // create temporary fleets for next battle
@@ -149,7 +151,7 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
                 Utils.getRecruitmentFaction().getId(), FleetTypes.TASK_FORCE,
                 market);
         market.getContainingLocation().addEntity(fleet);
-        fleet.setName("Your fleet");
+        fleet.setName(Presentation.text("tournament.your_fleet"));
         fleet.setHidden(false);
         fleet.setExpired(false);
         fleet.setCommander(Global.getSector().getPlayerPerson());
@@ -173,7 +175,7 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
                 market);
         fleet2.setAIMode(true);
         fleet2.setNoFactionInName(true);
-        fleet2.setName("Opposing Fleet");
+        fleet2.setName(Presentation.text("tournament.opposing_fleet"));
         fleet2.addTag("$starlords_tournament");
         fleet2.setCommander(participants.get(participants.size() / 2));
         fleet2.setLocation(market.getPrimaryEntity().getLocation().x,
@@ -198,9 +200,9 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
         if (person.isPlayer() && playerShip != null) {
             fleet.getFleetData().addFleetMember(playerShip);
             if (shipCategory != null && !playerShip.getHullSpec().getManufacturer().equals(shipCategory)) {
-                addText("Your ship does not match the tournament theme: " + shipCategory,
+                addText(Presentation.text("tournament.your_ship_does_not_match_the_tournament_theme") + shipCategory,
                         shipCategory, market.getFaction().getBaseUIColor());
-                addText("CR will be significantly reduced.", Color.YELLOW);
+                addText(Presentation.text("tournament.cr_will_be_significantly_reduced"), Color.YELLOW);
                 playerShip.getRepairTracker().setCR(0.4f);
             }
         } else {
@@ -270,15 +272,15 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
             switch (option) {
                 case INIT:
                     options.clearOptions();
-                    options.addOption("Proceed to the next round", OptionId.ENGAGE, getString("tooltipEngage"));
-                    options.addOption("Check the tournament roster", TournamentOptionId.LIST_PARTICIPANTS);
-                    options.addOption("Place a wager", TournamentOptionId.PLACE_WAGER);
+                    options.addOption(Presentation.text("tournament.proceed_to_the_next_round"), OptionId.ENGAGE, getString("tooltipEngage"));
+                    options.addOption(Presentation.text("tournament.check_the_tournament_roster"), TournamentOptionId.LIST_PARTICIPANTS);
+                    options.addOption(Presentation.text("tournament.place_a_wager"), TournamentOptionId.PLACE_WAGER);
                     if (playerShip == null) {
-                        options.addOption("Pilot your own ship", TournamentOptionId.CHOOSE_SHIP);
+                        options.addOption(Presentation.text("tournament.pilot_your_own_ship"), TournamentOptionId.CHOOSE_SHIP);
                     } else {
-                        options.addOption("Pilot a standardized ship", TournamentOptionId.UNCHOOSE_SHIP);
+                        options.addOption(Presentation.text("tournament.pilot_a_standardized_ship"), TournamentOptionId.UNCHOOSE_SHIP);
                     }
-                    options.addOption("Withdraw from the tournament", OptionId.LEAVE, null);
+                    options.addOption(Presentation.text("tournament.withdraw_from_the_tournament"), OptionId.LEAVE, null);
                     options.setShortcut(OptionId.LEAVE, Keyboard.KEY_ESCAPE, false, false, false, true);
                     if (placedWager) options.setEnabled(TournamentOptionId.PLACE_WAGER, false);
                     doSuper = false;
@@ -323,7 +325,7 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
             float baseWinPerRound;
             switch (option) {
                 case LIST_PARTICIPANTS:
-                    addText("Tournament Roster:");
+                    addText(Presentation.text("tournament.tournament_roster"));
                     addText(Global.getSector().getPlayerPerson().getNameString(),
                             Utils.getRecruitmentFaction().getBaseUIColor());
                     for (int i = 0; i < participants.size(); i++) {
@@ -339,31 +341,31 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
                     }
                     break;
                 case PLACE_WAGER:
-                    addText("Choose the amount you'd like to wager. " +
-                            "You will pay this amount upfront and receive winnings for each round you win." +
-                            "You can wager once per round and winnings stack.");
+                    addText(Presentation.text("tournament.choose_the_amount_you_d_like_to_wager") +
+                            Presentation.text("tournament.you_will_pay_this_amount_upfront_and_receive_winnings_for_each_r") +
+                            Presentation.text("tournament.you_can_wager_once_per_round_and_winnings_stack"));
                     int creditsLeft = (int) origPlayerFleet.getCargo().getCredits().get() + winnings;
                     roundsLeft = (int) Math.round(Math.log(participants.size() + 1) / Math.log(2));
                     baseWinPerRound = wagerRatio[4 - roundsLeft] / roundsLeft;
                     // 2.5, 2, 1.8, 1.5
                     options.clearOptions();
-                    options.addOption("2000 Credits", TournamentOptionId.PROCESS_WAGER1);
+                    options.addOption(Presentation.text("tournament.2000_credits"), TournamentOptionId.PROCESS_WAGER1);
                     if (creditsLeft < 2000) options.setEnabled(TournamentOptionId.PROCESS_WAGER1, false);
                     options.setTooltip(TournamentOptionId.PROCESS_WAGER1,
-                            "Gain " + ((int) (baseWinPerRound * 2000)) + " credits per win");
-                    options.addOption("5000 Credits", TournamentOptionId.PROCESS_WAGER2);
+                            Presentation.text("tournament.gain") + ((int) (baseWinPerRound * 2000)) + Presentation.text("tournament.credits_per_win"));
+                    options.addOption(Presentation.text("tournament.5000_credits"), TournamentOptionId.PROCESS_WAGER2);
                     if (creditsLeft < 5000) options.setEnabled(TournamentOptionId.PROCESS_WAGER2, false);
                     options.setTooltip(TournamentOptionId.PROCESS_WAGER2,
-                            "Gain " + ((int) (baseWinPerRound * 5000)) + " credits per win");
-                    options.addOption("10000 Credits", TournamentOptionId.PROCESS_WAGER3);
+                            Presentation.text("tournament.gain") + ((int) (baseWinPerRound * 5000)) + Presentation.text("tournament.credits_per_win"));
+                    options.addOption(Presentation.text("tournament.10000_credits"), TournamentOptionId.PROCESS_WAGER3);
                     if (creditsLeft < 10000) options.setEnabled(TournamentOptionId.PROCESS_WAGER3, false);
                     options.setTooltip(TournamentOptionId.PROCESS_WAGER3,
-                            "Gain " + ((int) (baseWinPerRound * 10000)) + " credits per win");
-                    options.addOption("20000 Credits", TournamentOptionId.PROCESS_WAGER4);
+                            Presentation.text("tournament.gain") + ((int) (baseWinPerRound * 10000)) + Presentation.text("tournament.credits_per_win"));
+                    options.addOption(Presentation.text("tournament.20000_credits"), TournamentOptionId.PROCESS_WAGER4);
                     if (creditsLeft < 20000) options.setEnabled(TournamentOptionId.PROCESS_WAGER4, false);
                     options.setTooltip(TournamentOptionId.PROCESS_WAGER4,
-                            "Gain " + ((int) (baseWinPerRound * 20000)) + " credits per win");
-                    options.addOption("Never mind", OptionId.INIT);
+                            Presentation.text("tournament.gain") + ((int) (baseWinPerRound * 20000)) + Presentation.text("tournament.credits_per_win"));
+                    options.addOption(Presentation.text("tournament.never_mind"), OptionId.INIT);
                     break;
                 case PROCESS_WAGER1:
                 case PROCESS_WAGER2:
@@ -375,7 +377,7 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
                     wager += baseWinPerRound * credits;
                     winnings -= credits;
                     placedWager = true;
-                    addText("Wagered " + credits + " credits.", Color.RED);
+                    addText(Presentation.text("tournament.wagered") + credits + Presentation.text("tournament.credits"), Color.RED);
                     optionSelected(null, OptionId.INIT);
                     break;
                 case CHOOSE_SHIP:
@@ -386,10 +388,10 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
                     }
                     members.removeAll(toRemove);
                     if (members.isEmpty()) {
-                        addText("No eligible ships to pilot.", Color.RED);
+                        addText(Presentation.text("tournament.no_eligible_ships_to_pilot"), Color.RED);
                         return;
                     }
-                    dialog.showFleetMemberPickerDialog("Select craft to pilot", "Ok", "Cancel",
+                    dialog.showFleetMemberPickerDialog(Presentation.text("tournament.select_craft_to_pilot"), Presentation.text("tournament.ok"), Presentation.text("tournament.cancel"),
                             4, 8, 58f, false, false, members,
                             new FleetMemberPickerListener() {
                                 public void pickedFleetMembers(List<FleetMemberAPI> members) {
@@ -412,9 +414,9 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
                     break;
                 case REWARD_SHIP:
                     origPlayerFleet.getFleetData().addFleetMember(rewardShip);
-                    addText("Gained " + rewardShip.getShipName(), Color.GREEN);
+                    addText(Presentation.text("tournament.gained") + rewardShip.getShipName(), Color.GREEN);
                     options.clearOptions();
-                    options.addOption("Leave", OptionId.LEAVE, null);
+                    options.addOption(Presentation.text("tournament.leave"), OptionId.LEAVE, null);
                     options.setShortcut(OptionId.LEAVE, Keyboard.KEY_ESCAPE, false, false, false, true);
                     break;
                 case REWARD_BP:
@@ -463,12 +465,12 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
                                 break;
                         }
                         origPlayerFleet.getCargo().addSpecial(new SpecialItemData(result.two, result.one), 1);
-                        addText("Gained blueprint for " + name, Color.GREEN);
+                        addText(Presentation.text("tournament.gained_blueprint_for") + name, Color.GREEN);
                     } else {
-                        addText("This faction has no more blueprints to offer", Color.RED);
+                        addText(Presentation.text("tournament.this_faction_has_no_more_blueprints_to_offer"), Color.RED);
                     }
                     options.clearOptions();
-                    options.addOption("Leave", OptionId.LEAVE, null);
+                    options.addOption(Presentation.text("tournament.leave"), OptionId.LEAVE, null);
                     options.setShortcut(OptionId.LEAVE, Keyboard.KEY_ESCAPE, false, false, false, true);
                     break;
             }
@@ -512,18 +514,18 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
         }
         if (!advance) {
             showFleetInfo();
-            addText("You've been eliminated from the tournament.", Color.RED);
+            addText(Presentation.text("tournament.you_ve_been_eliminated_from_the_tournament"), Color.RED);
             PersonAPI winner = getRandWinner();
             feast.setTournamentWinner(winner);
-            addText(winner.getNameString() + " goes on to win the tournament.");
+            addText(winner.getNameString() + Presentation.text("tournament.goes_on_to_win_the_tournament"));
             options.clearOptions();
-            options.addOption("Leave", OptionId.LEAVE, null);
+            options.addOption(Presentation.text("tournament.leave"), OptionId.LEAVE, null);
             options.setShortcut(OptionId.LEAVE, Keyboard.KEY_ESCAPE, false, false, false, true);
         } else if (participants.size() == 1) {
             showFleetInfo();
             // choose between faction ship or rare blueprint
-            addText("The crowd erupts in cheers! You have won the tournament!", Color.GREEN);
-            addText("Gained 25000 credits.", Color.GREEN);
+            addText(Presentation.text("tournament.the_crowd_erupts_in_cheers_you_have_won_the_tournament"), Color.GREEN);
+            addText(Presentation.text("tournament.gained_25000_credits"), Color.GREEN);
             winnings += 25000;
             ArrayList<String> cruiserOptions = new ArrayList<>();
             ArrayList<String> capitalOptions = new ArrayList<>();
@@ -548,16 +550,16 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
             dialog.getVisualPanel().showFleetMemberInfo(rewardShip, false);
             feast.setTournamentWinner(Global.getSector().getPlayerPerson());
             options.clearOptions();
-            options.addOption("Claim the prize ship", TournamentOptionId.REWARD_SHIP, null);
-            options.addOption("Claim new faction blueprint", TournamentOptionId.REWARD_BP, null);
+            options.addOption(Presentation.text("tournament.claim_the_prize_ship"), TournamentOptionId.REWARD_SHIP, null);
+            options.addOption(Presentation.text("tournament.claim_new_faction_blueprint"), TournamentOptionId.REWARD_BP, null);
             options.setShortcut(OptionId.LEAVE, Keyboard.KEY_ESCAPE, false, false, false, true);
         } else {
             showFleetInfo();
             if (playerTeamLost) {
-                addText("Though your team was defeated, you have been recognized for " +
-                        "achieving a solo takedown and advance to the next round!", Color.GREEN);
+                addText(Presentation.text("tournament.though_your_team_was_defeated_you_have_been_recognized_for") +
+                        Presentation.text("tournament.achieving_a_solo_takedown_and_advance_to_the_next_round"), Color.GREEN);
             } else {
-                addText("You advance to the next round!", Color.GREEN);
+                addText(Presentation.text("tournament.you_advance_to_the_next_round"), Color.GREEN);
             }
             advanceTournamentStage(true);
         }
@@ -669,30 +671,30 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
     private void setShipCategory() {
         switch (market.getFaction().getId()) {
             case Factions.HEGEMONY:
-                shipCategory = "Low Tech";
+                shipCategory = Presentation.text("tournament.low_tech");
                 break;
             case Factions.TRITACHYON:
-                shipCategory = "High Tech";
+                shipCategory = Presentation.text("tournament.high_tech");
                 break;
             case Factions.LIONS_GUARD:
             case Factions.DIKTAT:
-                shipCategory = "Lion's Guard";
+                shipCategory = Presentation.text("tournament.lion_s_guard");
                 break;
             case Factions.LUDDIC_CHURCH:
-                shipCategory = "Luddic Church";
+                shipCategory = Presentation.text("tournament.luddic_church");
                 break;
             case Factions.LUDDIC_PATH:
-                shipCategory = "Luddic Path";
+                shipCategory = Presentation.text("tournament.luddic_path");
                 break;
             case Factions.PERSEAN:
-                shipCategory = "Midline";
+                shipCategory = Presentation.text("tournament.midline");
                 break;
             case Factions.REMNANTS:
-                shipCategory = "Remnant";
+                shipCategory = Presentation.text("tournament.remnant");
                 break;
             case Factions.PIRATES:
             default:
-                shipCategory = "Pirate";
+                shipCategory = Presentation.text("tournament.pirate");
                 break;
         }
     }

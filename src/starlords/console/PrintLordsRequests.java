@@ -1,5 +1,7 @@
 package starlords.console;
 
+import starlords.presentation.Presentation;
+
 import org.lazywizard.console.BaseCommand;
 import org.lazywizard.console.Console;
 import starlords.util.Utils;
@@ -11,7 +13,7 @@ public class PrintLordsRequests implements BaseCommand {
 
         Utils.printRequests();
 
-        Console.showMessage("Print existing lord requests to log");
+        Console.showMessage(Presentation.text("print_lords_requests.print_existing_lord_requests_to_log"));
         return CommandResult.SUCCESS;
     }
 }

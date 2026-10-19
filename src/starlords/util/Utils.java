@@ -52,14 +52,7 @@ public class Utils {
     private static boolean showMessageLordCaptureReleaseEscape;
 	public static final Random rand = new Random(); // for low-priority rng that doesn't need to be savescum-proof
     public static String getFactionTitle(String faction,int ranking){
-        switch (ranking){
-            case 2:
-                return FactionTemplateController.getTemplate(faction).getT2_title();
-            case 1:
-                return FactionTemplateController.getTemplate(faction).getT1_title();
-            default:
-                return FactionTemplateController.getTemplate(faction).getT0_title();
-        }
+        return starlords.presentation.Presentation.title(faction, ranking);
     }
     public static int nextInt(int bound) {
         return rand.nextInt(bound);
@@ -358,12 +351,7 @@ public class Utils {
     }
 
     public static String getTitle(FactionAPI faction, int rank) {
-        String titleStr = "title_" + faction.getId() + "_" + rank;
-        String ret = StringUtil.getString("starlords_title", titleStr);
-        if (ret != null && ret.startsWith("Missing string")) {
-            ret = StringUtil.getString("starlords_title", "title_default_" + rank);
-        }
-        return ret;
+        return getFactionTitle(faction == null ? null : faction.getId(), rank);
     }
 
     public static <T> T weightedSample(List<T> data, List<Integer> weights, Random rand) {

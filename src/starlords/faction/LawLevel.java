@@ -1,11 +1,13 @@
 package starlords.faction;
 
+import starlords.presentation.Presentation;
+
 public enum LawLevel {
-    VERY_LOW("V. Low"),
-    LOW("Low"),
-    MEDIUM("Medium"),
-    HIGH("High"),
-    VERY_HIGH("V. High");
+    VERY_LOW(Presentation.text("law_level.v_low")),
+    LOW(Presentation.text("law_level.low")),
+    MEDIUM(Presentation.text("law_level.medium")),
+    HIGH(Presentation.text("law_level.high")),
+    VERY_HIGH(Presentation.text("law_level.v_high"));
 
     public final String displayName;
 

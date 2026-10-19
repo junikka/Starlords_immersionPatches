@@ -46,9 +46,14 @@ public class DialogInsertList {
         return error;
     }
     public String insertData(String line, Lord lord, Lord targetLord, MarketAPI targetMarket){
-        for (DialogInsert_Base a : inserts){
-            line = a.insert(line, lord, targetLord, targetMarket);
+        return starlords.presentation.TextRenderer.render(line, values(line, lord, targetLord, targetMarket));
+    }
+    public java.util.Map<String,String> values(String line, Lord lord, Lord targetLord, MarketAPI market) {
+        java.util.Map<String,String> values = new java.util.LinkedHashMap<>();
+        for (DialogInsert_Base insert : inserts) {
+            if (insert.key != null && !insert.key.isEmpty())
+                values.put(insert.key, insert.getInsertedData(line, lord, targetLord, market));
         }
-        return line;
+        return values;
     }
 }

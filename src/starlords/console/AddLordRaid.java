@@ -1,5 +1,7 @@
 package starlords.console;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.util.Misc;
@@ -18,7 +20,7 @@ public class AddLordRaid implements BaseCommand {
     public CommandResult runCommand(String args, CommandContext context) {
         String[] argsArr = args.split(" ");
         if (argsArr.length != 2) {
-            Console.showMessage("AddLordRaid requires 2 arguments.");
+            Console.showMessage(Presentation.text("add_lord_raid.addlordraid_requires_2_arguments"));
             return CommandResult.BAD_SYNTAX;
         }
         Lord lord = LordController.getLordOrPlayerById(argsArr[0]);
@@ -26,7 +28,7 @@ public class AddLordRaid implements BaseCommand {
             lord = LordController.getLordByFirstName(argsArr[0]);
         }
         if (lord == null || lord.isPlayer()) {
-            Console.showMessage("Lord not found.");
+            Console.showMessage(Presentation.text("add_lord_raid.lord_not_found"));
             return CommandResult.ERROR;
         }
 
@@ -35,11 +37,11 @@ public class AddLordRaid implements BaseCommand {
         for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy())
             if (market.getName().equalsIgnoreCase(marketName)) {
                 LordAI.beginAssignment(lord, LordAction.RAID_TRANSIT, market.getPrimaryEntity(),null, false);
-                Console.showMessage("Added raid for market " + marketName + " with originator lord " + lord.getLordAPI().getNameString());
+                Console.showMessage(Presentation.text("add_lord_raid.added_raid_for_market") + marketName + Presentation.text("add_lord_raid.with_originator_lord") + lord.getLordAPI().getNameString());
                 return CommandResult.SUCCESS;
             }
 
-        Console.showMessage("Market not found.");
+        Console.showMessage(Presentation.text("add_lord_raid.market_not_found"));
         return CommandResult.ERROR;
     }
 }

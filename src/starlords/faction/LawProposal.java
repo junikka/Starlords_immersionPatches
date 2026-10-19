@@ -4,11 +4,13 @@ package starlords.faction;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import starlords.controllers.LordController;
+import starlords.controllers.PlayerProgression;
 import starlords.controllers.PoliticsController;
 import lombok.Getter;
 import lombok.Setter;
 import starlords.person.Lord;
 import starlords.util.Utils;
+import starlords.presentation.Presentation;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -120,7 +122,7 @@ public class LawProposal {
         }
         if (playerSupports) {
             if (!faction.equals(Global.getSector().getPlayerFaction())) {
-                ctr += PoliticsController.getPoliticalWeight(LordController.getPlayerLord());
+                if (PlayerProgression.hasSeat()) ctr += PoliticsController.getPoliticalWeight(LordController.getPlayerLord());
             } else  {
                 ctr += PoliticsController.PLAYER_EXTRA_COUNCIL_WEIGHT;
                 ctr *= PoliticsController.getLiegeMultiplier(Global.getSector().getPlayerFaction());
@@ -140,122 +142,48 @@ public class LawProposal {
         alive = false;
     }
 
-    // 1-line summary of proposal
+    // Presentation only: the proposal's authority faction is explicit.
     public String getSummary() {
-        Lord lord;
-        try {
-            switch (law) {
-                case CROWN_AUTHORITY:
-                case NOBLE_AUTHORITY:
-                case TRADE_LAW:
-                case FEAST_LAW:
-                    return "Change " + law.lawName + " to " + LawLevel.values()[targetLevel].displayName;
-                case APPOINT_MARSHAL:
-                    lord = LordController.getLordOrPlayerById(targetLord);
-                    return "Appoint " + lord.getTitle() + " " + lord.getLordAPI().getNameString() + " to Marshal.";
-                case AWARD_FIEF:
-                    lord = LordController.getLordOrPlayerById(targetLord);
-                    return "Award " + Global.getSector().getEconomy().getMarket(targetFief).getName()
-                            + " to " + lord.getTitle() + " " + lord.getLordAPI().getNameString();
-                case DECLARE_WAR:
-                    return "Declare war on " + Global.getSector().getFaction(targetFaction).getDisplayNameWithArticle();
-                case SUE_FOR_PEACE:
-                    return "Sue for peace with " + Global.getSector().getFaction(targetFaction).getDisplayNameWithArticle();
-                case REVOKE_FIEF:
-                    lord = LordController.getLordOrPlayerById(targetLord);
-                    return "Revoke " + Global.getSector().getEconomy().getMarket(targetFief)
-                            + " from " + lord.getTitle() + " " + lord.getLordAPI().getNameString();
-                case CHANGE_RANK:
-                    lord = LordController.getLordOrPlayerById(targetLord);
-                    String ret;
-                    if (lord.getRanking() > targetLevel) {
-                        ret = "Demote ";
-                    } else {
-                        ret = "Promote ";
-                    }
-                    ret += lord.getTitle() + " " + lord.getLordAPI().getNameString() + " to " + Utils.getTitle(
-                            lord.getFaction(), targetLevel);
-                    return ret;
-                case EXILE_LORD:
-                    lord = LordController.getLordOrPlayerById(targetLord);
-                    return "Exile " + lord.getTitle() + " " + lord.getLordAPI().getNameString() + " from the realm.";
-            }
-        }catch (Exception e){
-            return e.getMessage();
+        Lord target = targetLord == null ? null : LordController.getLordOrPlayerById(targetLord);
+        String name = target == null ? Presentation.text("context.person")
+                : target.getTitle() + " " + target.getLordAPI().getNameString();
+        com.fs.starfarer.api.campaign.econ.MarketAPI market = targetFief == null ? null : Global.getSector().getEconomy().getMarket(targetFief);
+        String marketName = market == null ? Presentation.text("context.market") : market.getName();
+        FactionAPI other = targetFaction == null ? null : Global.getSector().getFaction(targetFaction);
+        String otherName = other == null ? Presentation.text("context.faction") : other.getDisplayNameWithArticle();
+        switch (law) {
+            case CROWN_AUTHORITY: case NOBLE_AUTHORITY: case TRADE_LAW: case FEAST_LAW:
+                return Presentation.format("policy.change", "policy", Presentation.lawName(faction, law),
+                        "level", LawLevel.values()[targetLevel].displayName);
+            case APPOINT_MARSHAL:
+                return Presentation.format("policy.appoint", "commander", name);
+            case AWARD_FIEF:
+                return Presentation.format("holding.assign", "market", marketName, "commander", name);
+            case REVOKE_FIEF:
+                return Presentation.format("holding.revoke", "market", marketName, "commander", name);
+            case DECLARE_WAR:
+                return Presentation.format("policy.war", "faction", otherName);
+            case SUE_FOR_PEACE:
+                return Presentation.format("policy.peace", "faction", otherName);
+            case CHANGE_RANK:
+                return Presentation.format("standing.change", "commander", name,
+                        "title", Presentation.title(faction == null ? null : faction.getId(), targetLevel),
+                        "tier", Integer.toString(targetLevel + 1));
+            case EXILE_LORD:
+                return Presentation.format("policy.expel", "commander", name);
+            default:
+                return Presentation.text("policy.unavailable");
         }
-        return "";
     }
 
     public String getTitle() {
-        int baseLevel;
-        Lord lord;
         switch (law) {
-            case CROWN_AUTHORITY:
-                 baseLevel = PoliticsController.getLaws(
-                         LordController.getLordOrPlayerById(originator).getFaction()).getCrownAuthority().ordinal();
-                if (baseLevel > targetLevel) {
-                    return "Decrease " + law.lawName;
-                } else {
-                    return "Increase " + law.lawName;
-                }
-            case NOBLE_AUTHORITY:
-                baseLevel = PoliticsController.getLaws(
-                        LordController.getLordOrPlayerById(originator).getFaction()).getNobleAuthority().ordinal();
-                if (baseLevel > targetLevel) {
-                    return "Decrease " + law.lawName;
-                } else {
-                    return "Increase " + law.lawName;
-                }
-            case TRADE_LAW:
-                baseLevel = PoliticsController.getLaws(
-                        LordController.getLordOrPlayerById(originator).getFaction()).getTradeFavor().ordinal();
-                if (baseLevel > targetLevel) {
-                    return "Decrease " + law.lawName;
-                } else {
-                    return "Increase " + law.lawName;
-                }
-            case FEAST_LAW:
-                baseLevel = PoliticsController.getLaws(
-                        LordController.getLordOrPlayerById(originator).getFaction()).getFeastLaw().ordinal();
-                if (baseLevel > targetLevel) {
-                    return "Decrease " + law.lawName;
-                } else {
-                    return "Increase " + law.lawName;
-                }
-            case APPOINT_MARSHAL:
-                lord = LordController.getLordOrPlayerById(targetLord);
-                if (lord == null){
-                    return "Appoint Marshal [Error]";
-                }else {
-                    return "Appoint Marshal " + lord.getLordAPI().getNameString();
-                }
-            case AWARD_FIEF:
-                lord = LordController.getLordOrPlayerById(targetLord);
-                if(lord == null) return "Award Fief to "+"null";
-                return "Award Fief to " + lord.getLordAPI().getNameString();
-            case DECLARE_WAR:
-                return "Declare war - " + Global.getSector().getFaction(targetFaction).getDisplayName();
-            case SUE_FOR_PEACE:
-                return "Sue for peace - " + Global.getSector().getFaction(targetFaction).getDisplayName();
-            case REVOKE_FIEF:
-                lord = LordController.getLordOrPlayerById(targetLord);
-                if(lord == null) return "Revoke Fief from "+"null";
-                return "Revoke Fief from " + lord.getLordAPI().getNameString();
-            case CHANGE_RANK:
-                lord = LordController.getLordOrPlayerById(targetLord);
-                String ret;
-                if (lord.getRanking() > targetLevel) {
-                    ret = "Demote ";
-                } else {
-                    ret = "Promote ";
-                }
-                ret += lord.getLordAPI().getNameString();
-                return ret;
-            case EXILE_LORD:
-                lord = LordController.getLordOrPlayerById(targetLord);
-                if(lord == null) return "Exile "+"null";
-                return "Exile " + lord.getLordAPI().getNameString();
+            case CROWN_AUTHORITY: case NOBLE_AUTHORITY: case TRADE_LAW: case FEAST_LAW:
+                int current = PoliticsController.getLaws(faction).getLawLevel(law).ordinal();
+                return Presentation.format(current > targetLevel ? "policy.decrease" : "policy.increase",
+                        "policy", Presentation.lawName(faction, law));
+            default:
+                return getSummary();
         }
-        return "ERROR: No Title";
     }
 }

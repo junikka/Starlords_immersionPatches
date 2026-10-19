@@ -1,0 +1,269 @@
+import java.awt.Color;
+import java.lang.reflect.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.function.BiFunction;
+import org.json.*;
+import com.fs.starfarer.api.*;
+import com.fs.starfarer.api.campaign.*;
+import com.fs.starfarer.api.campaign.econ.*;
+import com.fs.starfarer.api.campaign.rules.MemoryAPI;
+import com.fs.starfarer.api.characters.*;
+import starlords.controllers.*;
+import starlords.faction.*;
+import starlords.person.*;
+import starlords.presentation.*;
+import starlords.util.*;
+import starlords.util.dialogControler.*;
+import starlords.util.dialogControler.dialogAddon.DialogAddon_Base;
+
+/** Controlled game context, invoking production code against the real API JAR. */
+public class PresentationChecks {
+    static Path root;
+    static JSONObject titleData, neutralData, legacyData;
+    static final Map<String, FactionAPI> factions = new HashMap<>();
+    static final Map<String, Object> persistent = new HashMap<>();
+    static String commission;
+    static FactionAPI speakerFaction;
+    static Lord player, speaker, recipient, host;
+    static MarketAPI market;
+
+    @SuppressWarnings("unchecked")
+    static <T> T proxy(Class<T> type, BiFunction<String, Object[], Object> handler) {
+        return (T) Proxy.newProxyInstance(type.getClassLoader(), new Class<?>[]{type}, (obj, method, args) -> {
+            if (method.getName().equals("equals")) return obj == args[0];
+            if (method.getName().equals("hashCode")) return System.identityHashCode(obj);
+            if (method.getName().equals("toString")) return "API proxy " + type.getSimpleName();
+            Object value = handler.apply(method.getName(), args == null ? new Object[0] : args);
+            if (value != null || !method.getReturnType().isPrimitive()) return value;
+            if (method.getReturnType() == boolean.class) return false;
+            if (method.getReturnType() == float.class) return 0f;
+            if (method.getReturnType() == double.class) return 0d;
+            if (method.getReturnType() == long.class) return 0L;
+            return 0;
+        });
+    }
+    static void eq(Object actual, Object expected) {
+        if (!Objects.equals(actual, expected)) throw new AssertionError("Expected " + expected + ", got " + actual);
+    }
+    static void yes(boolean condition) { if (!condition) throw new AssertionError(); }
+    static JSONObject json(String path) throws Exception { return new JSONObject(Files.readString(root.resolve(path))); }
+    static Object field(Class<?> type, Object instance, String name) throws Exception {
+        Field f = type.getDeclaredField(name); f.setAccessible(true); return f.get(instance);
+    }
+    static void set(Class<?> type, Object instance, String name, Object value) throws Exception {
+        Field f = type.getDeclaredField(name); f.setAccessible(true); f.set(instance, value);
+    }
+    static <T> T construct(Class<T> type) throws Exception {
+        Constructor<T> ctor = type.getDeclaredConstructor(); ctor.setAccessible(true); return ctor.newInstance();
+    }
+    static FactionAPI faction(String id) {
+        FactionAPI f = proxy(FactionAPI.class, (m, a) -> switch(m) {
+            case "getId" -> id;
+            case "getDisplayName", "getDisplayNameWithArticle" -> id;
+            case "getBaseUIColor", "getBrightUIColor", "getDarkUIColor" -> Color.WHITE;
+            default -> null;
+        });
+        factions.put(id, f); return f;
+    }
+    static Lord person(String id, String first, String last, String factionId, int tier) throws Exception {
+        FullName name = new FullName(first, last, FullName.Gender.MALE);
+        PersonAPI p = proxy(PersonAPI.class, (m, a) -> switch(m) {
+            case "getId" -> id;
+            case "getNameString" -> first + " " + last;
+            case "getName" -> name;
+            case "getGender" -> FullName.Gender.MALE;
+            case "getFaction" -> id.equals("speaker") ? speakerFaction : factions.get(factionId);
+            case "getManOrWoman" -> "man";
+            case "getHeOrShe" -> "he";
+            case "getHisOrHer", "getHimOrHer" -> "his";
+            default -> null;
+        });
+        Constructor<Lord> ctor = Lord.class.getDeclaredConstructor(PersonAPI.class);
+        ctor.setAccessible(true);
+        Lord lord = ctor.newInstance(p);
+        set(Lord.class, lord, "ranking", tier);
+        set(Lord.class, lord, "formalWear", "uniform");
+        return lord;
+    }
+    static void setup() throws Exception {
+        neutralData = json("data/lords/presentation/neutral.json");
+        titleData = json("data/lords/presentation/titles.json");
+        legacyData = json("data/lords/faction.json");
+        JSONObject strings = json("data/strings/strings.json");
+        ModManagerAPI modManager = proxy(ModManagerAPI.class, (m,a) -> null);
+        Global.setSettings(proxy(SettingsAPI.class, (m, a) -> {
+            try {
+                if (m.equals("getMergedJSONForMod")) return switch((String)a[0]) {
+                    case "data/lords/presentation/neutral.json" -> neutralData;
+                    case "data/lords/presentation/titles.json" -> titleData;
+                    case "data/lords/faction.json" -> legacyData;
+                    default -> throw new AssertionError("Unexpected file: " + a[0]);
+                };
+                if (m.equals("getString")) return strings.getJSONObject((String)a[0]).getString((String)a[1]);
+                if (m.equals("getModManager")) return modManager;
+                if (m.endsWith("Color")) return Color.WHITE;
+                return null;
+            } catch (JSONException e) { throw new RuntimeException(e); }
+        }));
+        for (String id : List.of("player", "naval", "raider", "corporate", "unknown_mod")) faction(id);
+        speakerFaction = factions.get("raider");
+        titleData.getJSONObject("factions").put("naval", new JSONArray(List.of("Lieutenant", "Captain", "Admiral")));
+        titleData.getJSONObject("factions").put("raider", new JSONArray(List.of("Captain", "Warlord", "Overlord")));
+        titleData.getJSONObject("factions").put("corporate", new JSONArray(List.of("Agent", "Manager", "Director")));
+        persistent.put(Constants.LORD_TABLE_KEY, new HashMap<>());
+        MemoryAPI memory = proxy(MemoryAPI.class, (m,a) -> m.equals("getString") && a[0].equals("$fcm_faction") ? commission : null);
+        CharacterDataAPI character = proxy(CharacterDataAPI.class, (m,a) -> m.equals("getMemoryWithoutUpdate") ? memory : null);
+        CampaignClockAPI clock = proxy(CampaignClockAPI.class, (m,a) -> null);
+        market = proxy(MarketAPI.class, (m,a) -> switch(m) {
+            case "getId" -> "kestrel"; case "getName" -> "Kestrel $5\\Dock";
+            case "getFaction" -> factions.get("naval"); default -> null;
+        });
+        EconomyAPI economy = proxy(EconomyAPI.class, (m,a) -> m.equals("getMarket") && a[0].equals("kestrel") ? market : null);
+        Global.setSector(proxy(SectorAPI.class, (m,a) -> switch(m) {
+            case "getFaction" -> factions.get(a[0]);
+            case "getPlayerFaction" -> factions.get("player");
+            case "getPlayerPerson" -> player == null ? null : player.getLordAPI();
+            case "getCharacterData" -> character;
+            case "getClock" -> clock;
+            case "getEconomy" -> economy;
+            case "getPersistentData" -> persistent;
+            case "getAllFactions", "getScripts" -> new ArrayList<>();
+            default -> null;
+        }));
+        Presentation.reload();
+        player = person("player", "Mara$1", "\\Venn", "player", 1);
+        set(Lord.class, player, "isPlayer", true);
+        set(LordController.class, null, "playerLord", player);
+        speaker = person("speaker", "Rook", "Tann", "raider", 1);
+        recipient = person("recipient", "Ira", "Sun", "corporate", 2);
+        host = person("host", "Dana", "Rell", "raider", 0);
+        set(LordController.class, null, "lordsMap", new HashMap<>(Map.of("speaker", speaker, "recipient", recipient, "host", host)));
+        PoliticsController.instance = construct(PoliticsController.class);
+        set(EventController.class, null, "instance", construct(EventController.class));
+    }
+    static void renderer() {
+        Map<String,String> values = new HashMap<>(Map.of("%PLAYER_NAME", "Mara$1\\Venn %PLAYER_NAME_FIRST {host.fullName}",
+                "%PLAYER_NAME_FIRST", "Mara", "%c1", "one", "%c10", "ten"));
+        eq(TextRenderer.render("%PLAYER_NAME_FIRST / %PLAYER_NAME / %c10 / %c1 / %c100", values),
+                "Mara / Mara$1\\Venn %PLAYER_NAME_FIRST {host.fullName} / ten / one / %c100");
+        eq(TextRenderer.render("%c10", Map.of("%c1", "one")), "%c10");
+        eq(TextRenderer.positional("$string / $string", "$1\\test $string", "two"), "$1\\test $string / two");
+        eq(TextRenderer.positional("$string / $string", (String)null), "unavailable / unavailable");
+        eq(TextRenderer.missingNamedTokens("{commander} {host.name}", Map.of("{commander}", "{invented}")), Set.of("{host.name}"));
+        eq(Presentation.format("holding.assign", "market", "Kestrel"), "Information unavailable");
+        eq(Presentation.format("holding.assign", "market", "Kestrel", "commander", "$5\\{host.name}"),
+                "Grant Kestrel to $5\\{host.name} as a holding");
+    }
+    static void titles() {
+        List<String> bound = new ArrayList<>(List.of("Ensign", "Captain", "Admiral"));
+        TitleResolver resolver = new TitleResolver(List.of("Commander", "Commander", "Commander"),
+                Map.of("naval", bound), Map.of("naval", List.of("Lord", "Duke", "King"),
+                        "legacy", Arrays.asList("Captain", null, "Warlord")));
+        bound.set(1, "Changed");
+        eq(resolver.title("naval", 1), "Captain");
+        eq(resolver.title("legacy", 0), "Captain");
+        eq(resolver.title("legacy", 1), "Commander");
+        eq(resolver.title("legacy", 2), "Warlord");
+        eq(resolver.title("absent", 2), "Commander"); eq(resolver.title(null, -5), "Commander");
+        eq(resolver.title("naval", 20), "Admiral");
+        eq(Utils.getTitle(factions.get("raider"), 1), speaker.getTitle());
+    }
+    @SuppressWarnings("unchecked")
+    static void context() throws Exception {
+        commission = "naval";
+        List<LordEvent> feasts = (List<LordEvent>)field(EventController.class,
+                field(EventController.class, null, "instance"), "feasts");
+        LordEvent event = new LordEvent(LordEvent.FEAST, host);
+        event.setWeddingCeremonyTarget(recipient); feasts.add(event);
+        Map<String,String> v = DialogueTokens.values(speaker, recipient, market);
+        eq(v.get("%PLAYER_FACTION_RANK_TITLE2"), "Admiral");
+        eq(v.get("%PLAYER_TITLE"), "Captain"); eq(v.get("%LORD_TITLE"), "Warlord");
+        eq(v.get("%SECOND_LORD_TITLE"), "Director"); eq(v.get("{destination.rank2}"), "Admiral");
+        eq(v.get("{host.formalName}"), "Captain Dana Rell");
+        eq(v.get("%WEDDING_TARGET_TITLE"), "Director");
+        eq(v.get("%LORD_LIEGE_NAME"), "the faction leadership");
+        eq(v.get("%PLAYER_NAME_FIRST"), "Mara$1");
+        eq(v.get("%TARGET_MARKET_NAME"), "Kestrel $5\\Dock");
+        speakerFaction = factions.get("naval");
+        eq(speaker.getTitle(), "Captain");
+        eq(DialogueTokens.values(speaker, recipient, null).get("%LORD_TITLE"), "Captain");
+        commission = null; speakerFaction = factions.get("unknown_mod");
+        v = DialogueTokens.values(speaker, null, null);
+        eq(v.get("%LORD_TITLE"), "Commodore"); eq(v.get("%PLAYER_TITLE"), "Commodore");
+        eq(v.get("%SECOND_LORD_NAME"), "that person"); eq(v.get("%TARGET_MARKET_NAME"), "the market");
+        eq(v.get("{host.fullName}"), "that person");
+        for (String value : v.values()) yes(value == null || !value.contains("ERROR:"));
+    }
+    @SuppressWarnings("unchecked")
+    static void proposals() throws Exception {
+        commission = "naval";
+        LawProposal award = new LawProposal(Lawset.LawType.AWARD_FIEF, "player", "speaker", "kestrel", null, 0);
+        eq(award.getSummary(), "Grant Kestrel $5\\Dock to Warlord Rook Tann as a holding");
+        LawProposal rank = new LawProposal(Lawset.LawType.CHANGE_RANK, "player", "speaker", null, null, 2);
+        eq(rank.getSummary(), "Change Warlord Rook Tann's rank to Admiral");
+        for (Lawset.LawType law : Lawset.LawType.values()) {
+            LawProposal proposal = new LawProposal(law, "player", "speaker", "kestrel", "corporate", 1);
+            yes(!proposal.getSummary().contains("Information unavailable"));
+            yes(!proposal.getTitle().contains("Information unavailable"));
+            yes(!proposal.getSummary().contains("{"));
+        }
+        LawProposal policy = new LawProposal(Lawset.LawType.CROWN_AUTHORITY, "player", null, null, null, 1);
+        eq(policy.getTitle(), "Decrease Central Authority");
+        Map<String,LawProposal> proposals = (Map<String,LawProposal>)field(PoliticsController.class, PoliticsController.instance, "lordProposalsMap");
+        proposals.put("player", policy); proposals.put("speaker", award);
+        Map<String,String> values = DialogueTokens.values(speaker, null, null);
+        eq(values.get("%PLAYER_PROPOSAL_NAME"), policy.getTitle());
+        eq(values.get("%LORD_PROPOSAL_NAME"), award.getTitle());
+    }
+    @SuppressWarnings("unchecked")
+    static void dialogue() throws Exception {
+        LordDialog owner = new LordDialog("test", new JSONObject("{\"rules\":{},\"lines\":{}}"));
+        JSONObject line = new JSONObject().put("line", "%PLAYER_NAME_FIRST / %c10 / %c1 / {recipient.title}")
+                .put("hint", "%c10 / %c1 / {recipient.title}")
+                .put("highlight", new JSONObject().put("highlight", new JSONArray(List.of("%c10", "%c1"))))
+                .put("color", "GREEN")
+                .put("customInserts", new JSONObject().put("replaced", "%c10").put("dialogValue", 42));
+        DialogSet set = new DialogSet("test", new JSONObject().put("lines", new JSONObject().put("test", line)), owner);
+        List<Object[]> paras = new ArrayList<>(), options = new ArrayList<>(), hints = new ArrayList<>();
+        List<String> order = new ArrayList<>();
+        TextPanelAPI text = proxy(TextPanelAPI.class, (m,a) -> { if(m.equals("addPara")) { paras.add(a); order.add("text"); } return null; });
+        OptionPanelAPI panel = proxy(OptionPanelAPI.class, (m,a) -> {
+            if(m.equals("addOption")) options.add(a); if(m.equals("setTooltip")) hints.add(a); return null;
+        });
+        Map<String,ArrayList<DialogAddon_Base>> addons = (Map<String,ArrayList<DialogAddon_Base>>)field(DialogSet.class, set, "addons");
+        addons.put("test", new ArrayList<>(List.of(new DialogAddon_Base() {
+            public void apply(TextPanelAPI t, OptionPanelAPI o, InteractionDialogAPI d, Lord l, Lord r, MarketAPI m) { order.add("effect"); }
+        })));
+        HashMap<String,String> extra = new HashMap<>(Map.of("%c1", "$1\\literal %c10"));
+        set.applyLine("test", speaker, recipient, market, text, panel, null, false, extra);
+        eq(paras.get(0)[0], "Mara$1 / 42 / $1\\literal %c10 / Director");
+        eq(Arrays.asList((String[])paras.get(0)[3]), List.of("42", "$1\\literal %c10"));
+        eq(order, List.of("text", "effect"));
+        set.applyOptionSingle("test", speaker, recipient, market, text, null, panel, null, extra);
+        eq(options.get(0)[0], paras.get(0)[0]);
+        eq(hints.get(0)[1], "42 / $1\\literal %c10 / Director");
+        eq(order, List.of("text", "effect")); // Rendering options must not trigger effects.
+    }
+    static void validation() throws Exception {
+        titleData.getJSONObject("factions").put("optional_mod_not_installed", new JSONArray(List.of("Captain","Warlord","Admiral")));
+        Presentation.reload(); eq(Presentation.title("unknown_mod", 1), "Commodore");
+        titleData.getJSONObject("factions").put("bad", new JSONArray(List.of("one","two")));
+        boolean failed = false;
+        try { Presentation.reload(); } catch (IllegalStateException e) { failed = e.getMessage().contains("factions.bad"); }
+        yes(failed);
+        titleData.getJSONObject("factions").remove("bad");
+        neutralData.put("schemaVersion", 77); failed = false;
+        try { Presentation.reload(); } catch (IllegalStateException e) { failed = e.getMessage().contains("schemaVersion"); }
+        yes(failed);
+    }
+    public static void main(String[] args) throws Exception {
+        root = Path.of(args[0]); setup();
+        switch(args[1]) {
+            case "renderer" -> renderer(); case "titles" -> titles(); case "context" -> context();
+            case "proposals" -> proposals(); case "dialogue" -> dialogue(); case "validation" -> validation();
+            default -> throw new IllegalArgumentException(args[1]);
+        }
+        System.out.println("PASS " + args[1]);
+    }
+}

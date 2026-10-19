@@ -1,5 +1,7 @@
 package starlords.person;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import lombok.Getter;
@@ -40,9 +42,9 @@ public class LordRequest {
     public String getRequestCapitalized(){
         switch(type) {
             case PRISON_BREAK:
-                return "Prison Break";
+                return Presentation.text("lord_request.prison_break");
             case FIEF_FOR_DEFECTION:
-                return "Fief for Defection";
+                return Presentation.text("lord_request.fief_for_defection");
 
         }
         return null;

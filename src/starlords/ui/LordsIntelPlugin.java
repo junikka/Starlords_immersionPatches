@@ -1,5 +1,7 @@
 package starlords.ui;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
 import com.fs.starfarer.api.campaign.FactionAPI;
@@ -91,7 +93,7 @@ public class LordsIntelPlugin extends BaseIntelPlugin {
         String wealthStr;
         if (lord.getPlayerRel() < repForWealth
                 && !isSubject && !isMarried && !DEBUG_MODE) {
-            wealthStr = "[REDACTED]";
+            wealthStr = Presentation.text("lords.redacted");
         } else {
             wealthStr = Integer.toString((int) lord.getWealth());
         }
@@ -101,7 +103,7 @@ public class LordsIntelPlugin extends BaseIntelPlugin {
             personalityStr = lord.getPersonality().toString();
             personalityStr = personalityStr.substring(0, 1) + personalityStr.substring(1).toLowerCase();
         } else {
-            personalityStr = "Unknown";
+            personalityStr = Presentation.text("lords.unknown");
         }
         String orderStr;
         orderStr = Utils.getLordCurrOrders(lord, repForCurAction);
@@ -109,34 +111,35 @@ public class LordsIntelPlugin extends BaseIntelPlugin {
         String lastSeenStr;
         if (lord.getPlayerRel() < repForLocation
                 && !isSubject && !isMarried && !DEBUG_MODE) {
-            lastSeenStr = "[REDACTED]";
+            lastSeenStr = Presentation.text("lords.redacted");
         }  else if (!fleet.isAlive()) {
-            lastSeenStr = "N/A";
+            lastSeenStr = Presentation.text("lords.n_a");
         } else if (lord.getCurrAction() == LordAction.COMPANION) {
             lastSeenStr = Utils.getNearbyDescription(Global.getSector().getPlayerFleet());
         } else {
             lastSeenStr = Utils.getNearbyDescription(fleet);
         }
 
-        summary.addPara("Rank: " + lord.getTitle(), pad, uiColor, factionColor, "Rank: ", lord.getTitle());
+        summary.addPara(Presentation.text("lords.rank") + lord.getTitle(), pad, uiColor, factionColor, Presentation.text("lords.rank"), lord.getTitle());
+        summary.addPara(Presentation.format("standing.label", "tier", Integer.toString(lord.getRanking() + 1)), uiColor, pad);
         if (fiefStr.isEmpty()) {
-            summary.addPara("Fiefs: None", uiColor, pad);
+            summary.addPara(Presentation.text("lords.fiefs_none"), uiColor, pad);
         } else {
-            summary.addPara("Fiefs: " + fiefStr, pad, uiColor, factionColor, "Fiefs: ", fiefStr);
+            summary.addPara(Presentation.text("lords.fiefs") + fiefStr, pad, uiColor, factionColor, Presentation.text("lords.fiefs"), fiefStr);
         }
-        summary.addPara("Personality: " + personalityStr, uiColor, pad);
-        summary.addPara("Wealth: " + wealthStr, uiColor, pad);
-        summary.addPara("Last Seen: " + lastSeenStr, uiColor, pad);
-        summary.addPara("Orders: " + orderStr, uiColor, pad);
-        summary.addPara("Kills: " + lord.getKills(), uiColor, pad);
+        summary.addPara(Presentation.text("lords.personality") + personalityStr, uiColor, pad);
+        summary.addPara(Presentation.text("lords.wealth") + wealthStr, uiColor, pad);
+        summary.addPara(Presentation.text("lords.last_seen") + lastSeenStr, uiColor, pad);
+        summary.addPara(Presentation.text("lords.orders") + orderStr, uiColor, pad);
+        summary.addPara(Presentation.text("lords.kills") + lord.getKills(), uiColor, pad);
         outer.addImageWithText(pad);
         outer.addRelationshipBar(lord.getLordAPI(), pad);
         // lore
-        outer.addSectionHeading("Character Bio",
+        outer.addSectionHeading(Presentation.text("lords.character_bio"),
                 faction.getBrightUIColor(), faction.getDarkUIColor(), Alignment.LMID, opad);
         outer.addPara(lord.getTemplate().lore, opad);
 
-        outer.addSectionHeading("Fleet Composition",
+        outer.addSectionHeading(Presentation.text("lords.fleet_composition"),
                 faction.getBrightUIColor(), faction.getDarkUIColor(), Alignment.LMID, opad);
         // shiplist
         if (lord.getCurrAction() != LordAction.COMPANION) {
@@ -147,23 +150,23 @@ public class LordsIntelPlugin extends BaseIntelPlugin {
                 outer.addShipList(15, rows, 48, factionColor,
                         lord.getLordAPI().getFleet().getMembersWithFightersCopy(), opad);
             } else {
-                outer.addPara("[REDACTED]", pad);
+                outer.addPara(Presentation.text("lords.redacted"), pad);
             }
         }
 
         // comms
         // TODO this doesnt really work
         float buttonPad = Math.min(Math.max(opad, height - outer.getHeightSoFar() - 160), 100 + pad);
-        ButtonAPI button = outer.addButton("Open Comms", OPEN_COMMS_BUTTON, 150, 20, buttonPad);
+        ButtonAPI button = outer.addButton(Presentation.text("lords.open_comms"), OPEN_COMMS_BUTTON, 150, 20, buttonPad);
         button.setShortcut(Keyboard.KEY_C, true);
         if (lord.getPlayerRel() < repForComs
                 && !isSubject && !isMarried && !DEBUG_MODE) {
             button.setEnabled(false);
-            outer.addTooltipToPrevious(new ToolTip(175, "Requires higher relations"),
+            outer.addTooltipToPrevious(new ToolTip(175, Presentation.text("lords.requires_higher_relations")),
                     TooltipMakerAPI.TooltipLocation.BELOW);
         } else if (lord.getCurrAction() == LordAction.IMPRISONED) {
             button.setEnabled(false);
-            outer.addTooltipToPrevious(new ToolTip(175, "Lord is imprisoned"),
+            outer.addTooltipToPrevious(new ToolTip(175, Presentation.text("lords.lord_is_imprisoned")),
                     TooltipMakerAPI.TooltipLocation.BELOW);
         }
         panel.addUIElement(outer).inTL(0, 0);

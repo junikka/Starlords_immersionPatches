@@ -21,6 +21,9 @@ import starlords.lunaSettings.StoredSettings;
 import starlords.person.Lord;
 import starlords.plugins.LordInteractionDialogPluginImpl;
 import starlords.util.Constants;
+import starlords.presentation.DialogueTokens;
+import starlords.presentation.TextRenderer;
+import starlords.presentation.Presentation;
 import starlords.util.GenderUtils;
 import starlords.util.Utils;
 import starlords.util.dialogControler.dialogInsert.DialogInsertList;
@@ -80,7 +83,7 @@ public class DialogSet {
         DialogSet set = getSet(lord,targetLord,targetMarket, key);
         if (set == null) {
             Logger log = Global.getLogger(DialogSet.class);
-            log.info("ERROR: FAILED TO GET DIALOG SET OF KEY: "+key);
+            log.warn("ERROR: FAILED TO GET DIALOG SET OF KEY: "+key);
             return;
         }
         set.applyLine(key, lord,targetLord,targetMarket, textPanel, options,dialog,forceHide,markersReplaced);
@@ -95,7 +98,7 @@ public class DialogSet {
 
     private static DialogSet getSet(Lord lord,Lord targetLord, MarketAPI targetMarket,String id){
         Logger log = Global.getLogger(DialogSet.class);
-        log.info("attempting to get set line ID of: "+id);
+        if (log.isDebugEnabled()) log.debug("attempting to get set line ID of: "+id);
         if (lord.getTemplate().dialogOverride != null) {
             for (String a : lord.getTemplate().dialogOverride) {
                 DialogSet out = dialogs.get(a).getSet(lord, targetLord, targetMarket, id);
@@ -122,374 +125,34 @@ public class DialogSet {
     public static String getLine(Lord lord,Lord targetLord, MarketAPI targetMarket,String id){
         DialogSet set = getSet(lord,targetLord,targetMarket, id);
         if (set != null) return set.getLine(id);
-        return "ERROR: unable to get line of dialog. id of: "+id;
+        Global.getLogger(DialogSet.class).warn("Missing dialogue line: " + id);
+        return Presentation.text("dialogue.unavailable");
     }
     @Deprecated
     public static String getLineWithInserts(Lord lord,String id){
         //String line = getLine(lord,null,id);
         return "";//insertDefaltData(line,lord);
     }
-    public static String insertData(String line, String mark, String replace){
-        /*StringBuilder out = new StringBuilder();
-        if (markAtStart(line,mark)){
-            out.append(replaced);
-        }
-        String[] lines = line.split(mark);
-        for (String a : lines){
-            out.append(a);
-            out.append(replaced);
-        }
-        if (markAtEnd(line,mark)){
-            out.append(replaced);
-        }*/
-        return line.replaceAll(mark,replace);
+    public static String insertData(String line, String mark, String replacement) {
+        HashMap<String, String> values = new HashMap<>();
+        values.put(mark, replacement);
+        return TextRenderer.render(line, values);
     }
-    public static String insertAdditionalData(String line,HashMap<String,String> markersReplaced){
-        for (String a : markersReplaced.keySet()){
-            line = insertData(line,a,markersReplaced.get(a));
-        }
-        return line;
+    public static String insertAdditionalData(String line, HashMap<String,String> markersReplaced) {
+        return TextRenderer.render(line, markersReplaced);
     }
-    public static String insertDefaltData(String line, Lord lord,Lord targetLord,MarketAPI targetMarket,boolean clone){
-        if (!clone) return insertDefaltData(line, lord, targetLord, targetMarket);
-        StringBuilder lineTemp = new StringBuilder();
-        for (char a : line.toCharArray()){
-            lineTemp.append(a);
-        }
-        line = lineTemp.toString();
-        return insertDefaltData(line, lord, targetLord, targetMarket);
+    public static String insertDefaltData(String line, Lord lord, Lord targetLord, MarketAPI market, boolean clone) {
+        return insertDefaltData(line, lord, targetLord, market);
     }
-    public static String insertDefaltData(String line, Lord lord,Lord targetLord,MarketAPI targetMarket){
-        line = getPlayerStringMods(line,lord);
-        line = getPlayerPartnerStringMods(line,lord);
-
-        line = getLordStringMods(line,lord);
-        line = getLordPartnerStringMods(line,lord);
-
-        line = getHostLordStringMods(line,lord);
-        line = getHostLordPartnerStringMods(line,lord);
-
-        line = getWeddingTargetLordStringMods(line,lord);
-        line = getWeddingTargetPartnerStringMods(line,lord);
-
-        line = getSecondLordStringMods(line,targetLord);
-        line = getSecondLordPartnerStringMods(line,targetLord);
-
-        line = getTargetMarketStringMods(line,targetMarket);
-        return line;
+    public static String insertDefaltData(String line, Lord lord, Lord targetLord, MarketAPI market) {
+        return TextRenderer.render(line, DialogueTokens.values(lord, targetLord, market));
     }
-
-    private static String getPlayerStringMods(String line, Lord lord){
-        String data = Utils.getRecruitmentFaction().getDisplayName();
-        line = insertData(line,"%PLAYER_FACTION_NAME",data);
-
-        data = Global.getSector().getPlayerPerson().getNameString();
-        line = insertData(line,"%PLAYER_NAME",data);
-
-        data = Global.getSector().getPlayerPerson().getName().getFirst();
-        line = insertData(line,"%PLAYER_NAME_FIRST",data);
-
-        data = Global.getSector().getPlayerPerson().getName().getLast();
-        line = insertData(line,"%PLAYER_NAME_LAST",data);
-
-        data = LordController.getPlayerLord().getTitle();
-        if (data == null) data = "";
-        line = insertData(line,"%PLAYER_TITLE",data);
-
-        data = Global.getSector().getPlayerPerson().getManOrWoman();
-        line = insertData(line,"%PLAYER_GENDER_MAN_OR_WOMEN",data);
-
-        data = Global.getSector().getPlayerPerson().getHeOrShe();
-        line = insertData(line,"%PLAYER_GENDER_HE_OR_SHE",data);
-
-        data = Global.getSector().getPlayerPerson().getHimOrHer();
-        line = insertData(line,"%PLAYER_GENDER_HIM_OR_HER",data);
-
-        data = Global.getSector().getPlayerPerson().getHisOrHer();
-        line = insertData(line,"%PLAYER_GENDER_HIS_OR_HER",data);
-
-        data = LordController.getPlayerLord().getFormalWear();
-        line = insertData(line,"%PLAYER_GENDER_SUIT_OR_DRESS",data);
-
-        data = GenderUtils.sirOrMaam(Global.getSector().getPlayerPerson(), false);
-        line = insertData(line,"%PLAYER_GENDER_SIR_OR_MAAM",data);
-
-        data = Global.getSector().getPlayerPerson().getGender().name();
-        line = insertData(line,"%PLAYER_GENDER_NAME",data);
-
-        data = Global.getSector().getPlayerPerson().getGender().name();
-        line = insertData(line,"%PLAYER_GENDER_NAME",data);
-
-        FleetMemberAPI flownShip = getFlownShip(Global.getSector().getPlayerPerson(),Global.getSector().getPlayerFleet());
-        data = "nothing";//todo: move this, like everything else, into the strings file. for modality of different languages.
-        if (flownShip != null) data = flownShip.getHullSpec().getHullName();
-        line = insertData(line,"%PLAYER_FLAGSHIP_HULLNAME",data);
-
-        data = "nothing";//todo: move this, like everything else, into the strings file. for modality of different languages.
-        if (flownShip != null) data = flownShip.getShipName();
-        line = insertData(line,"%PLAYER_FLAGSHIP_NAME",data);
-
-        data = GenderUtils.husbandOrWife(Global.getSector().getPlayerPerson(), false);
-        line = insertData(line,"%PLAYER_GENDER_HUSBAND_OR_WIFE",data);
-
-        data = "nothing";
-        LawProposal lordProposal = PoliticsController.getProposal(lord);
-        if (lordProposal != null) data = lordProposal.getTitle();
-        line = insertData(line,"%PLAYER_PROPOSAL_NAME",data);
-
-        data = "nowhere";
-        if (Global.getSector().getPlayerFleet() != null && Utils.getNearbyDescription(Global.getSector().getPlayerFleet()) != null) data = Utils.getNearbyDescription(Global.getSector().getPlayerFleet());
-        line = insertData(line,"%PLAYER_FLEET_LOCATION",data);
-
-        data = "noone";
-        if (LordController.getPlayerLord().getLiegeName() != null) data = LordController.getPlayerLord().getLiegeName();
-        line = insertData(line,"%PLAYER_LIEGE_NAME",data);
-
-        data = Utils.getFactionTitle(lord.getFaction().getId(),0);
-        line = insertData(line,"%PLAYER_FACTION_RANK_TITLE0",data);
-
-        data = Utils.getFactionTitle(lord.getFaction().getId(),1);
-        line = insertData(line,"%PLAYER_FACTION_RANK_TITLE1",data);
-
-        data = Utils.getFactionTitle(lord.getFaction().getId(),2);
-        line = insertData(line,"%PLAYER_FACTION_RANK_TITLE2",data);
-        return line;
-    }
-    private static String getPlayerPartnerStringMods(String line, Lord lord){
-        if (LordController.getPlayerLord().getSpouse() != null) return get_Person_StringMods(line,LordController.getLordOrPlayerById(LordController.getPlayerLord().getSpouse()),"PLAYER_SPOUSE_");
-        return get_null_Person_StringMods(line,"PLAYER_SPOUSE_");
-    }
-    private static String getLordStringMods(String line, Lord lord){
-        return get_Person_StringMods(line,lord,"LORD_");
-    }
-    private static String getLordPartnerStringMods(String line, Lord lord){
-        if (lord.getSpouse() == null) return get_null_Person_StringMods(line,"LORD_SPOUSE_");
-        lord = LordController.getLordOrPlayerById(lord.getSpouse());
-        return get_Person_StringMods(line,lord,"LORD_SPOUSE_");
-    }
-    private static String getHostLordStringMods(String line, Lord lord){
-        boolean check = EventController.getCurrentFeast(lord.getLordAPI().getFaction()) != null && EventController.getCurrentFeast(lord.getLordAPI().getFaction()).getOriginator() != null;
-        if (check){
-            Lord temp = EventController.getCurrentFeast(lord.getLordAPI().getFaction()).getOriginator();
-            if (temp != null){
-                lord = temp;
-                return get_Person_StringMods(line,lord,"LORD_HOST_");
-            }
-        }
-        return get_null_Person_StringMods(line,"LORD_HOST_");
-    }
-    private static String getHostLordPartnerStringMods(String line, Lord lord){
-        boolean check = EventController.getCurrentFeast(lord.getLordAPI().getFaction()) != null && EventController.getCurrentFeast(lord.getLordAPI().getFaction()).getOriginator() != null;
-        if (check){
-            Lord temp = EventController.getCurrentFeast(lord.getLordAPI().getFaction()).getOriginator();
-            if (temp != null) {
-                lord = temp;
-                if (lord.getSpouse() != null){
-                    lord = LordController.getLordOrPlayerById(lord.getSpouse());
-                    return get_Person_StringMods(line,lord,"LORD_HOST_SPOUSE_");
-                }
-            }
-        }
-        return get_null_Person_StringMods(line,"LORD_HOST_SPOUSE_");
-    }
-    private static String getWeddingTargetLordStringMods(String line, Lord lord){
-        boolean check = EventController.getCurrentFeast(lord.getLordAPI().getFaction()) != null;
-        if (check){
-            Lord temp = EventController.getCurrentFeast(lord.getLordAPI().getFaction()).getWeddingCeremonyTarget();
-            if (temp != null) return get_Person_StringMods(line,temp,"WEDDING_TARGET_");
-        }
-        return get_null_Person_StringMods(line,"WEDDING_TARGET_");
-    }
-    private static String getWeddingTargetPartnerStringMods(String line, Lord lord){
-        boolean check = EventController.getCurrentFeast(lord.getLordAPI().getFaction()) != null;
-        if (check){
-            Lord temp = EventController.getCurrentFeast(lord.getLordAPI().getFaction()).getWeddingCeremonyTarget();
-            if (temp != null){
-                lord = temp;
-                if (lord.getSpouse() != null){
-                    lord = LordController.getLordOrPlayerById(lord.getSpouse());
-                    return get_Person_StringMods(line,lord,"WEDDING_TARGET_SPOUSE_");
-                }
-            }
-        }
-        return get_null_Person_StringMods(line,"WEDDING_TARGET_SPOUSE_");
-    }
-    private static String getSecondLordStringMods(String line,Lord targetLord){
-        if (targetLord == null) return get_null_Person_StringMods(line,"SECOND_LORD_");
-        return get_Person_StringMods(line,targetLord,"SECOND_LORD_");
-    }
-    private static String getSecondLordPartnerStringMods(String line,Lord targetLord){
-        if (targetLord == null || targetLord.getSpouse() == null) return get_null_Person_StringMods(line,"SECOND_LORD_SPOUSE_");
-        targetLord = LordController.getLordOrPlayerById(targetLord.getSpouse());
-        return get_Person_StringMods(line,targetLord,"SECOND_LORD_SPOUSE_");
-    }
-
-    private static String get_Person_StringMods(String line, Lord lord, String key){
-        String data = lord.getFaction().getDisplayName();
-        line = insertData(line,"%"+key+"FACTION_NAME",data);
-
-        data = "";
-        if (lord.getTemplate() != null)data = Global.getSector().getFaction(lord.getTemplate().factionId).getDisplayName();
-        line = insertData(line,"%"+key+"STARTING_FACTION_NAME",data);
-
-        data = lord.getLordAPI().getNameString();
-        line = insertData(line,"%"+key+"NAME",data);
-
-        data = lord.getLordAPI().getName().getFirst();
-        line = insertData(line,"%"+key+"NAME_FIRST",data);
-
-        data = lord.getLordAPI().getName().getLast();
-        line = insertData(line,"%"+key+"NAME_LAST",data);
-
-        data = lord.getTitle();
-        line = insertData(line,"%"+key+"TITLE",data);
-
-        data = lord.getLordAPI().getManOrWoman();
-        line = insertData(line,"%"+key+"GENDER_MAN_OR_WOMEN",data);
-
-        data = lord.getLordAPI().getHeOrShe();
-        line = insertData(line,"%"+key+"GENDER_HE_OR_SHE",data);
-
-        data = lord.getLordAPI().getHimOrHer();
-        line = insertData(line,"%"+key+"GENDER_HIM_OR_HER",data);
-
-        data = lord.getLordAPI().getHisOrHer();
-        line = insertData(line,"%"+key+"GENDER_HIS_OR_HER",data);
-
-        data = lord.getFormalWear();
-        line = insertData(line,"%"+key+"GENDER_SUIT_OR_DRESS",data);
-
-        data = GenderUtils.sirOrMaam(lord.getLordAPI(), false);
-        line = insertData(line,"%"+key+"GENDER_SIR_OR_MAAM",data);
-
-        data = lord.getLordAPI().getGender().name();
-        line = insertData(line,"%"+key+"GENDER_NAME",data);
-
-        FleetMemberAPI flownShip = getFlownShip(lord.getLordAPI(),lord.getFleet());
-        data = "nothing";//todo: move this, like everything else, into the strings file. for modality of different languages.
-        if (flownShip != null) data = flownShip.getHullSpec().getHullName();
-        line = insertData(line,"%"+key+"FLAGSHIP_HULLNAME",data);
-
-        data = "nothing";//todo: move this, like everything else, into the strings file. for modality of different languages.
-        if (flownShip != null) data = flownShip.getShipName();
-        line = insertData(line,"%"+key+"FLAGSHIP_NAME",data);
-
-        data = GenderUtils.husbandOrWife(lord.getLordAPI(), false);
-        line = insertData(line,"%"+key+"GENDER_HUSBAND_OR_WIFE",data);
-
-        data = "nothing";
-        LawProposal lordProposal = PoliticsController.getProposal(lord);
-        if (lordProposal != null) data = lordProposal.getTitle();
-        line = insertData(line,"%"+key+"PROPOSAL_NAME",data);
-
-        data = "nowhere";
-        if (lord.getLordAPI().getFleet() != null && Utils.getNearbyDescription(lord.getLordAPI().getFleet()) != null) data = Utils.getNearbyDescription(lord.getLordAPI().getFleet());
-        line = insertData(line,"%"+key+"FLEET_LOCATION",data);
-
-        data = "noone";
-        if (lord.getLiegeName() != null) data = lord.getLiegeName();
-        line = insertData(line,"%"+key+"LIEGE_NAME",data);
-
-        data = Utils.getFactionTitle(lord.getFaction().getId(),0);
-        line = insertData(line,"%"+key+"FACTION_RANK_TITLE0",data);
-
-        data = Utils.getFactionTitle(lord.getFaction().getId(),1);
-        line = insertData(line,"%"+key+"FACTION_RANK_TITLE1",data);
-
-        data = Utils.getFactionTitle(lord.getFaction().getId(),2);
-        line = insertData(line,"%"+key+"FACTION_RANK_TITLE2",data);
-        return line;
-    }
-    private static String get_null_Person_StringMods(String line, String key){
-        String data = "ERROR: failed to get date of: '"+key+"'";
-        line = insertData(line,"%"+key+"FACTION_NAME",data);
-
-        line = insertData(line,"%"+key+"STARTING_FACTION_NAME",data);
-
-        line = insertData(line,"%"+key+"NAME",data);
-
-        line = insertData(line,"%"+key+"NAME_FIRST",data);
-
-        line = insertData(line,"%"+key+"NAME_LAST",data);
-
-        line = insertData(line,"%"+key+"TITLE",data);
-
-        line = insertData(line,"%"+key+"GENDER_MAN_OR_WOMEN",data);
-
-        line = insertData(line,"%"+key+"GENDER_HE_OR_SHE",data);
-
-        line = insertData(line,"%"+key+"GENDER_HIM_OR_HER",data);
-
-        line = insertData(line,"%"+key+"GENDER_HIS_OR_HER",data);
-
-        line = insertData(line,"%"+key+"GENDER_SUIT_OR_DRESS",data);
-
-        line = insertData(line,"%"+key+"GENDER_SIR_OR_MAAM",data);
-
-        line = insertData(line,"%"+key+"GENDER_NAME",data);
-
-        line = insertData(line,"%"+key+"FLAGSHIP_HULLNAME",data);
-
-        line = insertData(line,"%"+key+"FLAGSHIP_NAME",data);
-
-        line = insertData(line,"%"+key+"GENDER_HUSBAND_OR_WIFE",data);
-
-        line = insertData(line,"%"+key+"PROPOSAL_NAME",data);
-
-        line = insertData(line,"%"+key+"FLEET_LOCATION",data);
-
-        line = insertData(line,"%"+key+"LIEGE_NAME",data);
-        return line;
-    }
-
-    private static String getTargetMarketStringMods(String line,MarketAPI market){
-        if (market != null) return get_Market_StringMods(line,market,"TARGET_MARKET_");
-        return get_null_Market_StringMods(line,"TARGET_MARKET_");
-    }
-    private static String get_Market_StringMods(String line,MarketAPI market,String key){
-        String data = market.getName();
-        line = insertData(line,"%"+key+"NAME",data);
-
-        data = market.getFaction().getDisplayName();
-        line = insertData(line,"%"+key+"FACTION",data);
-
-        data = "nowere";
-        if (market.getStarSystem() != null)data = market.getStarSystem().getName();
-        line = insertData(line,"%"+key+"SYSTEM",data);
-
-        data = market.getSize()+"";
-        line = insertData(line,"%"+key+"SIZE",data);
-
-        data = market.getStabilityValue()+"";
-        line = insertData(line,"%"+key+"STABILITY",data);
-
-        return line;
-    }
-    private static String get_null_Market_StringMods(String line,String key){
-        String data = "nothing";
-        line = insertData(line,"%"+key+"NAME",data);
-
-        line = insertData(line,"%"+key+"FACTION",data);
-
-        line = insertData(line,"%"+key+"SYSTEM",data);
-
-        line = insertData(line,"%"+key+"SIZE",data);
-
-        line = insertData(line,"%"+key+"STABILITY",data);
-
-        return line;
-    }
-
-    private static FleetMemberAPI getFlownShip(PersonAPI lord, CampaignFleetAPI fleet){
-        if (fleet == null) return null;
-        FleetMemberAPI output = fleet.getFlagship();
-        if (output != null && output.getCaptain() != null && fleet.getFlagship().getCaptain().getId().equals(lord.getId())) return output;
-        for (FleetMemberAPI a : fleet.getFleetData().getMembersListCopy()){
-            if (a.getCaptain() != null && a.getCaptain().getId().equals(lord.getId())){
-                return a;
-            }
-        }
-        return null;
+    private java.util.Map<String,String> textContext(String key, String line, Lord lord, Lord targetLord,
+                                                    MarketAPI market, HashMap<String,String> additional) {
+        java.util.Map<String,String> values = DialogueTokens.values(lord, targetLord, market);
+        if (customInserts.containsKey(key)) values.putAll(customInserts.get(key).values(line, lord, targetLord, market));
+        if (additional != null) values.putAll(additional);
+        return values;
     }
 
     private static boolean markAtStart(String line, String mark){
@@ -640,7 +303,7 @@ public class DialogSet {
     }
     public void applyLine(String key, Lord lord,Lord targetLord, MarketAPI targetMarket, TextPanelAPI textPanel, OptionPanelAPI options, InteractionDialogAPI dialog, boolean forceHide, HashMap<String,String> markersReplaced){
         Logger log = Global.getLogger(DialogSet.class);
-        log.info("applying line of key: "+key);
+        if (log.isDebugEnabled()) log.debug("applying line of key: "+key);
         //apply a paragraph of text for the current line
         /*if (runStartingOptions(key, lord, targetLord, targetMarket, textPanel, null, options, dialog, markersReplaced)){
             return;
@@ -648,16 +311,15 @@ public class DialogSet {
         if (shouldHide(key,textPanel,options,lord,targetLord,targetMarket)) return;
         String line = this.getLine(key);
         if (line != null && !line.equals("") && !shouldHide(key, textPanel, options, lord,targetLord,targetMarket) && !forceHide) {
-            log.info("running dialog of line: "+line);
+            if (log.isDebugEnabled()) log.debug("running dialog of line: "+line);
             //if (!((key.equals("greeting") || key.equals(LordInteractionDialogPluginImpl.startingDialog)) && LordInteractionDialogPluginImpl.isHasGreeted())) {
-            line = insertCustomData(key, line, lord, targetLord, targetMarket);
-            line = insertDefaltData(line, lord, targetLord, targetMarket);
-            line = insertAdditionalData(line, markersReplaced);
+            java.util.Map<String,String> values = textContext(key, line, lord, targetLord, targetMarket, markersReplaced);
+            line = Presentation.render("dialogue." + key, line, values);
             String[] highlightsTemp = new String[0];
             if (colorHighlight.containsKey(key)) {
                 highlightsTemp = new String[highlight.get(key).length];
                 for (int a = 0; a < highlightsTemp.length; a++) {
-                    highlightsTemp[a] = insertDefaltData(highlight.get(key)[a], lord, targetLord, targetMarket, true);
+                    highlightsTemp[a] = Presentation.render("dialogue." + key + ".highlight", highlight.get(key)[a], values);
                 }
             }
             if (colorOverride.containsKey(key)) {
@@ -693,17 +355,17 @@ public class DialogSet {
                 builtOptions = true;
             }
             for (String a : additionalOptions.get(key)){
-                log.info("  ADDITIONAL OPTIONS: a single option of key: "+a);
+                if (log.isDebugEnabled()) log.debug("  ADDITIONAL OPTIONS: a single option of key: "+a);
                 //if (runStartingOptions(a,lord,targetLord,targetMarket,textPanel,null,options,dialog,markersReplaced)) continue;
                 addOptionWithInserts(a,lord,targetLord,targetMarket,textPanel,options,dialog,markersReplaced);
             }
         }else if (defaltOptionSets.containsKey(key)){
-            log.info("getting default options of: "+defaltOptionSets.get(key));
+            if (log.isDebugEnabled()) log.debug("getting default options of: "+defaltOptionSets.get(key));
             addParaWithInserts(defaltOptionSets.get(key),lord,targetLord,targetMarket,textPanel,options,dialog,false,markersReplaced);
             builtOptions = true;
         }
         if (!builtOptions){
-            log.info("got no options from key of: "+key);
+            if (log.isDebugEnabled()) log.debug("got no options from key of: "+key);
             //???????? unknown process.
             //what I would attempt to do here is run the optionData of the line. effectively, just changing lines directly after. this can be done with chained lines though?
         }
@@ -723,19 +385,19 @@ public class DialogSet {
     }
     public void applyOption(String key, Lord lord,Lord targetLord, MarketAPI targetMarket, TextPanelAPI textPanel,Object optionData,OptionPanelAPI options, InteractionDialogAPI dialog,HashMap<String,String> markersReplaced){
         Logger log = Global.getLogger(StoredSettings.class);
-        log.info("  checking option of key: "+key);
+        if (log.isDebugEnabled()) log.debug("  checking option of key: "+key);
         if (advancedDialogOptionData.containsKey(key)){
-            log.info("  attempting to add advanced option for: "+key);
+            if (log.isDebugEnabled()) log.debug("  attempting to add advanced option for: "+key);
             advancedDialogOptionData.get(key).applyOptions(lord,targetLord,targetMarket,textPanel,options,dialog,markersReplaced);
         }else{
-            log.info("  attempting to add basic option for: "+key);
+            if (log.isDebugEnabled()) log.debug("  attempting to add basic option for: "+key);
             applyOptionSingle(key, lord, targetLord,targetMarket, textPanel, optionData, options, dialog, markersReplaced);
         }
     }
     public void applyOptionSingle(String key, Lord lord,Lord targetLord,MarketAPI targetMarket, TextPanelAPI textPanel,Object optionData,OptionPanelAPI options, InteractionDialogAPI dialog,HashMap<String,String> markersReplaced){
         Logger log = Global.getLogger(DialogSet.class);
         String line = this.getLine(key);
-        log.info("running option of key: "+key);
+        if (log.isDebugEnabled()) log.debug("running option of key: "+key);
         if (optionData != null){
             DialogOption temp = ((DialogOption)optionData);
             temp.optionID = attemptKeyRedirection(temp.optionID);
@@ -744,14 +406,12 @@ public class DialogSet {
             return;
         }*/
         if (!shouldHide(key, textPanel, options, lord,targetLord,targetMarket) && (line != null)) {
-            log.info("adding option key: " + key);
-            line = insertCustomData(key, line, lord, targetLord, targetMarket);
-            line = insertDefaltData(line, lord, targetLord, targetMarket);
-            line = insertAdditionalData(line, markersReplaced);
+            if (log.isDebugEnabled()) log.debug("adding option key: " + key);
+            java.util.Map<String,String> values = textContext(key, line, lord, targetLord, targetMarket, markersReplaced);
+            line = Presentation.render("dialogue." + key, line, values);
             if (hint.containsKey(key)) {
                 String line2 = hint.get(key);
-                line2 = insertDefaltData(line2, lord, targetLord, targetMarket);
-                line2 = insertAdditionalData(line2, markersReplaced);
+                line2 = Presentation.render("dialogue." + key + ".hint", line2, values);
                 if (colorOverride.containsKey(key)) {
                     options.addOption(line, optionData, colorOverride.get(key), line2);
                 } else {
@@ -784,7 +444,7 @@ public class DialogSet {
                 options.setEnabled(optionData, false);
             }
         }else if(line == null){
-            log.info("attempting to run option as optionSet.");
+            if (log.isDebugEnabled()) log.debug("attempting to run option as optionSet.");
             DialogOption optionDataTemp = (DialogOption)optionData;
             //note: target lord and market set in internal data of dialogOption. not needed for input.
             optionDataTemp.applyAddons(textPanel, options, dialog, lord);
@@ -792,7 +452,7 @@ public class DialogSet {
         //log.info("attempting to add options from options" + key);
         boolean builtOptions = false;
         if (additionalOptions.containsKey(key)) {
-            log.info("running additional options from option...");
+            if (log.isDebugEnabled()) log.debug("running additional options from option...");
             //log.info("ADDITIONAL OPTIONS: adding options from key of: " + key);
             if (additionalOptions.get(key).size() != 0) {
                 options.clearOptions();
@@ -803,7 +463,7 @@ public class DialogSet {
                 addOptionWithInserts(a, lord,targetLord,targetMarket, textPanel, options, dialog, markersReplaced);
             }
         } else if (defaltOptionSets.containsKey(key)) {
-            log.info("running default option sets of key "+key+" from options...");
+            if (log.isDebugEnabled()) log.debug("running default option sets of key "+key+" from options...");
             //log.info("getting default options from, to key: " + key + ", " + defaltOptionSets.get(key));
             addParaWithInserts(defaltOptionSets.get(key), lord,targetLord,targetMarket, textPanel, options, dialog, false, markersReplaced);
             builtOptions = true;
@@ -1069,6 +729,9 @@ public class DialogSet {
                     break;
                 case "attemptToAddRandomQuest":
                     addon = addAddon_attemptToAddRandomQuest(addons,key2);
+                    break;
+                case "askForPromotion":
+                    addon = addons.optBoolean(key2) ? new DialogAddon_askForPromotion() : null;
                     break;
                 case "AICommand":
                     addon = addAddon_AICommand(addons,key2);
@@ -1560,6 +1223,9 @@ public class DialogSet {
                     break;
                 case "lordAndPlayerSameFaction":
                     rules.add(addRule_lordAndPlayerSameFaction(rulesTemp,key));
+                    break;
+                case "playerCanSeekPromotion":
+                    rules.add(new DialogRule_playerCanSeekPromotion(rulesTemp.optBoolean(key)));
                     break;
                 case "playerHasCommodity":
                     rules.addAll(addRule_playerHasCommodity(rulesTemp,key));

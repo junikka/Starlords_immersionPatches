@@ -1,5 +1,7 @@
 package starlords.console;
 
+import starlords.presentation.Presentation;
+
 import org.lazywizard.console.BaseCommand;
 import org.lazywizard.console.Console;
 import starlords.controllers.LordController;
@@ -15,7 +17,7 @@ public class PrintLordsDefectionWeights implements BaseCommand {
         for (Lord lord : LordController.getLordsList())
             DefectionUtils.getLordPreferredFaction(lord,true);
 
-        Console.showMessage("Print full lord list defection weights to log");
+        Console.showMessage(Presentation.text("print_lords_defection_weights.print_full_lord_list_defection_weights_to_log"));
         return CommandResult.SUCCESS;
 
     }

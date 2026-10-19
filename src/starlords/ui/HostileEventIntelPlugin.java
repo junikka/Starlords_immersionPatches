@@ -1,5 +1,7 @@
 package starlords.ui;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
@@ -42,8 +44,8 @@ public class HostileEventIntelPlugin extends BaseIntelPlugin {
 			alliedOriginator = event.getOriginator().getFaction().equals(Utils.getRecruitmentFaction());
 		else
 			alliedOriginator = false;
-		if (alliedOriginator) eventType = "Allied";
-			else eventType = "Hostile";
+		if (alliedOriginator) eventType = Presentation.text("hostile_event.allied");
+			else eventType = Presentation.text("hostile_event.hostile");
     }
 
 	@Override
@@ -53,24 +55,24 @@ public class HostileEventIntelPlugin extends BaseIntelPlugin {
 		FactionAPI faction = originator.getFaction();
 		info.addImages(256, 128, pad, 0, faction.getCrest(),
 				originator.getLordAPI().getPortraitSprite());
-		info.addPara("You've received reports of an imminent " + eventType.toLowerCase() + " incursion led by "
+		info.addPara(Presentation.text("hostile_event.you_ve_received_reports_of_an_imminent") + eventType.toLowerCase() + Presentation.text("hostile_event.incursion_led_by")
 				+ originator.getLordAPI().getNameString() + ".", opad);
-		info.addPara("Target: " + target.getName(), uiColor, opad);
-		info.addPara(eventType + " fleets: " + (event.getParticipants().size() + 1), uiColor, pad);
+		info.addPara(Presentation.text("hostile_event.target") + target.getName(), uiColor, opad);
+		info.addPara(eventType + Presentation.text("hostile_event.fleets") + (event.getParticipants().size() + 1), uiColor, pad);
 
 		String arrivalDays = Utils.getLordTravelTimeString(event.getOriginator(), event.getTarget());
-		String arrivalStr = originator.getLordAPI().getNameString() + " - estimated arrival: " + arrivalDays;
+		String arrivalStr = originator.getLordAPI().getNameString() + Presentation.text("hostile_event.estimated_arrival") + arrivalDays;
 		info.addPara(arrivalStr, opad, Misc.getHighlightColor(), arrivalDays);
 
 		for (Lord lord : event.getParticipants()) {
 			arrivalDays = Utils.getLordTravelTimeString(lord, event.getTarget());
-			arrivalStr = lord.getLordAPI().getNameString() + " - estimated arrival:  " + arrivalDays;
+			arrivalStr = lord.getLordAPI().getNameString() + Presentation.text("hostile_event.estimated_arrival_67") + arrivalDays;
 			info.addPara(arrivalStr, opad, Misc.getHighlightColor(), arrivalDays);
 		}
 
 		if (event.getOpposition().size() > 0) {
-			info.addPara("Nearby lords are assisting in the defense.", opad);
-			info.addPara("Defenders:", uiColor, pad);
+			info.addPara(Presentation.text("hostile_event.nearby_lords_are_assisting_in_the_defense"), opad);
+			info.addPara(Presentation.text("hostile_event.defenders"), uiColor, pad);
 			String[] portraits = new String[event.getOpposition().size()];
 			for (int i = 0; i < portraits.length; i++) {
 				portraits[i] = event.getOpposition().get(i).getLordAPI().getPortraitSprite();
@@ -79,7 +81,7 @@ public class HostileEventIntelPlugin extends BaseIntelPlugin {
 
 			for (Lord lord : event.getOpposition()) {
 				arrivalDays = Utils.getLordTravelTimeString(lord, event.getTarget());
-				arrivalStr = lord.getLordAPI().getNameString() + " - estimated arrival:  " + arrivalDays;
+				arrivalStr = lord.getLordAPI().getNameString() + Presentation.text("hostile_event.estimated_arrival_82") + arrivalDays;
 				info.addPara(arrivalStr, opad, Misc.getHighlightColor(), arrivalDays);
 			}
 		}
@@ -94,10 +96,10 @@ public class HostileEventIntelPlugin extends BaseIntelPlugin {
 		lords.add(event.getOriginator());
 
 		String days = Utils.getMinArrivalTime(lords,event.getTarget());
-		info.addPara("Attackers: " + days, pad, tc, Misc.getHighlightColor(), days);
+		info.addPara(Presentation.text("hostile_event.attackers") + days, pad, tc, Misc.getHighlightColor(), days);
 
 		days = Utils.getMinArrivalTime(event.getOpposition(),event.getTarget());
-		info.addPara("Defenders: " + days, pad, tc, Misc.getHighlightColor(), days);
+		info.addPara(Presentation.text("hostile_event.defenders_100") + days, pad, tc, Misc.getHighlightColor(), days);
 
 	}
 
@@ -138,7 +140,7 @@ public class HostileEventIntelPlugin extends BaseIntelPlugin {
 
     @Override
     public String getName() {
-        return eventType + " Action Alert: " + target.getName();
+        return eventType + Presentation.text("hostile_event.action_alert") + target.getName();
     }
 
     @Override
@@ -158,7 +160,7 @@ public class HostileEventIntelPlugin extends BaseIntelPlugin {
 	@Override
 	public Set<String> getIntelTags(SectorMapAPI map) {
 		Set<String> tags = super.getIntelTags(map);
-		tags.add("Lord Actions");
+		tags.add(Presentation.text("hostile_event.lord_actions"));
 		if (playerTargeted)
 			tags.add(Tags.INTEL_COLONIES);
 		return tags;
@@ -167,8 +169,8 @@ public class HostileEventIntelPlugin extends BaseIntelPlugin {
 	@Override
 	public void reportRemovedIntel() {
 		if (playerTargeted || alliedOriginator)
-			Global.getSector().getCampaignUI().addMessage(eventType + " Raid against "
+			Global.getSector().getCampaignUI().addMessage(eventType + Presentation.text("hostile_event.raid_against")
 					+ this.target.getName()
-					+ " HAS ENDED.", Color.LIGHT_GRAY);
+					+ Presentation.text("hostile_event.has_ended"), Color.LIGHT_GRAY);
 	}
 }

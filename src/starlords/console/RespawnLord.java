@@ -1,5 +1,7 @@
 package starlords.console;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.fleet.FleetMemberAPI;
 import org.lazywizard.console.BaseCommand;
 import org.lazywizard.console.Console;
@@ -13,7 +15,7 @@ public class RespawnLord implements BaseCommand {
     public CommandResult runCommand(String args, CommandContext context) {
         String[] argsArr = args.split(" ");
         if (argsArr.length != 1) {
-            Console.showMessage("RespawnLord requires 1 argument.");
+            Console.showMessage(Presentation.text("respawn_lord.respawnlord_requires_1_argument"));
             return CommandResult.BAD_SYNTAX;
         }
         Lord lord = LordController.getLordByFirstName(argsArr[0]);
@@ -21,7 +23,7 @@ public class RespawnLord implements BaseCommand {
             lord = LordController.getLordById(argsArr[0]);
         }
         if (lord == null || lord.isPlayer()) {
-            Console.showMessage("Lord not found.");
+            Console.showMessage(Presentation.text("respawn_lord.lord_not_found"));
             return CommandResult.ERROR;
         }
 
@@ -32,7 +34,7 @@ public class RespawnLord implements BaseCommand {
         }
         LordAI.progressAssignment(lord);
 
-        Console.showMessage("Respawning lord " + lord.getLordAPI().getNameString() + " .");
+        Console.showMessage(Presentation.text("respawn_lord.respawning_lord") + lord.getLordAPI().getNameString() + " .");
         return CommandResult.SUCCESS;
     }
 }

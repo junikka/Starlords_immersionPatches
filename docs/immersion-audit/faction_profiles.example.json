@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "status": "DESIGN EXAMPLE ONLY: not loaded or supported by the current mod",
+  "profiles": {
+    "example:neutral": {
+      "writingNotes": "Concrete, restrained language about fleets, resources, relationships, and political authority. These notes guide authors; they do not generate text.",
+      "terms": {
+        "member": { "singular": "commander", "plural": "commanders" },
+        "holding": { "singular": "assigned market", "plural": "assigned markets" },
+        "council": "leadership council",
+        "leader": "faction leader",
+        "campaignOffice": "operation commander",
+        "gathering": "gathering",
+        "competition": "piloting competition"
+      },
+      "titles": {
+        "byTier": { "0": "Commander", "1": "Commander", "2": "Commander" },
+        "addressByTier": { "0": "Commander", "1": "Commander", "2": "Commander" }
+      },
+      "labels": {
+        "ui.commanders": "Commanders",
+        "ui.holdings": "Assigned markets",
+        "ui.politics": "Faction affairs",
+        "law.executiveAuthority": "Executive authority",
+        "law.seniorityInfluence": "Seniority influence",
+        "law.gatheringPolicy": "Gathering policy",
+        "action.assignHolding": "Assign market",
+        "action.revokeHolding": "Revoke assignment"
+      },
+      "messages": {
+        "holding.assigned": "{recipient.formalName} has been assigned control of {market.name}.",
+        "campaign.started": "{operationCommander.formalName} is assembling a joint fleet at {market.name}.",
+        "gathering.invitation": "{host.formalName} invites you to a gathering at {market.name}.",
+        "competition.invitation": "A piloting competition will be held at {market.name}."
+      },
+      "dialogue": {
+        "recruitment.accept": {
+          "default": "We have an agreement. My fleet will join your faction.",
+          "personalities": {
+            "Upstanding": "Your people seem worth standing beside. You can count on my fleet.",
+            "Martial": "Your fleet can hold its own. Let's see what we can accomplish together.",
+            "Calculating": "The terms are acceptable. I'll arrange the transfer.",
+            "Quarrelsome": "I've had enough of them. You'll have my ships. Give us something worth fighting for."
+          }
+        }
+      }
+    },
+    "example:naval": {
+      "extends": "example:neutral",
+      "terms": {
+        "member": { "singular": "officer", "plural": "officers" },
+        "holding": { "singular": "territorial command", "plural": "territorial commands" },
+        "council": "command council",
+        "campaignOffice": "task force commander",
+        "gathering": "shore-leave gathering",
+        "competition": "fleet championship"
+      },
+      "titles": {
+        "byTier": { "0": "Captain", "1": "Commodore", "2": "Admiral" },
+        "addressByTier": { "0": "Captain", "1": "Commodore", "2": "Admiral" }
+      },
+      "labels": {
+        "ui.holdings": "Territorial commands",
+        "law.executiveAuthority": "Command authority",
+        "law.seniorityInfluence": "Senior officer influence",
+        "action.assignHolding": "Assign territorial command"
+      },
+      "messages": {
+        "holding.assigned": "{recipient.formalName} has assumed command of the {market.name} district.",
+        "campaign.started": "Task force mobilization is underway at {market.name}, under {operationCommander.formalName}.",
+        "gathering.invitation": "{host.formalName} invites you to join the officers gathering at {market.name} during shore leave.",
+        "competition.invitation": "The fleet championship at {market.name} is accepting pilots."
+      }
+    },
+    "example:corporate": {
+      "extends": "example:neutral",
+      "terms": {
+        "member": { "singular": "executive", "plural": "executives" },
+        "holding": { "singular": "concession", "plural": "concessions" },
+        "council": "executive board",
+        "leader": "chief executive",
+        "campaignOffice": "operations director",
+        "gathering": "corporate retreat",
+        "competition": "sponsored piloting competition"
+      },
+      "titles": {
+        "byTier": { "0": "Director", "1": "Senior Director", "2": "Executive Director" },
+        "addressByTier": { "0": "Director", "1": "Director", "2": "Director" }
+      },
+      "labels": {
+        "ui.holdings": "Concessions",
+        "law.executiveAuthority": "Executive control",
+        "law.seniorityInfluence": "Executive influence",
+        "action.assignHolding": "Award concession",
+        "action.revokeHolding": "Revoke concession"
+      },
+      "messages": {
+        "holding.assigned": "{recipient.formalName} has been awarded the {market.name} concession.",
+        "campaign.started": "{operationCommander.formalName} is coordinating a joint security operation. Participating fleets will assemble at {market.name}.",
+        "gathering.invitation": "{host.formalName} invites you to the corporate retreat at {market.name}.",
+        "competition.invitation": "A sponsored piloting competition at {market.name} is accepting entrants."
+      },
+      "dialogue": {
+        "recruitment.accept": {
+          "personalities": {
+            "Upstanding": "As long as my crews are looked after, we have a deal. I'll arrange the transfer.",
+            "Calculating": "A better allocation, a viable operation, and room to advance. We have an agreement."
+          }
+        }
+      }
+    },
+    "example:raider": {
+      "extends": "example:neutral",
+      "terms": {
+        "member": { "singular": "captain", "plural": "captains" },
+        "holding": { "singular": "holding", "plural": "holdings" },
+        "council": "captains' council",
+        "leader": "coalition leader",
+        "campaignOffice": "raid leader",
+        "gathering": "celebration",
+        "competition": "piloting contest"
+      },
+      "titles": {
+        "byTier": { "0": "Captain", "1": "Fleet Captain", "2": "Warlord" },
+        "addressByTier": { "0": "Captain", "1": "Captain", "2": "Warlord" }
+      },
+      "labels": {
+        "ui.holdings": "Holdings",
+        "law.executiveAuthority": "Leader's authority",
+        "law.seniorityInfluence": "Captains' influence",
+        "action.assignHolding": "Allocate territory",
+        "action.revokeHolding": "Revoke territorial claim"
+      },
+      "messages": {
+        "holding.assigned": "{recipient.fullName}'s captains now control {market.name}.",
+        "campaign.started": "{operationCommander.fullName} is bringing the crews together at {market.name} for a joint operation.",
+        "gathering.invitation": "{host.fullName} is hosting a celebration at {market.name}. Your crews are invited.",
+        "competition.invitation": "Pilots are gathering at {market.name} to compete for the prize."
+      }
+    },
+    "example:custom_company": {
+      "extends": "example:corporate",
+      "writingNotes": "An example of a small faction-specific override. All other words and dialogue inherit from the corporate profile.",
+      "terms": {
+        "council": "Directorate",
+        "campaignOffice": "security coordinator"
+      },
+      "titles": {
+        "byTier": { "0": "Associate Director", "1": "Director", "2": "Senior Director" }
+      }
+    }
+  },
+  "exampleFactionBindings": {
+    "YOUR_EXACT_FACTION_ID": "example:custom_company"
+  }
+}

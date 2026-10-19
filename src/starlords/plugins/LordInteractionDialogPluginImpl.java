@@ -19,6 +19,7 @@ import starlords.util.Utils;
 import starlords.util.dialogControler.DialogDataHolder;
 import starlords.util.dialogControler.DialogOption;
 import starlords.util.dialogControler.DialogSet;
+import starlords.util.dialogControler.DialogueTiming;
 
 import java.awt.*;
 import java.util.*;
@@ -187,43 +188,48 @@ public class LordInteractionDialogPluginImpl implements InteractionDialogPlugin 
         *   I have done all the lines!?!!?!?! what????
         * */
         if (optionData instanceof DialogOption){
-            if (prevPlugin.equals(this) && !visual.isShowingPersonInfo(targetLord.getLordAPI())) {
-                visual.showPersonInfo(targetLord.getLordAPI(), false, true);
-            }
             DialogOption data = (DialogOption) optionData;
-            data.applyAddons(textPanel,options,dialog,targetLord);
-            String selectedOption = data.optionID;
+            try (DialogueTiming timing = new DialogueTiming(data.optionID)) {
+                timing.stage("portrait");
+                if (prevPlugin.equals(this) && !visual.isShowingPersonInfo(targetLord.getLordAPI())) {
+                    visual.showPersonInfo(targetLord.getLordAPI(), false, true);
+                }
+                timing.stage("option effects");
+                data.applyAddons(textPanel,options,dialog,targetLord);
+                timing.stage("dialogue and options");
+                String selectedOption = data.optionID;
 
-            Lord secondLord = data.getTargetLord();
-            MarketAPI targetMarket = data.getTargetMarket();
-            if (selectedOption.equals(setStartingDialog())){
-                optionSelected_greetings(selectedOption,secondLord,targetMarket);
+                Lord secondLord = data.getTargetLord();
+                MarketAPI targetMarket = data.getTargetMarket();
+                if (selectedOption.equals(setStartingDialog())){
+                    optionSelected_greetings(selectedOption,secondLord,targetMarket);
+                    return true;
+                }
+                switch (selectedOption){
+                    case "exitDialog":
+                        optionSelected_exitDialog();
+                        break;
+                    case "":
+                        break;
+                    case "current_task_desc":
+                        optionSelected_askCurrentTask(selectedOption,secondLord,targetMarket);
+                        break;
+                    case "spend_time_together":
+                        optionSelected_suggestDate(selectedOption,secondLord,targetMarket);
+                        break;
+                    default:
+                        DialogSet.addParaWithInserts(selectedOption,targetLord,secondLord,targetMarket,textPanel,options,dialog);
+                        break;
+                }
                 return true;
             }
-            switch (selectedOption){
-                case "exitDialog":
-                    optionSelected_exitDialog();
-                    break;
-                case "":
-                    break;
-                case "current_task_desc":
-                    optionSelected_askCurrentTask(selectedOption,secondLord,targetMarket);
-                    break;
-                case "spend_time_together":
-                    optionSelected_suggestDate(selectedOption,secondLord,targetMarket);
-                    break;
-                default:
-                    DialogSet.addParaWithInserts(selectedOption,targetLord,secondLord,targetMarket,textPanel,options,dialog);
-                    break;
-            }
-            return true;
         }
         return false;
     }
 
 
     private void optionSelected_greetings(String selectedOption,Lord secondLord,MarketAPI targetMarket){
-        log.info("RUNNING THE CORRECT GREETING OPTION DATA");
+        if (log.isDebugEnabled()) log.debug("RUNNING THE CORRECT GREETING OPTION DATA");
         boolean isFeast = targetLord.getCurrAction() == LordAction.FEAST;
         LordEvent feast = isFeast ? EventController.getCurrentFeast(targetLord.getLordAPI().getFaction()) : null;
         //only run greetings if player has not yet heard them this conversation
@@ -238,7 +244,7 @@ public class LordInteractionDialogPluginImpl implements InteractionDialogPlugin 
         }
         //if this is a feast, apply rep gained.
         /*if(feast != null) {
-            log.info("APPLYING REP CHANGE DATA");
+            if (log.isDebugEnabled()) log.debug("APPLYING REP CHANGE DATA");
             if (!feast.getOriginator().isFeastInteracted()) {
                 feast.getOriginator().setFeastInteracted(true);
                 applyRepIncrease(textPanel, feast.getOriginator(),secondLord,targetMarket, 3);

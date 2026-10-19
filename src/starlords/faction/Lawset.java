@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import starlords.person.Lord;
 import starlords.util.StringUtil;
+import starlords.util.factionUtils.FactionTemplate;
+import starlords.util.factionUtils.FactionTemplateController;
 
 import static starlords.util.Constants.CATEGORY_UI;
 
@@ -48,10 +50,12 @@ public class Lawset {
 
     public Lawset(FactionAPI faction) {
         factionId = faction.getId();
-        crownAuthority = LawLevel.MEDIUM;
-        nobleAuthority = LawLevel.MEDIUM;
-        tradeFavor = LawLevel.MEDIUM;
-        feastLaw = LawLevel.MEDIUM;
+        // startingPolicies in data/lords/faction.json; only read when the faction's laws are first created
+        FactionTemplate template = FactionTemplateController.getTemplate(faction);
+        crownAuthority = template.getStartingPolicy(LawType.CROWN_AUTHORITY);
+        nobleAuthority = template.getStartingPolicy(LawType.NOBLE_AUTHORITY);
+        tradeFavor = template.getStartingPolicy(LawType.TRADE_LAW);
+        feastLaw = template.getStartingPolicy(LawType.FEAST_LAW);
         marshal = null;
         for (Lord lord : LordController.getLordsList()) {
             if (faction.equals(lord.getLordAPI().getFaction()) && lord.getRanking() == 2) {

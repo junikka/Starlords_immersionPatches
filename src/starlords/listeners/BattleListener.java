@@ -50,6 +50,7 @@ public class BattleListener extends BaseCampaignEventListener {
 	    int loserKillsFp = 0;
 	    int loserTotalFP = 0;
 	    boolean playerWon = battle.isOnPlayerSide(primaryWinner);
+	    PlayerProgression.recordBattle(battle, primaryWinner);
 
 	    ArrayList<Lord> loserLords = new ArrayList<>();
 	    HashSet<Lord> maybeCaptured = new HashSet<>();

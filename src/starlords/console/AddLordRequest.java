@@ -1,5 +1,7 @@
 package starlords.console;
 
+import starlords.presentation.Presentation;
+
 import org.lazywizard.console.BaseCommand;
 import org.lazywizard.console.Console;
 import starlords.controllers.LordController;
@@ -13,12 +15,12 @@ public class AddLordRequest implements BaseCommand {
     public CommandResult runCommand(String args, CommandContext context) {
         String[] argsArr = args.split(" ");
         if (argsArr.length != 2) {
-            Console.showMessage("AddLordRequest requires 2 arguments.");
+            Console.showMessage(Presentation.text("add_lord_request.addlordrequest_requires_2_arguments"));
             return CommandResult.BAD_SYNTAX;
         }
         Lord lord = LordController.getLordById(argsArr[0]);
         if (lord == null || lord.isPlayer()) {
-            Console.showMessage("Lord not found.");
+            Console.showMessage(Presentation.text("add_lord_request.lord_not_found"));
             return CommandResult.ERROR;
         }
 
@@ -26,14 +28,14 @@ public class AddLordRequest implements BaseCommand {
         switch (request_type){
             case LordRequest.PRISON_BREAK:
                 RequestController.addRequest(new LordRequest(LordRequest.PRISON_BREAK, lord));
-                Console.showMessage("Added " + request_type + " request to " + lord.getLordAPI().getNameString());
+                Console.showMessage(Presentation.text("add_lord_request.added") + request_type + Presentation.text("add_lord_request.request_to") + lord.getLordAPI().getNameString());
                 return CommandResult.SUCCESS;
             case LordRequest.FIEF_FOR_DEFECTION:
                 RequestController.addRequest(new LordRequest(LordRequest.FIEF_FOR_DEFECTION, lord));
-                Console.showMessage("Added " + request_type + " request to " + lord.getLordAPI().getNameString());
+                Console.showMessage(Presentation.text("add_lord_request.added") + request_type + Presentation.text("add_lord_request.request_to") + lord.getLordAPI().getNameString());
                 return CommandResult.SUCCESS;
             default:
-                Console.showMessage("Incorrect request type");
+                Console.showMessage(Presentation.text("add_lord_request.incorrect_request_type"));
                 return CommandResult.ERROR;
         }
 

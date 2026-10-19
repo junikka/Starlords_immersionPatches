@@ -1,5 +1,7 @@
 package starlords.ai;
 
+import starlords.presentation.Presentation;
+
 import com.fs.starfarer.api.EveryFrameScript;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.Script;
@@ -413,7 +415,7 @@ public class LordAI implements EveryFrameScript {
                     fleetAI.addAssignmentAtStart(
                             FleetAssignment.GO_TO_LOCATION, rallyPoint, 1000, null);
                     fleetAI.addAssignment(FleetAssignment.ORBIT_PASSIVE, rallyPoint, 1000,
-                            "Waiting for Lords to Assemble", null);
+                            Presentation.text("lord_a_i.waiting_for_lords_to_assemble"), null);
                     Misc.setFlagWithReason(mem, MemFlags.FLEET_BUSY, BUSY_REASON, true, 1000);
                     EventController.addCampaign(new LordEvent(LordEvent.CAMPAIGN, lord, null));
                 }
@@ -814,7 +816,7 @@ public class LordAI implements EveryFrameScript {
                                                     if (Utils.nexEnabled()) {
                                                         Object battle = beginNexGroundBattle(lord, campaign);
                                                         if (battle != null) {
-                                                            lord.setActionText("Supporting Ground Invasion");
+                                                            lord.setActionText(Presentation.text("lord_a_i.supporting_ground_invasion"));
                                                             // remove troops and arms
                                                             for (Lord supporter : campaign.getParticipants()) {
                                                                 if (campaign.getOriginator().getFleet().getContainingLocation().equals(

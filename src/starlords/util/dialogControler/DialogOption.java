@@ -30,14 +30,14 @@ public class DialogOption {
         int size = 0;
         if (addons != null) size = addons.size();
         Logger log = Global.getLogger(DialogOption.class);
-        log.info("creating a option with a link of: "+optionID+" and a set of addons of size: "+size);
+        if (log.isDebugEnabled()) log.debug("creating a option with a link of: "+optionID+" and a set of addons of size: "+size);
     }
     public void applyAddons(TextPanelAPI textPanel, OptionPanelAPI options, InteractionDialogAPI dialog, Lord lord){
         Logger log = Global.getLogger(DialogOption.class);
-        log.info("applying addon's from option data with link to: "+optionID);
+        if (log.isDebugEnabled()) log.debug("applying addon's from option data with link to: "+optionID);
         if (addons == null) return;
         for (DialogAddon_Base a : addons){
-            log.info("  applying addon from option of class name: "+a.getClass().getName());
+            if (log.isDebugEnabled()) log.debug("  applying addon from option of class name: "+a.getClass().getName());
             a.apply(textPanel, options, dialog,lord,targetLord,targetMarket);
         }
     }

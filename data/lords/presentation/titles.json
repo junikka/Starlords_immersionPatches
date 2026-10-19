@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "neutralRanks": [
+    "Captain",
+    "Commodore",
+    "Admiral"
+  ],
+  "factions": {
+    "player": [
+      "Captain",
+      "Commodore",
+      "Admiral"
+    ],
+    "hegemony": [
+      "Commodore",
+      "Admiral",
+      "Fleet Admiral"
+    ],
+    "persean": [
+      "Doux",
+      "Megas Doux",
+      "Archon"
+    ],
+    "tritachyon": [
+      "Vice President",
+      "Senior Vice President",
+      "Executive Vice President"
+    ],
+    "sindrian_diktat": [
+      "Deputy Star Marshal",
+      "Star Marshal",
+      "Grand Marshal"
+    ],
+    "luddic_church": [
+      "Deacon-Captain",
+      "Bishop",
+      "Archbishop"
+    ],
+    "luddic_path": [
+      "Brother-Captain",
+      "Elder",
+      "Herald of Ludd"
+    ],
+    "pirates": [
+      "Captain",
+      "Warlord",
+      "Kingpin"
+    ],
+    "independent": [
+      "Captain",
+      "Commodore",
+      "Fleet Commander"
+    ]
+  }
+}

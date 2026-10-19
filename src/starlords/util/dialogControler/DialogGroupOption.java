@@ -58,7 +58,7 @@ public class DialogGroupOption {
         }
         Utils.canonicalLordSort(goodLords);
         for (Lord lord : goodLords){
-            log.info("  adding a group option of key, lord: "+ line +", "+lord.getLordAPI().getNameString());
+            if (log.isDebugEnabled()) log.debug("  adding a group option of key, lord: "+ line +", "+lord.getLordAPI().getNameString());
             DialogSet.addOptionWithInserts(line,pastLord,lord,targetMarket,textPanel,options,dialog,markersReplaced);
         }
     }

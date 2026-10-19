@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "readme": "Comm-link greetings from ordinary fleets of the faction whose council you sit on, one per council tier (seat, tier 1, tier 2). Tokens: {title} {lastName} {fullName} {sirOrMadam}. Factions not listed use default. Other mods can add a faction under factions.",
+  "default": [
+    "The captain gives you a nod across the comm. \"{title} {lastName}. Good to see a friendly transponder out here. Shout if you need anything.\"",
+    "The captain straightens up. \"{title} {lastName}, {sirOrMadam}. You have this fleet's respect, for whatever that's worth out here. Anything you need?\"",
+    "The captain comes to attention, and the bridge crew follows. \"{title} {lastName}. An honour, {sirOrMadam}. We're at your disposal.\""
+  ],
+  "factions": {
+    "hegemony": [
+      "The captain snaps a salute that even the comm lag can't spoil. \"{title} {lastName}. Hegemony patrol, holding station. COMSEC has you logged as friendly.\"",
+      "\"{title} {lastName}, {sirOrMadam}.\" The captain's salute is textbook. \"This fleet is at your disposal. Nobody in this system will trouble you while we're here.\"",
+      "Behind the captain, the whole bridge crew comes to attention. \"{title} {lastName}. An honour, {sirOrMadam}. Give the word and the fleet moves.\""
+    ],
+    "sindrian_diktat": [
+      "\"{title} {lastName}. Glory to the Diktat.\" The officer's salute is precise to the point of anxiety. \"Your presence has been noted and approved.\"",
+      "The officer goes rigid. \"{title} {lastName}! Glory to the Diktat. Your orders, {sirOrMadam}? We will carry them out exactly.\"",
+      "The officer turns pale, then very straight. \"{title} {lastName}. The Supreme Executor's own hand in this sector. We are honoured, and we are listening.\""
+    ],
+    "persean": [
+      "\"{title} {lastName}, welcome.\" The captain raises a glass just out of frame. \"The League remembers its friends. Fair travels.\"",
+      "\"{title} {lastName}. The houses speak well of you, which is rare enough to be worth mentioning. Can this fleet be of service?\"",
+      "The captain inclines their head with careful, old-fashioned formality. \"{title} {lastName}. Kazeron sends its regards, I'm sure. Mine come with a fleet attached.\""
+    ],
+    "tritachyon": [
+      "\"{title} {lastName}.\" The captain's smile is polished and brief. \"Your transponder came up green on our partner registry. Pleasure doing business.\"",
+      "\"{title} {lastName}. I've been told to extend you every courtesy, and the board doesn't tell me twice. What can we do for you?\"",
+      "The captain's smile is fixed and very expensive. \"{title} {lastName}. Anything you need. Really, anything. Perhaps mention us in your next quarterly review.\""
+    ],
+    "luddic_church": [
+      "\"Ludd keep you, {title} {lastName}.\" The captain makes the sign of the flame. \"It gladdens us to see a faithful hand at the helm.\"",
+      "The captain bows their head. \"{title} {lastName}. The congregation of this fleet would be grateful for your blessing, and for your orders.\"",
+      "A hush falls over the bridge as the captain kneels before the comm. \"{title} {lastName}. Ludd's light upon you. Command us, and we will follow.\""
+    ],
+    "luddic_path": [
+      "\"{title} {lastName}.\" The captain's stare doesn't waver. \"The Path is long. Walk it well, and the faithful will walk it with you.\"",
+      "\"{title} {lastName}. The faithful know your name. Tell us who has strayed, and we will see to them.\"",
+      "The captain's eyes shine with a frightening joy. \"{title} {lastName}! Ludd's fire walks with you. Speak, and the Path will burn whatever you name.\""
+    ],
+    "pirates": [
+      "\"Well, if it isn't {title} {lastName}.\" The captain waves off someone off-screen. \"Relax, nobody here is dumb enough to shake down one of ours.\"",
+      "The captain grins, showing too many metal teeth. \"{title} {lastName}! Word gets around. You want a cut of something, you just say so, boss.\"",
+      "The pirate on the screen suddenly remembers how to sit up straight. \"{title} {lastName}. We, uh, didn't know it was you. Whatever you need, it's yours. No charge.\""
+    ]
+  }
+}
