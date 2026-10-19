@@ -1,10 +1,10 @@
 # Quick in-game test (wording pass)
 
-Expect faction ranks (Hegemony **Commodore / Admiral / Fleet Admiral**, Tri-Tachyon **Vice President** ladder, Church **Deacon-Captain / Bishop / Archbishop**, pirates **Captain / Warlord / Kingpin**), **Holdings**, **Fleet Commander**, **Expeditions**, **Raves** and **Tournaments**. Policies read **Central Authority**, **Privilege of Rank**, **Revenue Policy** and **Rave Licensing**.
+Expect faction ranks (Hegemony **Commodore / Admiral / Fleet Admiral**, Tri-Tachyon **Vice President** ladder, Church **Deacon-Captain / Bishop / Archbishop**, pirates **Captain / Warlord / Kingpin**), **Raves** and **Tournaments** everywhere, and each faction's own words for holdings, the council, the Fleet Commander, expeditions and policies (see "Faction wording" below). Your own faction uses the house words by default: **Holdings**, **Council**, **Fleet Commander**, **Expeditions**, **Central Authority**, **Privilege of Rank**, **Revenue Policy** and **Rave Licensing**.
 
 1. Close Starsector. Rebuild (`python tools/build.py build`) so the JAR and ZIP are current, then replace the installed Starlords folder with this folder or extract `build/Starlords_immersionPatches.zip` into `Starsector/mods`. Keep one installed copy. Enable Star Lords, Nexerelin and Console Commands, then restart. A new campaign gives the cleanest test.
 2. Advance a few days. Run `PrintLordsDetails` and `PrintLordsAlignments`. Expect populated tables in `starsector-core/starsector.log` with no presentation exceptions.
-3. Run `WarpLord Victor`, then `AddLordRelation Victor 50`. Hail Victor Wallis and inspect his intel: he should be **Admiral** in both places, with **Holdings** and **Rank** labels. Read his biography (no "Operation commander" or garbled letters). There should be no `(error)`, `_FIRST`, unresolved `{tokens}` or raw `%LORD_...` markers.
+3. Run `WarpLord Victor`, then `AddLordRelation Victor 50`. Hail Victor Wallis and inspect his intel: he should be **Admiral** in both places, with **Commands** (the Hegemony's word for holdings) and **Rank** labels. Read his biography (no "Operation commander" or garbled letters). There should be no `(error)`, `_FIRST`, unresolved `{tokens}` or raw `%LORD_...` markers.
 4. Open Politics with a commission or your own faction. Hover the policy rows: level tooltips start with names such as *Free Trade* or *Anything Goes*. With a fresh commission, proposals are locked until you earn a seat (see below), so run `promoteplayer 2` first. Submit a proposal and check its council text.
 5. At a rave, try every "spend time together" scene, a gift, the tournament and a recruitment attempt (the justification lines should vary by personality, with the verdict highlighted). Save and reload; everything should persist.
 6. Ask someone about the state of the Sector. If the game stalls, `starsector.log` should contain a `Slow dialogue option` line naming the slow step.
@@ -13,14 +13,37 @@ Console command IDs remain unchanged: use `WarpLord`, not `WarpCommander`. If Vi
 
 ## Council progression and starting policies
 
-1. Start a new campaign. Open Politics for a few factions you can view (or take a commission with each): the Church should start at *Strict* Rave Licensing, the Path at *Banned*, Tri-Tachyon at *Free Trade*, pirates at *Very Low* Central Authority. Independent and your own faction stay in the middle.
+1. Start a new campaign. Open Politics for a few factions you can view (or take a commission with each): the Church should start at *Strict* Rave Licensing, the Path at *Banned*, Tri-Tachyon at *Free Trade*, pirates at *Very Low* Boss's Word (their name for Central Authority). Independent and your own faction stay in the middle.
 2. Take a commission with the Hegemony. Politics should show you as **Commissioned officer**, with every proposal button greyed out and a tooltip saying you need a seat. `promoteplayer status` lists what's missing (60 days of service and Welcoming).
-3. Run `promoteplayer`. You should become a Commodore, with your Hegemony reputation raised to at least Welcoming: holdings, Revenue Policy and Rave Licensing unlock, while war, peace, Central Authority, Privilege of Rank and Fleet Commander stay locked with "You need the rank of Admiral".
+3. Run `promoteplayer`. You should become a Commodore, with your Hegemony reputation raised to at least Welcoming: commands, Revenue Policy and Rave Licensing unlock, while war, peace, Command Authority, Privilege of Rank and Fleet Commander stay locked with "You need the rank of Admiral".
 4. Run `AddLordRelation <name> 50` on a Hegemony commander, then `promoteplayer vote`. A message should say who put you forward for Admiral, and the proposal should appear in the council list. Wait for the council to take it up (`promoteplayer status` reports if it's still waiting). If the vote fails, relations with the commanders who opposed it shouldn't drop.
 5. Hail a Hegemony commander you get on with and open *Ask a question*. "Ask them to put your name forward for promotion" should be there. Asking either starts a vote or explains what's missing. Try it with a commander at relation 0 or below for the refusal line.
 6. Run `promoteplayer 2`. Nominating yourself as Fleet Commander should now be possible.
 7. Hail an ordinary Hegemony patrol with your transponder on. The captain should greet you as **Fleet Admiral** with a Hegemony line instead of the vanilla greeting, and the usual fleet options should follow. Try `promoteplayer 0` and a Diktat or pirate commission too: each faction and rank has its own line.
 8. Lower your reputation below Cooperative (for example with the console's `adjustrelation` or `setrelation` command). Politics should say the council treats you as a lower rank, self-nomination should lock again, and fleets should greet you at that lower rank.
+
+## Faction wording (Phase 3)
+
+Each faction names its own institutions. Raves and tournaments are the same everywhere.
+
+| Faction | Holding | Council | Fleet Commander | Expedition | Policies (Central Authority / Privilege of Rank / Revenue Policy) |
+|---|---|---|---|---|---|
+| Hegemony, independents | Command | Admiralty Board | Fleet Commander | Expedition | Command Authority / Privilege of Rank / Revenue Policy |
+| Sindrian Diktat | Prefecture | Executive Council | Marshal of the Fleet | Expedition | as Hegemony |
+| Tri-Tachyon | Concession | Board | Director of Operations | Operation | Executive Control / Seniority Rights / Margin Policy |
+| Persean League | Seat | League Council | Strategos | Expedition | Archon's Prerogative / Ancient Privilege / Levies |
+| Luddic Church | Parish | Synod | Knight-Commander | Crusade | Pontifical Authority / Clerical Privilege / Tithes |
+| Luddic Path | Cell | Conclave | Knight-Commander | Purge | as Church |
+| Pirates | Turf | Captains' Table | Raid Boss | Raid | Boss's Word / Captains' Rights / Cut of the Take |
+
+1. Open the Politics screen with a Tri-Tachyon commission, then a Hegemony one (`promoteplayer 2` unlocks everything). Each screen should use its own faction's words: the policy names and tooltips, the Fleet Commander line, the holding buttons, and the "Call ..." button if you're the Fleet Commander. Switch back and forth: nothing from one faction should leak into the other.
+2. Submit a proposal in each. The proposal title, the council message ("The Board is now voting...") and the vote reasons ("Recipient has few concessions") should match that faction.
+3. Open a Hegemony commander's intel: the holdings line reads **Commands**. A Tri-Tachyon commander's reads **Concessions**.
+4. When a faction starts an expedition, its event intel should read "Ongoing operation" for Tri-Tachyon, "Ongoing crusade" for the Church, and so on, naming the faction's office.
+5. In LunaLib's settings, under **Other**, set **Your faction's wording** to *corporate*. With your own faction, its Politics screen should now say Concession, Board and Director of Operations. Rank titles stay Captain / Commodore / Admiral; edit `titles.json` to change those.
+6. `starsector.log` should have no "Missing presentation" warnings and no `profiles` errors.
+
+To read every message as each faction sees it without launching the game, run `python tools/preview_profiles.py` and open `docs/immersion-audit/generated/profile_preview.md`.
 
 ## Optional: prove faction-specific ranks
 

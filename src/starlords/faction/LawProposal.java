@@ -153,24 +153,24 @@ public class LawProposal {
         String otherName = other == null ? Presentation.text("context.faction") : other.getDisplayNameWithArticle();
         switch (law) {
             case CROWN_AUTHORITY: case NOBLE_AUTHORITY: case TRADE_LAW: case FEAST_LAW:
-                return Presentation.format("policy.change", "policy", Presentation.lawName(faction, law),
-                        "level", LawLevel.values()[targetLevel].displayName);
+                return Presentation.formatFor(faction, "policy.change", "policy", Presentation.lawName(faction, law),
+                        "level", Presentation.levelName(faction, LawLevel.values()[targetLevel]));
             case APPOINT_MARSHAL:
-                return Presentation.format("policy.appoint", "commander", name);
+                return Presentation.formatFor(faction, "policy.appoint", "commander", name);
             case AWARD_FIEF:
-                return Presentation.format("holding.assign", "market", marketName, "commander", name);
+                return Presentation.formatFor(faction, "holding.assign", "market", marketName, "commander", name);
             case REVOKE_FIEF:
-                return Presentation.format("holding.revoke", "market", marketName, "commander", name);
+                return Presentation.formatFor(faction, "holding.revoke", "market", marketName, "commander", name);
             case DECLARE_WAR:
-                return Presentation.format("policy.war", "faction", otherName);
+                return Presentation.formatFor(faction, "policy.war", "faction", otherName);
             case SUE_FOR_PEACE:
-                return Presentation.format("policy.peace", "faction", otherName);
+                return Presentation.formatFor(faction, "policy.peace", "faction", otherName);
             case CHANGE_RANK:
-                return Presentation.format("standing.change", "commander", name,
+                return Presentation.formatFor(faction, "standing.change", "commander", name,
                         "title", Presentation.title(faction == null ? null : faction.getId(), targetLevel),
                         "tier", Integer.toString(targetLevel + 1));
             case EXILE_LORD:
-                return Presentation.format("policy.expel", "commander", name);
+                return Presentation.formatFor(faction, "policy.expel", "commander", name);
             default:
                 return Presentation.text("policy.unavailable");
         }

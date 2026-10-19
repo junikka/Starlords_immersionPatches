@@ -1,5 +1,6 @@
 package starlords.controllers;
 
+import starlords.presentation.Presentation;
 import starlords.ai.LordAI;
 import com.fs.starfarer.api.Global;
 import com.fs.starfarer.api.campaign.CampaignFleetAPI;
@@ -146,15 +147,15 @@ public class EventController extends BaseIntelPlugin {
             Global.getSector().getIntelManager().addIntel(new EventIntelPlugin(campaign));
             if (campaign.getOriginator().isPlayer()) {
                 Global.getSector().getCampaignUI().addMessage(
-                        StringUtil.getString(CATEGORY, "campaign_start",
-                                campaign.getOriginator().getLordAPI().getNameString(),
-                                Misc.getNearestStarSystem(campaign.getOriginator().getFleet()).getBaseName()),
+                        Presentation.formatFor(faction, "event.campaign.started",
+                                "commander", campaign.getOriginator().getLordAPI().getNameString(),
+                                "location", Misc.getNearestStarSystem(campaign.getOriginator().getFleet()).getBaseName()),
                         faction.getBaseUIColor());
             } else {
                 Global.getSector().getCampaignUI().addMessage(
-                        StringUtil.getString(CATEGORY, "campaign_start",
-                                campaign.getOriginator().getLordAPI().getNameString(),
-                                campaign.getOriginator().getTarget().getMarket().getName()),
+                        Presentation.formatFor(faction, "event.campaign.started",
+                                "commander", campaign.getOriginator().getLordAPI().getNameString(),
+                                "location", campaign.getOriginator().getTarget().getMarket().getName()),
                         faction.getBaseUIColor());
             }
         }
@@ -176,7 +177,7 @@ public class EventController extends BaseIntelPlugin {
         FactionAPI faction = campaign.getFaction();
         if (faction.getId().equals(Misc.getCommissionFactionId()) || faction.getId().equals(Factions.PLAYER)) {
             Global.getSector().getCampaignUI().addMessage(
-                    StringUtil.getString(CATEGORY, "campaign_end"),
+                    Presentation.textFor(faction, "event.campaign.ended"),
                     faction.getBaseUIColor());
         }
         if (!campaign.isDefensive()) {

@@ -1,4 +1,4 @@
-"""Generate vanilla rank names from data/lords/presentation/titles.json.
+"""Generate vanilla rank names from data/lords/presentation/titles.json and profiles.json.
 
 The comm panel's "Rank:" line comes from Starsector's own rank system, not from
 Starlords. Lords carry the rank ids starlords_tier_0/1/2 (see Lord.syncVanillaRank);
@@ -7,8 +7,10 @@ this script names those ids per faction so the panel matches titles.json.
     python tools/sync_ranks.py
 
 Writes data/world/factions/default_ranks.json (fallback names) and one partial
-<faction>.faction per titles.json entry. Starsector merges both into the real
-faction files. Re-run after editing titles.json.
+<faction>.faction per faction named in titles.json or bound in profiles.json.
+Titles resolve as in Java's TitleResolver: titles.json, then legacy faction.json
+rank_N, then the faction's profile chain, then neutralRanks. Starsector merges the
+output into the real faction files. Re-run after editing titles.json or profiles.json.
 """
 import json
 from pathlib import Path
@@ -27,15 +29,55 @@ def write(path, data):
                     + json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
 
 
+def load(path):
+    return json.loads((ROOT / path).read_text(encoding='utf-8'))
+
+
+def resolver():
+    """Returns faction id -> three titles, matching TitleResolver and ProfileRegistry."""
+    titles = load('data/lords/presentation/titles.json')
+    legacy = load('data/lords/faction.json')
+    profiles = load('data/lords/presentation/profiles.json')
+
+    def profile_titles(faction):
+        name = profiles['factions'].get(faction, 'default')
+        seen = []
+        while name != 'default':
+            if name in seen:
+                raise SystemExit('Profile inheritance cycle: %s' % seen)
+            seen.append(name)
+            profile = profiles['profiles'][name]
+            if 'titles' in profile:
+                return profile['titles']
+            name = profile.get('extends', 'default')
+        return None
+
+    def resolve(faction):
+        explicit = titles['factions'].get(faction)
+        old = legacy.get(faction, {})
+        result = []
+        for tier in range(3):
+            value = explicit[tier] if explicit else old.get('rank_%d' % tier)
+            if not isinstance(value, str) or not value.strip():
+                value = (profile_titles(faction) or [None] * 3)[tier]
+            if not isinstance(value, str) or not value.strip():
+                value = titles['neutralRanks'][tier]
+            result.append(value)
+        return result
+
+    factions = sorted(set(titles['factions']) | set(profiles['factions']))
+    return titles['neutralRanks'], {faction: resolve(faction) for faction in factions}
+
+
 def main():
-    titles = json.loads((ROOT / 'data/lords/presentation/titles.json').read_text(encoding='utf-8'))
-    write(FACTIONS / 'default_ranks.json', {'ranks': ranks(titles['neutralRanks'])})
-    for faction, names in titles['factions'].items():
+    neutral, resolved = resolver()
+    write(FACTIONS / 'default_ranks.json', {'ranks': ranks(neutral)})
+    for faction, names in resolved.items():
         target = FACTIONS / (faction + '.faction')
         if target.exists() and MARKER not in target.read_text(encoding='utf-8'):
             raise SystemExit('Refusing to overwrite hand-written ' + str(target))
         write(target, {'ranks': {'ranks': ranks(names)}})
-    print('Wrote rank names for %d factions' % len(titles['factions']))
+    print('Wrote rank names for %d factions' % len(resolved))
 
 
 if __name__ == '__main__':

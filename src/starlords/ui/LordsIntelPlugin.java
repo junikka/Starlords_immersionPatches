@@ -123,9 +123,9 @@ public class LordsIntelPlugin extends BaseIntelPlugin {
         summary.addPara(Presentation.text("lords.rank") + lord.getTitle(), pad, uiColor, factionColor, Presentation.text("lords.rank"), lord.getTitle());
         summary.addPara(Presentation.format("standing.label", "tier", Integer.toString(lord.getRanking() + 1)), uiColor, pad);
         if (fiefStr.isEmpty()) {
-            summary.addPara(Presentation.text("lords.fiefs_none"), uiColor, pad);
+            summary.addPara(Presentation.textFor(lord.getFaction(), "lords.fiefs_none"), uiColor, pad);
         } else {
-            summary.addPara(Presentation.text("lords.fiefs") + fiefStr, pad, uiColor, factionColor, Presentation.text("lords.fiefs"), fiefStr);
+            summary.addPara(Presentation.textFor(lord.getFaction(), "lords.fiefs") + fiefStr, pad, uiColor, factionColor, Presentation.textFor(lord.getFaction(), "lords.fiefs"), fiefStr);
         }
         summary.addPara(Presentation.text("lords.personality") + personalityStr, uiColor, pad);
         summary.addPara(Presentation.text("lords.wealth") + wealthStr, uiColor, pad);

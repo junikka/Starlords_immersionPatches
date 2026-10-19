@@ -38,7 +38,7 @@ public class EventIntelPlugin extends BaseIntelPlugin {
                 originator.getLordAPI().getPortraitSprite());
         switch (event.getType()) {
             case LordEvent.CAMPAIGN:
-                info.addPara(Presentation.format("event.campaign.description", "commander", originator.getLordAPI().getNameString()), opad);
+                info.addPara(Presentation.formatFor(originator.getFaction(), "event.campaign.description", "commander", originator.getLordAPI().getNameString()), opad);
                 info.addPara(Presentation.format("event.location", "location", Utils.getNearbyDescription(originator.getFleet())), uiColor, opad);
                 String orderStr = Presentation.text("event.assembling");
                 if (event.getTarget() != null) {
@@ -113,7 +113,7 @@ public class EventIntelPlugin extends BaseIntelPlugin {
 
     @Override
     public String getName() {
-        return Presentation.text(LordEvent.FEAST.equals(event.getType()) ? "event.feast.heading" : "event.campaign.heading");
+        return Presentation.textFor(event.getFaction(), LordEvent.FEAST.equals(event.getType()) ? "event.feast.heading" : "event.campaign.heading");
     }
 
     @Override

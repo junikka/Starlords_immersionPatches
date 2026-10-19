@@ -75,7 +75,7 @@ public class CouncilIntelPlugin extends BaseIntelPlugin {
             }
             header.addImageWithText(pad);
         } else {
-            header.addPara(Presentation.text("council.council_in_recess"), uiColor, pad);
+            header.addPara(Presentation.textFor(faction, "council.council_in_recess"), uiColor, pad);
             header.addPara(Presentation.text("council.time_remaining") + Math.max(0, PoliticsController.getTimeRemainingDays(faction)) + Presentation.text("council.day_s"), uiColor, pad);
         }
         panel.addUIElement(header).inTL(0, 0);
@@ -85,7 +85,7 @@ public class CouncilIntelPlugin extends BaseIntelPlugin {
             LawProposal prevProposal = PoliticsController.getPrevProposal(faction);
             if (prevProposal != null) {
                 TooltipMakerAPI prevHeader = panel.createUIElement(width, height - header.getHeightSoFar(), true);
-                prevHeader.addSectionHeading(Presentation.text("council.last_council_results"),
+                prevHeader.addSectionHeading(Presentation.textFor(faction, "council.last_council_results"),
                         faction.getBrightUIColor(), faction.getDarkUIColor(), Alignment.LMID, opad);
                 if (prevProposal.isPassed()) {
                     prevHeader.addPara(Presentation.text("council.proposal_passed") + prevProposal.getTitle(), LIGHT_GREEN, opad);
@@ -380,7 +380,7 @@ public class CouncilIntelPlugin extends BaseIntelPlugin {
 
     @Override
     public String getName() {
-        return Utils.getRecruitmentFaction().getDisplayName() + Presentation.text("council.council");
+        return Utils.getRecruitmentFaction().getDisplayName() + Presentation.textFor(Utils.getRecruitmentFaction(), "council.council");
     }
 
     @Override

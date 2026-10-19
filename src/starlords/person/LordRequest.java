@@ -10,6 +10,7 @@ import starlords.controllers.FiefController;
 import starlords.controllers.LordController;
 import starlords.ui.RequestIntelPlugin;
 import starlords.util.DefectionUtils;
+import starlords.util.Utils;
 
 @Getter
 public class LordRequest {
@@ -44,7 +45,7 @@ public class LordRequest {
             case PRISON_BREAK:
                 return Presentation.text("lord_request.prison_break");
             case FIEF_FOR_DEFECTION:
-                return Presentation.text("lord_request.fief_for_defection");
+                return Presentation.textFor(Utils.getRecruitmentFaction(), "lord_request.fief_for_defection");
 
         }
         return null;

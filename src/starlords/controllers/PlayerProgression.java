@@ -97,7 +97,7 @@ public class PlayerProgression {
         if (faction == null || effective >= standing) return "";
         String title = effective == COMMISSIONED
                 ? Presentation.text("progression.commissioned_title") : Utils.getTitle(faction, effective);
-        return Presentation.format("progression.suspended", "faction", faction.getDisplayName(),
+        return Presentation.formatFor(faction, "progression.suspended", "faction", faction.getDisplayName(),
                 "level", getRequiredRep(FactionTemplateController.getTemplate(faction), standing).getDisplayName(),
                 "title", title);
     }
@@ -116,7 +116,7 @@ public class PlayerProgression {
     // shown on proposals the player can't make yet
     public static String getRequirementText(int requiredStanding) {
         if (getStanding() >= requiredStanding) return getSuspensionText();
-        if (requiredStanding <= 0) return Presentation.text("progression.requires_seat");
+        if (requiredStanding <= 0) return Presentation.textFor(getFaction(), "progression.requires_seat");
         return Presentation.format("progression.requires_rank",
                 "title", Utils.getTitle(Utils.getRecruitmentFaction(), requiredStanding));
     }
@@ -162,7 +162,7 @@ public class PlayerProgression {
                 addMissingRep(missing, faction, rules.getTier1Rep());
                 int wins = getJointVictories();
                 if (LordController.getPlayerLord().getFiefs().isEmpty() && wins < rules.getTier1Battles()) {
-                    missing.add(Presentation.format("progression.need_holding_or_battles",
+                    missing.add(Presentation.formatFor(faction, "progression.need_holding_or_battles",
                             "battles", Integer.toString(rules.getTier1Battles()), "current", Integer.toString(wins)));
                 }
                 break;
@@ -223,7 +223,7 @@ public class PlayerProgression {
         sync().put("seated", true);
         sync().put("rankSince", Global.getSector().getClock().getTimestamp());
         LordController.getPlayerLord().setRanking(0);
-        Global.getSector().getCampaignUI().addMessage(Presentation.format("progression.seated",
+        Global.getSector().getCampaignUI().addMessage(Presentation.formatFor(faction, "progression.seated",
                 "faction", faction.getDisplayName(), "title", Utils.getTitle(faction, 0)), faction.getBaseUIColor());
     }
 
@@ -233,13 +233,13 @@ public class PlayerProgression {
         FactionAPI faction = getFaction();
         if (faction == null) return Presentation.text("progression.no_commission");
         int standing = getStanding();
-        if (standing == COMMISSIONED) return Presentation.text("progression.no_vote_seat");
+        if (standing == COMMISSIONED) return Presentation.textFor(faction, "progression.no_vote_seat");
         if (standing >= 2) return Presentation.text("progression.no_vote_top");
         List<String> missing = getMissingRequirements();
         if (!ignoreRequirements && !missing.isEmpty()) {
             return Presentation.format("progression.no_vote_requirements", "requirements", joinRequirements(missing));
         }
-        if (PoliticsController.hasPendingPromotion(LordController.getPlayerLord())) return Presentation.text("progression.no_vote_pending");
+        if (PoliticsController.hasPendingPromotion(LordController.getPlayerLord())) return Presentation.textFor(faction, "progression.no_vote_pending");
 
         Lord sponsor = null;
         int bestRelation = 0;
@@ -266,7 +266,7 @@ public class PlayerProgression {
         proposal.setPlayerSupports(true);
         PoliticsController.addProposal(sponsor, proposal);
         PoliticsController.updateProposal(proposal);
-        String message = Presentation.format("progression.sponsored",
+        String message = Presentation.formatFor(faction, "progression.sponsored",
                 "commander", sponsor.getTitle() + " " + sponsor.getLordAPI().getNameString(),
                 "title", Utils.getTitle(faction, targetTier));
         Global.getSector().getCampaignUI().addMessage(message, faction.getBaseUIColor());
@@ -313,7 +313,7 @@ public class PlayerProgression {
         if (proposal.isPassed()) data.put("rankSince", Global.getSector().getClock().getTimestamp());
         if (!proposal.isPassed()) {
             data.put("failedAt", Global.getSector().getClock().getTimestamp());
-            Global.getSector().getCampaignUI().addMessage(Presentation.format("progression.vote_failed",
+            Global.getSector().getCampaignUI().addMessage(Presentation.formatFor(faction, "progression.vote_failed",
                     "days", Integer.toString(cooldown)), faction.getBaseUIColor());
         }
     }

@@ -91,15 +91,15 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
             if (PoliticsController.playerFactionHasLaws()) {
                 faction = Global.getSector().getPlayerFaction();
             } else {
-                header.addPara(Presentation.text("laws.please_join_or_start_an_organized_faction_to_participate_in_poli"), pad);
+                header.addPara(words("laws.please_join_or_start_an_organized_faction_to_participate_in_poli"), pad);
                 panel.addUIElement(header).inTL(0, 0);
                 return;
             }
         }
         //header.addImage(faction.getCrest(), headerHeight, headerHeight, pad);
-        header.addSectionHeading(Presentation.text("laws.laws_of_the_realm"),
+        header.addSectionHeading(words("laws.laws_of_the_realm"),
                 faction.getBrightUIColor(), faction.getDarkUIColor(), Alignment.LMID, opad);
-        header.addTooltipToPrevious(new ToolTip(250, StringUtil.getString(CATEGORY_UI, "laws_tooltip")),
+        header.addTooltipToPrevious(new ToolTip(250, words("laws.policies_tooltip")),
                 TooltipMakerAPI.TooltipLocation.BELOW);
         panel.addUIElement(header).inTL(0, 0);
 
@@ -117,39 +117,39 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
         prev = addLawRow(panel, prev, Lawset.LawType.FEAST_LAW, faction, FEAST_LAW_BUTTON, 0);
 
         TooltipMakerAPI internalAffairsHeader = panel.createUIElement(width, headerHeight, false);
-        internalAffairsHeader.addSectionHeading(Presentation.text("laws.internal_affairs"),
+        internalAffairsHeader.addSectionHeading(words("laws.internal_affairs"),
                 faction.getBrightUIColor(), faction.getDarkUIColor(), Alignment.LMID, opad);
         panel.addUIElement(internalAffairsHeader).belowLeft(prev, 0);
         // Change Marshal
 
         TooltipMakerAPI marshalPanel = panel.createUIElement(width / 2, 80, false);
         Lord marshal = LordController.getLordOrPlayerById(laws.getMarshal());
-        marshalPanel.addPara(Presentation.text("laws.current_marshal"), uiColor, pad);
+        marshalPanel.addPara(words("laws.current_marshal"), uiColor, pad);
         if (marshal != null) {
             TooltipMakerAPI marshalImagePanel = marshalPanel.beginImageWithText(
                     marshal.getLordAPI().getPortraitSprite(), 48);
             marshalImagePanel.addPara(marshal.getLordAPI().getNameString(), faction.getBaseUIColor(), pad);
-            ButtonAPI changeMarshalButton = marshalImagePanel.addButton(Presentation.text("laws.change_marshal"), APPOINT_MARSHAL_BUTTON, 150, 20, pad);
+            ButtonAPI changeMarshalButton = marshalImagePanel.addButton(words("laws.change_marshal"), APPOINT_MARSHAL_BUTTON, 150, 20, pad);
             requireStanding(changeMarshalButton, marshalImagePanel, 1);
             if (marshal.isPlayer()) {
                 if (EventController.getCurrentCampaign(marshal.getFaction()) != null) {
-                    marshalImagePanel.addButton(Presentation.text("laws.end_campaign"), END_CAMPAIGN_BUTTON, 150, 20, pad);
+                    marshalImagePanel.addButton(words("laws.end_campaign"), END_CAMPAIGN_BUTTON, 150, 20, pad);
                 } else {
-                    ButtonAPI campaignButton = marshalImagePanel.addButton(Presentation.text("laws.start_campaign"), START_CAMPAIGN_BUTTON, 150, 20, pad);
+                    ButtonAPI campaignButton = marshalImagePanel.addButton(words("laws.start_campaign"), START_CAMPAIGN_BUTTON, 150, 20, pad);
                     // cannot start campaign if on cooldown
                     int daysPassed = (int) Utils.getDaysSince(
                             EventController.getLastCampaignTime(marshal.getFaction()));
                     if (daysPassed < LordAI.CAMPAIGN_COOLDOWN) {
                         campaignButton.setEnabled(false);
                         marshalImagePanel.addTooltipToPrevious(new ToolTip(250,
-                                Presentation.text("laws.campaign_on_cooldown_for") + (LordAI.CAMPAIGN_COOLDOWN - daysPassed) + Presentation.text("laws.days")), TooltipMakerAPI.TooltipLocation.BELOW);
+                                words("laws.campaign_on_cooldown_for") + (LordAI.CAMPAIGN_COOLDOWN - daysPassed) + words("laws.days")), TooltipMakerAPI.TooltipLocation.BELOW);
                     }
                 }
             }
             marshalPanel.addImageWithText(pad);
         } else {
-            marshalPanel.addPara(Presentation.text("laws.none"), faction.getBaseUIColor(), pad);
-            ButtonAPI appointMarshalButton = marshalPanel.addButton(Presentation.text("laws.appoint_marshal"), APPOINT_MARSHAL_BUTTON, 150, 20, pad);
+            marshalPanel.addPara(words("laws.none"), faction.getBaseUIColor(), pad);
+            ButtonAPI appointMarshalButton = marshalPanel.addButton(words("laws.appoint_marshal"), APPOINT_MARSHAL_BUTTON, 150, 20, pad);
             requireStanding(appointMarshalButton, marshalPanel, 1);
         }
         panel.addUIElement(marshalPanel).belowLeft(internalAffairsHeader, 0);
@@ -157,14 +157,14 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
 
         // Award Fief
         TooltipMakerAPI fiefPanel = panel.createUIElement(width / 2, 80, false);
-        fiefPanel.addPara(Presentation.text("laws.unclaimed_fief"), uiColor, pad);
+        fiefPanel.addPara(words("laws.unclaimed_fief"), uiColor, pad);
         MarketAPI fief = laws.getFiefAward();
         if (fief != null) {
             fiefPanel.addPara(fief.getName(), faction.getBaseUIColor(), 3 * pad);
         } else {
-            fiefPanel.addPara(Presentation.text("laws.none"), faction.getBaseUIColor(), 3 * pad);
+            fiefPanel.addPara(words("laws.none"), faction.getBaseUIColor(), 3 * pad);
         }
-        ButtonAPI fiefButton = fiefPanel.addButton(Presentation.text("laws.award_fief"), AWARD_FIEF_BUTTON, 150, 20, pad);
+        ButtonAPI fiefButton = fiefPanel.addButton(words("laws.award_fief"), AWARD_FIEF_BUTTON, 150, 20, pad);
         if (fief == null) {
             fiefButton.setEnabled(false);
         }
@@ -174,11 +174,11 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
 
         // War and Peace
         TooltipMakerAPI diplomacyPanel = panel.createUIElement(width, headerHeight, false);
-        diplomacyPanel.addSectionHeading(Presentation.text("laws.foreign_relations"),
+        diplomacyPanel.addSectionHeading(words("laws.foreign_relations"),
                 faction.getBrightUIColor(), faction.getDarkUIColor(), Alignment.LMID, opad);
-        ButtonAPI button1 = diplomacyPanel.addButton(Presentation.text("laws.declare_war"), DECLARE_WAR_BUTTON, 150, 20, opad);
+        ButtonAPI button1 = diplomacyPanel.addButton(words("laws.declare_war"), DECLARE_WAR_BUTTON, 150, 20, opad);
         requireStanding(button1, diplomacyPanel, 1);
-        ButtonAPI button2 = diplomacyPanel.addButton(Presentation.text("laws.sue_for_peace"), SUE_FOR_PEACE_BUTTON, 150, 20, opad);
+        ButtonAPI button2 = diplomacyPanel.addButton(words("laws.sue_for_peace"), SUE_FOR_PEACE_BUTTON, 150, 20, opad);
         requireStanding(button2, diplomacyPanel, 1);
         button2.getPosition().rightOfTop(button1, opad);
         panel.addUIElement(diplomacyPanel).belowLeft(marshalPanel, opad);
@@ -189,13 +189,13 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
         if (faction.equals(Global.getSector().getPlayerFaction())) {
             // promote lord, demote lord, exile lord, revoke fief
             rulerPanel = panel.createUIElement(width, headerHeight, false);
-            rulerPanel.addSectionHeading(Presentation.text("laws.ruler_actions"),
+            rulerPanel.addSectionHeading(words("laws.ruler_actions"),
                     faction.getBrightUIColor(), faction.getDarkUIColor(), Alignment.LMID, opad);
-            ButtonAPI button3 = rulerPanel.addButton(Presentation.text("laws.grant_revoke_title"), CHANGE_TITLE_BUTTON, faction.getBrightUIColor(),
+            ButtonAPI button3 = rulerPanel.addButton(words("laws.grant_revoke_title"), CHANGE_TITLE_BUTTON, faction.getBrightUIColor(),
                     faction.getDarkUIColor(), 150, 20, opad);
-            ButtonAPI button4 = rulerPanel.addButton(Presentation.text("laws.revoke_fief"), REVOKE_FIEF_BUTTON, faction.getBrightUIColor(),
+            ButtonAPI button4 = rulerPanel.addButton(words("laws.revoke_fief"), REVOKE_FIEF_BUTTON, faction.getBrightUIColor(),
                     faction.getDarkUIColor(), 150, 20, opad);
-            ButtonAPI button5 = rulerPanel.addButton(Presentation.text("laws.exile_lord"), EXILE_LORD_BUTTON, faction.getBrightUIColor(),
+            ButtonAPI button5 = rulerPanel.addButton(words("laws.exile_lord"), EXILE_LORD_BUTTON, faction.getBrightUIColor(),
                     faction.getDarkUIColor(), 150, 20, opad);
             button4.getPosition().rightOfTop(button3, opad);
             button5.getPosition().rightOfTop(button4, opad);
@@ -204,9 +204,9 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
 
         // Personal Decisions
         TooltipMakerAPI personalPanel = panel.createUIElement(width, headerHeight, false);
-        personalPanel.addSectionHeading(Presentation.text("laws.personal_decisions"),
+        personalPanel.addSectionHeading(words("laws.personal_decisions"),
                 faction.getBrightUIColor(), faction.getDarkUIColor(), Alignment.LMID, opad);
-        ButtonAPI button6 = personalPanel.addButton(Presentation.text("laws.transfer_fief"), TRANSFER_FIEF_BUTTON, faction.getBrightUIColor(),
+        ButtonAPI button6 = personalPanel.addButton(words("laws.transfer_fief"), TRANSFER_FIEF_BUTTON, faction.getBrightUIColor(),
                 faction.getDarkUIColor(), 150, 20, opad);
 
         if(LordController.getPlayerLord().getFiefs().isEmpty())
@@ -229,6 +229,11 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
 
     }
 
+    // this screen shows one faction's affairs, so its wording follows that faction's profile
+    private String words(String key) {
+        return Presentation.textFor(faction, key);
+    }
+
     // disables a proposal button the player's standing doesn't allow yet; call right after adding the button
     private void requireStanding(ButtonAPI button, TooltipMakerAPI panel, int requiredStanding) {
         if (PlayerProgression.getEffectiveStanding() >= requiredStanding) return;
@@ -245,8 +250,7 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
         TooltipMakerAPI label = panel.createUIElement(100, gridHeight, false);
         LabelAPI title = label.addPara(Presentation.lawName(faction, type), 0);
         title.setAlignment(Alignment.MID);
-        label.addTooltipToPrevious(new ToolTip(200,
-                StringUtil.getString(CATEGORY_UI, "laws_" + type.toString().toLowerCase() + "_tooltip")),
+        label.addTooltipToPrevious(new ToolTip(200, Presentation.policyDescription(faction, type)),
                 TooltipMakerAPI.TooltipLocation.BELOW);
         panel.addUIElement(label).belowLeft(prev, 0);
         LawLevel level = PoliticsController.getLaws(faction).getLawLevel(type);
@@ -256,21 +260,21 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
             ButtonAPI button;
             if (level.ordinal() == i) {
                 Color bgColor = faction.isPlayerFaction() ? DARK_GOLD : faction.getDarkUIColor();
-                button = buttonPanel.addButton(LawLevel.values()[i].displayName, buttonObject.clone(i), faction.getBrightUIColor(),
+                button = buttonPanel.addButton(Presentation.levelName(faction, LawLevel.values()[i]), buttonObject.clone(i), faction.getBrightUIColor(),
                         bgColor, 50, gridHeight, 0);
                 button.setClickable(false);
                 button.setMouseOverSound(null);
             } else if (Math.abs(level.ordinal() - i) == 1) {
-                button = buttonPanel.addButton(LawLevel.values()[i].displayName, buttonObject.clone(i), 50, gridHeight, 0);
+                button = buttonPanel.addButton(Presentation.levelName(faction, LawLevel.values()[i]), buttonObject.clone(i), 50, gridHeight, 0);
                 if (!allowed) button.setEnabled(false);
             } else {
-                button = buttonPanel.addButton(LawLevel.values()[i].displayName, buttonObject.clone(i), 50, gridHeight, 0);
+                button = buttonPanel.addButton(Presentation.levelName(faction, LawLevel.values()[i]), buttonObject.clone(i), 50, gridHeight, 0);
                 button.setEnabled(false);
                 button.setClickable(false);
                 button.setMouseOverSound(null);
             }
 
-            String message = StringUtil.getString(CATEGORY_UI, "laws_" + type.toString().toLowerCase() + "_" + i);
+            String message = Presentation.levelEffects(faction, type, i);
             List<String> messages = new ArrayList<>(Arrays.asList(message.split("\\|")));
             if (!allowed && Math.abs(level.ordinal() - i) == 1) {
                 messages.add(PlayerProgression.getRequirementText(requiredStanding));
@@ -287,11 +291,11 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
     @Override
     public void createConfirmationPrompt(Object buttonId, TooltipMakerAPI prompt) {
         if (buttonId == START_CAMPAIGN_BUTTON) {
-            prompt.addPara(Presentation.text("laws.this_will_call_the_lords_of_the_realm_to_arms_continue"), 3);
+            prompt.addPara(words("laws.this_will_call_the_lords_of_the_realm_to_arms_continue"), 3);
         } else if (buttonId == END_CAMPAIGN_BUTTON) {
-            prompt.addPara(Presentation.text("laws.this_will_end_the_current_campaign_continue"), 3);
+            prompt.addPara(words("laws.this_will_end_the_current_campaign_continue"), 3);
         } else if (buttonId instanceof ButtonObject) {
-            prompt.addPara(Presentation.text("laws.you_are_submitting_a_new_legislative_proposal_continue"), 3);
+            prompt.addPara(words("laws.you_are_submitting_a_new_legislative_proposal_continue"), 3);
         }
     }
 
@@ -339,15 +343,15 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
             if (buttonId == APPOINT_MARSHAL_BUTTON) {
                 law = Lawset.LawType.APPOINT_MARSHAL;
                 targetFief = null;
-                message = Presentation.text("laws.you_are_proposing_new_legislation_select_who_you_nominate_to_be_");
+                message = words("laws.you_are_proposing_new_legislation_select_who_you_nominate_to_be_");
             } else if (buttonId == AWARD_FIEF_BUTTON) {
                 law = Lawset.LawType.AWARD_FIEF;
                 targetFief = laws.getFiefAward().getId();
-                message = Presentation.text("laws.you_are_proposing_new_legislation_select_who_you_nominate_to_rec") + laws.getFiefAward().getName() + ".";
+                message = words("laws.you_are_proposing_new_legislation_select_who_you_nominate_to_rec") + laws.getFiefAward().getName() + ".";
             } else {
                 law = Lawset.LawType.EXILE_LORD;
                 targetFief = null;
-                message = Presentation.text("laws.you_are_proposing_new_legislation_select_who_you_nominate_to_be__316");
+                message = words("laws.you_are_proposing_new_legislation_select_who_you_nominate_to_be__316");
             }
             ArrayList<Lord> lords = new ArrayList<>();
             ArrayList<String> options = new ArrayList<>();
@@ -392,11 +396,11 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
             final Lawset.LawType law;
             if (buttonId == DECLARE_WAR_BUTTON) {
                 law = Lawset.LawType.DECLARE_WAR;
-                message = Presentation.text("laws.you_are_proposing_new_legislation_select_the_faction_you_propose");
+                message = words("laws.you_are_proposing_new_legislation_select_the_faction_you_propose");
 
             } else {
                 law = Lawset.LawType.SUE_FOR_PEACE;
-                message = Presentation.text("laws.you_are_proposing_new_legislation_select_the_faction_you_propose_363");
+                message = words("laws.you_are_proposing_new_legislation_select_the_faction_you_propose_363");
             }
 
             ArrayList<String> options = new ArrayList<>();
@@ -431,14 +435,14 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
             ui.showDialog(null, plugin);
 
         } else if (buttonId == REVOKE_FIEF_BUTTON) {
-            String message = Presentation.text("laws.you_are_proposing_new_legislation_select_the_fief_to_revoke");
+            String message = words("laws.you_are_proposing_new_legislation_select_the_fief_to_revoke");
             ArrayList<String> options = new ArrayList<>();
             ArrayList<String> retVals = new ArrayList<>();
             FactionAPI faction = Utils.getRecruitmentFaction();
             for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy()) {
                 Lord owner = FiefController.getOwner(market);
                 if (faction.equals(market.getFaction()) && owner != null) {
-                    options.add(market.getName() + Presentation.text("laws.owned_by") + owner.getLordAPI().getNameString());
+                    options.add(market.getName() + words("laws.owned_by") + owner.getLordAPI().getNameString());
                     retVals.add(market.getId());
                 }
             }
@@ -462,7 +466,7 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
             });
             ui.showDialog(null, plugin);
         } else if (buttonId == CHANGE_TITLE_BUTTON) {
-            String message = Presentation.text("laws.you_are_proposing_new_legislation_select_the_lord_to_be_promoted");
+            String message = words("laws.you_are_proposing_new_legislation_select_the_lord_to_be_promoted");
             ArrayList<Lord> lords = new ArrayList<>();
             ArrayList<String> options = new ArrayList<>();
             ArrayList<String> retVals = new ArrayList<>();
@@ -486,7 +490,7 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
                     if (selection != null) {
                         // nested dialogs, yay
                         Lord lord = LordController.getLordOrPlayerById(selection);
-                        String message2 = Presentation.text("laws.select_new_rank_for") + lord.getLordAPI().getNameString();
+                        String message2 = words("laws.select_new_rank_for") + lord.getLordAPI().getNameString();
                         int rank = lord.getRanking();
                         ArrayList<String> options2 = new ArrayList<>();
                         ArrayList<String> retVals2 = new ArrayList<>();
@@ -521,7 +525,7 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
 
         }
         else if (buttonId == TRANSFER_FIEF_BUTTON) {
-            String message = Presentation.text("laws.you_are_going_to_transfer_one_of_your_fiefs_to_another_lord_sele");
+            String message = words("laws.you_are_going_to_transfer_one_of_your_fiefs_to_another_lord_sele");
             ArrayList<Lord> lords = new ArrayList<>();
             ArrayList<String> optionsLords = new ArrayList<>();
             ArrayList<String> retValsLords = new ArrayList<>();
@@ -543,14 +547,14 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
                     if (selection != null) {
                         // nested dialogs, yay
                         Lord lord = LordController.getLordById(selection);
-                        String messageFiefs = Presentation.text("laws.select_whom_to_transfer_fief_to") + lord.getLordAPI().getNameString();
+                        String messageFiefs = words("laws.select_whom_to_transfer_fief_to") + lord.getLordAPI().getNameString();
                         ArrayList<String> optionsFiefs = new ArrayList<>();
                         ArrayList<String> retValsFiefs = new ArrayList<>();
                         FactionAPI faction = Utils.getRecruitmentFaction();
                         for (MarketAPI market : Global.getSector().getEconomy().getMarketsCopy()) {
                             Lord owner = FiefController.getOwner(market);
                             if (faction.equals(market.getFaction()) && owner == LordController.getPlayerLord()) {
-                                optionsFiefs.add(market.getName() + Presentation.text("laws.owned_by") + owner.getLordAPI().getNameString());
+                                optionsFiefs.add(market.getName() + words("laws.owned_by") + owner.getLordAPI().getNameString());
                                 retValsFiefs.add(market.getId());
                             }
                         }
@@ -590,7 +594,7 @@ public class LawsIntelPlugin extends BaseIntelPlugin {
 
     @Override
     public String getName() {
-        return Utils.getRecruitmentFaction().getDisplayName() + Presentation.text("laws.realm_laws");
+        return Utils.getRecruitmentFaction().getDisplayName() + words("laws.realm_laws");
     }
 
     @Override

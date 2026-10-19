@@ -19,6 +19,7 @@ import exerelin.campaign.alliances.Alliance;
 import lombok.Setter;
 import org.apache.log4j.Logger;
 import org.lwjgl.util.vector.Vector2f;
+import starlords.presentation.Presentation;
 import starlords.ai.utils.TargetUtils;
 import starlords.controllers.LordController;
 import starlords.controllers.EventController;
@@ -105,12 +106,12 @@ public class Utils {
 			if (lord.isMarshal()) {
 				LordEvent campaign = EventController.getCurrentCampaign(lord.getLordAPI().getFaction());
 				if (campaign.getTarget() == null) {
-					orderStr = StringUtil.getString(CATEGORY_UI, "fleet_campaign_lead_desc", lord.getTarget().getName());
+					orderStr = Presentation.formatFor(lord.getFaction(), "fleet.campaign.lead", "target", lord.getTarget().getName());
 				} else {
-					orderStr = StringUtil.getString(CATEGORY_UI, "fleet_campaign_lead_desc", campaign.getTarget().getName());
+					orderStr = Presentation.formatFor(lord.getFaction(), "fleet.campaign.lead", "target", campaign.getTarget().getName());
 				}
 			} else {
-				orderStr = StringUtil.getString(CATEGORY_UI, "fleet_campaign_follow_desc");
+				orderStr = Presentation.textFor(lord.getFaction(), "fleet.campaign.follow");
 			}
 		}
 		return orderStr;

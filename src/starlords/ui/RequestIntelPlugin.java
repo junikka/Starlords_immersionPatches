@@ -94,7 +94,7 @@ public class RequestIntelPlugin extends BaseIntelPlugin {
 					break;
 				case LordRequest.FIEF_FOR_DEFECTION:
 					log.info("[Star Lords] Request Intel Plugin rendering text");
-                    info.addPara(Presentation.format("request.holding.offer", "player", Global.getSector().getPlayerPerson().getNameString(),
+                    info.addPara(Presentation.formatFor(Utils.getRecruitmentFaction(), "request.holding.offer", "player", Global.getSector().getPlayerPerson().getNameString(),
                             "commander", originator.getLordAPI().getNameString(), "faction", originator.getFaction().getDisplayNameWithArticle()), opad);
 
 					Utils.addShipHullsWithCodex(info, originator, pad);
@@ -102,7 +102,7 @@ public class RequestIntelPlugin extends BaseIntelPlugin {
 					if (request.hasPlayerAgreed() == true) {
 
 						info.addPara(Presentation.text("request.accepted"), Color.GREEN, opad);
-						info.addPara(Presentation.text("request.excellent_which_shall_be_my_new_demesne"), opad);
+						info.addPara(Presentation.textFor(Utils.getRecruitmentFaction(), "request.excellent_which_shall_be_my_new_demesne"), opad);
 						for (SectorEntityToken fief : LordController.getPlayerLord().getFiefs()) {
 							info.addButton(fief.getName(), fief.getMarket(), getFactionForUIColors().getBaseUIColor(),
 									getFactionForUIColors().getDarkUIColor(), (int) width, 20, opad);

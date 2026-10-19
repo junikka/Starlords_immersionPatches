@@ -6,7 +6,7 @@ The [accepted design](MODULAR_PRESENTATION_PROPOSAL.md) is the implementation ta
 | --- | --- | --- |
 | 1. Build foundation and runtime checks | Complete; campaign test passed | Full source build; pinned inputs; identical clean-build outputs; runtime JAR replacement; installable package; optional historical comparisons |
 | 2. Neutral presentation and common resolver | Implemented; automated checks passed; in-game review pending | Neutral UI/dialogue; common title resolver; current/destination/host/recipient context; safe tokens; existing content formats preserved |
-| 3. Profile inheritance and examples | Not started | Neutral → institutional → faction profiles; per-key fallback; faction-aware offices, laws, events, and UI |
+| 3. Profile inheritance and examples | Implemented; automated checks passed; in-game review pending | Neutral → institutional → faction profiles; per-key fallback; faction-aware offices, laws, events, and UI |
 | 4. Faction/personality dialogue | Not started | Authored complete messages with existing branches, conditions, and effects preserved |
 | 5. Modular commander packs and stable identity | Not started | Explicit manifests, validation, stable IDs, declared new-campaign/add-on-load policy, duplicate/death persistence |
 
@@ -41,9 +41,23 @@ Characters were present, changes persisted after saving/reloading, and log outpu
 
 Phase 2 still needs the user's in-game review of dialogue, policy UI, gatherings and saving/reloading. Automated checks use controlled API context; they do not run a campaign or assess visual layout. Existing Lombok warnings remain unchanged.
 
+## Phase 3 evidence — 2026-10-19
+
+Planned in [PHASE3_PLAN.md](PHASE3_PLAN.md) and approved by Julie with these decisions: raves and tournaments stay the same in every faction; the profile wording tables as drafted; the Diktat's office is renamed *Marshal of the Fleet*; a LunaLib setting picks the player faction's profile.
+
+- `data/lords/presentation/profiles.json` defines five institutional profiles (naval, corporate, aristocratic, religious, raider) and two faction profiles (Sindrian Diktat on naval, Luddic Path on religious), bound to the eight vanilla factions. The house wording in `neutral.json` is the implicit `default` profile. Inheritance is single and per message. `ProfileRegistry` resolves it at load time and rejects unknown parents, cycles, bindings to missing profiles, empty text, overrides of keys outside `overridable_keys.json` (84 institutional messages), and tokens the default message's context doesn't supply. Every error names its path.
+- `Presentation.textFor/formatFor(faction, key)`, `lawName`, `levelName`, `levelEffects` and `policyDescription` resolve per faction. The old faction-less calls keep meaning `default`. Context follows the design: the deciding faction for policies and proposals, the council's faction, the faction calling an expedition, a commander's own faction for their intel and fleet status, the commission faction for requests to the player.
+- Removed the two shared-enum traps: `LawLevel.displayName` (computed once for every faction) and `Lawset.LawType.lawName` (an unused duplicate of the policy names). Policy level effects and descriptions, and the expedition notifications and fleet status lines, moved from `strings.json` into the catalogue so profiles can reword them.
+- Profiles may carry a rank ladder that applies to factions without a `titles.json` entry. `tools/sync_ranks.py` follows the same chain. LunaLib's **Other → Your faction's wording** (or `playerFactionProfile` without LunaLib) picks the player faction's profile; titles are unaffected.
+- `tools/preview_profiles.py` writes `docs/immersion-audit/generated/profile_preview.md`, every overridable message as each faction sees it.
+- `python -m unittest discover -s tools/tests -v`: **34 tests passed, no skips**. New checks cover per-key inheritance, two factions rendered back to back, the player setting and its fallback, profile ladders, every validation error, the data rules (allowed keys, tokens, spaces, tooltip separators, raves universal), generated rank files being current, and Java resolution matching both Python tools exactly.
+- `python tools/build.py reproduce`: **passed**, two clean builds identical (JAR SHA-256 `ed22b2dbac85884534f117baec4fa8546298214d861f9dc4fb24a0b6b43d41f4`). **368 source files / 421 classes**, Java 16 bytecode. Updated `jars/StarLords.jar` and `build/Starlords_immersionPatches.zip`. No save changes: profiles affect wording only.
+
+Still needs the in-game review in [TESTING.md](../../TESTING.md), "Faction wording". Notification texts still read from `strings.json` (captures, defections and so on) and `dialog.json` use the house wording in every faction; dialogue belongs to Phase 4.
+
 ## Next phase
 
-Phase 3 implements neutral → institutional → faction profile inheritance and examples, including faction-specific offices, laws, events and messages. The example profile JSON remains a design illustration and is not loaded at runtime. Direct title bindings already work through `data/lords/presentation/titles.json`.
+Phase 4 rewrites faction/personality dialogue where noun substitution can't work, keeping branch conditions and effects. Dialogue that names holdings or the council can then follow each faction's profile.
 
 Later phases add richer faction/personality voices and modular commander packs. Authored historical biographies remain historical; changing allegiance does not rewrite their backgrounds. New commander content currently uses the existing `lords.json` format and a new campaign. Old-save compatibility remains optional.
 

@@ -403,7 +403,7 @@ public class LordAI implements EveryFrameScript {
                     lord.setTarget(target);
                     fleetAI.addAssignmentAtStart(
                             FleetAssignment.ORBIT_AGGRESSIVE, target, 1000,
-                            StringUtil.getString(CATEGORY, "fleet_campaign_follow_desc"), null);
+                            Presentation.textFor(lord.getFaction(), "fleet.campaign.follow"), null);
                     Misc.setFlagWithReason(mem, MemFlags.FLEET_BUSY, BUSY_REASON, true, 1000);
                     event.getParticipants().add(lord);
                 } else {

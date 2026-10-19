@@ -1,18 +1,17 @@
 package starlords.faction;
 
-import starlords.presentation.Presentation;
-
 public enum LawLevel {
-    VERY_LOW(Presentation.text("law_level.v_low")),
-    LOW(Presentation.text("law_level.low")),
-    MEDIUM(Presentation.text("law_level.medium")),
-    HIGH(Presentation.text("law_level.high")),
-    VERY_HIGH(Presentation.text("law_level.v_high"));
+    VERY_LOW("v_low"),
+    LOW("low"),
+    MEDIUM("medium"),
+    HIGH("high"),
+    VERY_HIGH("v_high");
 
-    public final String displayName;
+    /** Suffix of the law_level.* message; display names depend on the faction, see Presentation.levelName. */
+    public final String key;
 
-    LawLevel(String s) {
-        displayName = s;
+    LawLevel(String key) {
+        this.key = key;
     }
 
     public boolean isAtLeast(LawLevel level) {

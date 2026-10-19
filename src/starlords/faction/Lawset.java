@@ -6,21 +6,19 @@ import starlords.controllers.LordController;
 import lombok.Getter;
 import lombok.Setter;
 import starlords.person.Lord;
-import starlords.util.StringUtil;
 import starlords.util.factionUtils.FactionTemplate;
 import starlords.util.factionUtils.FactionTemplateController;
 
-import static starlords.util.Constants.CATEGORY_UI;
 
 
 @Getter
 @Setter
 public class Lawset {
     public enum LawType {
-        CROWN_AUTHORITY(StringUtil.getString(CATEGORY_UI, "laws_crown_authority"), 3, 2, 0, 2, 4),
-        NOBLE_AUTHORITY(StringUtil.getString(CATEGORY_UI, "laws_noble_authority"), 3, 2, 2, 2, 1),
-        TRADE_LAW(StringUtil.getString(CATEGORY_UI, "laws_trade_law"), 2, 4, 0, 2, 2),
-        FEAST_LAW(StringUtil.getString(CATEGORY_UI, "laws_feast_law"), 3, 3, 1, 0, 2),
+        CROWN_AUTHORITY(3, 2, 0, 2, 4),
+        NOBLE_AUTHORITY(3, 2, 2, 2, 1),
+        TRADE_LAW(2, 4, 0, 2, 2),
+        FEAST_LAW(3, 3, 1, 0, 2),
         APPOINT_MARSHAL,
         AWARD_FIEF,
         DECLARE_WAR,
@@ -29,14 +27,13 @@ public class Lawset {
         CHANGE_RANK,
         EXILE_LORD;
 
-        public String lawName;
+        // display names depend on the deciding faction, see Presentation.lawName
         public int[] pref; // preferred level for law for upstanding, martial, calculating, quarrelsome, and ruler
 
         LawType() {}
 
-        LawType(String s, int u, int m, int c, int q, int r) {
+        LawType(int u, int m, int c, int q, int r) {
             pref = new int[]{u, m, c, q, r};
-            lawName = s;
         }
     }
 

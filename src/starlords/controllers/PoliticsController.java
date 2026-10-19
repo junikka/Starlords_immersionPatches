@@ -162,7 +162,7 @@ public class PoliticsController implements EveryFrameScript {
                     if (nextProposal != null) {
                         boolean announce = nextProposal.getFaction().equals(Utils.getRecruitmentFaction());
                         if (announce == true) {
-                            Global.getSector().getCampaignUI().addMessage(Presentation.text("politics.the_council_is_now_voting_to_pass_law") + nextProposal.getTitle(),
+                            Global.getSector().getCampaignUI().addMessage(Presentation.textFor(nextProposal.getFaction(), "politics.the_council_is_now_voting_to_pass_law") + nextProposal.getTitle(),
                                     nextProposal.faction.getBaseUIColor());
                         }
                     }
@@ -418,7 +418,7 @@ public class PoliticsController implements EveryFrameScript {
         boolean announce = proposal.getFaction().equals(Utils.getRecruitmentFaction());
         if (totalSupport > totalOpposition && !proposal.isAlive()) {
             if (announce) {
-                Global.getSector().getCampaignUI().addMessage(Presentation.text("politics.the_council_has_passed_law") + proposal.getTitle(),
+                Global.getSector().getCampaignUI().addMessage(Presentation.textFor(proposal.getFaction(), "politics.the_council_has_passed_law") + proposal.getTitle(),
                         proposal.faction.getBaseUIColor());
             }
             // law passed
@@ -545,7 +545,7 @@ public class PoliticsController implements EveryFrameScript {
             // law failed
             if (announce) {
                 if (proposal.targetLord == null || LordController.getLordOrPlayerById(proposal.targetLord) != null) {
-                    Global.getSector().getCampaignUI().addMessage(Presentation.text("politics.the_council_has_voted_down_law") + proposal.getTitle(),
+                    Global.getSector().getCampaignUI().addMessage(Presentation.textFor(proposal.getFaction(), "politics.the_council_has_voted_down_law") + proposal.getTitle(),
                             Color.RED);
                 }else{
                     Global.getSector().getCampaignUI().addMessage(Presentation.text("politics.the_target_of_law") + proposal.getTitle()+Presentation.text("politics.has_died"),
@@ -807,8 +807,8 @@ public class PoliticsController implements EveryFrameScript {
                 }
                 delta = 25 * (2 - size);
                 approval += delta;
-                if (delta > 0) reasons.add(addPlus(delta) + Presentation.text("politics.recipient_has_few_fiefs"));
-                if (delta < 0) reasons.add(addPlus(delta) + Presentation.text("politics.recipient_has_many_fiefs"));
+                if (delta > 0) reasons.add(addPlus(delta) + Presentation.textFor(proposal.getFaction(), "politics.recipient_has_few_fiefs"));
+                if (delta < 0) reasons.add(addPlus(delta) + Presentation.textFor(proposal.getFaction(), "politics.recipient_has_many_fiefs"));
                 break;
             case DECLARE_WAR:
             case SUE_FOR_PEACE:
@@ -928,7 +928,7 @@ public class PoliticsController implements EveryFrameScript {
                 if (lord.getFiefs().isEmpty()) {
                     delta = raising * -20;
                     approval += delta;
-                    if (itemized) auxReasons.add(addPlus(delta) + Presentation.text("politics.no_fiefs_to_tax"));
+                    if (itemized) auxReasons.add(addPlus(delta) + Presentation.textFor(proposal.getFaction(), "politics.no_fiefs_to_tax"));
                 }
                 // liked by calculating
                 if (lord.getPersonality() == LordPersonality.CALCULATING) {
@@ -970,12 +970,12 @@ public class PoliticsController implements EveryFrameScript {
                 }
                 delta = 20 * (newRank - currRank);
                 approval += delta;
-                if (itemized) auxReasons.add(addPlus(delta) + Presentation.text("politics.rank_difference_with_current_marshal"));
+                if (itemized) auxReasons.add(addPlus(delta) + Presentation.textFor(proposal.getFaction(), "politics.rank_difference_with_current_marshal"));
                 // disliked if on campaign
                 if (EventController.getCurrentCampaign(faction) != null) {
                     delta = -50;
                     approval += delta;
-                    if (itemized) auxReasons.add(addPlus(delta) + Presentation.text("politics.disrupts_ongoing_campaign"));
+                    if (itemized) auxReasons.add(addPlus(delta) + Presentation.textFor(proposal.getFaction(), "politics.disrupts_ongoing_campaign"));
                 }
                 delta = -beneficiary.getControversy();
                 if (victim != null) {
@@ -990,11 +990,11 @@ public class PoliticsController implements EveryFrameScript {
                 if (beneficiary.getFiefs().isEmpty()) {
                     delta = 25;
                     approval += delta;
-                    if (itemized) auxReasons.add(addPlus(delta) + Presentation.text("politics.recipient_has_no_fiefs"));
+                    if (itemized) auxReasons.add(addPlus(delta) + Presentation.textFor(proposal.getFaction(), "politics.recipient_has_no_fiefs"));
                 } else if (beneficiary.getFiefs().size() >= originator.getFiefs().size()) {
                     delta = -20;
                     approval += delta;
-                    if (itemized) auxReasons.add(addPlus(delta) + Presentation.text("politics.recipient_has_too_many_fiefs"));
+                    if (itemized) auxReasons.add(addPlus(delta) + Presentation.textFor(proposal.getFaction(), "politics.recipient_has_too_many_fiefs"));
                 }
                 // disliked by calculating
                 if (lord.getPersonality() == LordPersonality.CALCULATING && !lord.equals(beneficiary)) {

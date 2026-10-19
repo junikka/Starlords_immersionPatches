@@ -1,4 +1,4 @@
-"""Phase 2 regression checks: shipped data plus real Java/API integration.
+"""Phase 2/3 regression checks: shipped data plus real Java/API integration.
 
 Game interfaces supply controlled context; the renderer, resolvers, loader,
 proposal summaries and dialogue pipeline are the production classes.
@@ -16,6 +16,8 @@ import unittest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import build
+import preview_profiles
+import sync_ranks
 
 ROOT = Path(__file__).resolve().parents[2]
 ORIGINAL = 'd5cd42288ab7fd0b194266d51b206ed1f43edc8c'
@@ -61,11 +63,8 @@ class PresentationDataTests(unittest.TestCase):
             old = list(csv.reader(io.StringIO(historical(path))))
             new = list(csv.reader(io.StringIO((ROOT/path).read_text(encoding='utf-8'))))
             self.assertEqual(old[0], new[0])
-            # new commands may be appended (PromotePlayer); existing rows keep their ids and syntax
-            if path.endswith('commands.csv'):
-                self.assertGreaterEqual(len(new), len(old))
-            else:
-                self.assertEqual(len(old), len(new))
+            # new rows may be appended (PromotePlayer, the player faction profile); existing rows keep their ids and syntax
+            self.assertGreaterEqual(len(new), len(old))
             headers = old[0]
             for a, b in zip(old[1:], new[1:]):
                 self.assertEqual(len(a), len(b))
@@ -81,11 +80,17 @@ class PresentationDataTests(unittest.TestCase):
         messages = data['messages']
         for path in (ROOT/'src').rglob('*.java'):
             source = path.read_text(encoding='utf-8')
-            for key in re.findall(r'Presentation\.(?:text|format)\("([^"]+)"', source):
-                if key == 'policy.name.': continue  # enum suffix, checked below
-                self.assertIn(key, messages, str(path))
+            literal = (r'Presentation\.(?:text|format)\("([^"]+)"',
+                       r'Presentation\.(?:textFor|formatFor)\([^"\n]*?, "([^"]+)"',
+                       r'\bwords\("([^"]+)"')
+            for pattern in literal:
+                for key in re.findall(pattern, source):
+                    self.assertIn(key, messages, str(path))
         for policy in ('crown_authority', 'noble_authority', 'trade_law', 'feast_law'):
             self.assertIn('policy.name.' + policy, messages)
+            self.assertIn('policy.description.' + policy, messages)
+            for level in range(5): self.assertIn('policy.level.%s.%d' % (policy, level), messages)
+        for level in ('v_low', 'low', 'medium', 'high', 'v_high'): self.assertIn('law_level.' + level, messages)
         self.assertTrue(all(isinstance(v, str) and v.strip() for v in messages.values()))
 
     def test_visible_dialogue_has_no_debug_fallback_or_medieval_generic_titles(self):
@@ -103,7 +108,11 @@ class PresentationDataTests(unittest.TestCase):
         path = 'data/strings/strings.json'
         old = dict(leaves(json.loads(historical(path))))
         new = dict(leaves(json.loads((ROOT/path).read_text(encoding='utf-8'))))
-        self.assertEqual(old.keys(), new.keys())
+        moved = {k for k in old if re.fullmatch(r'/starlords_ui/laws_(tooltip|(crown_authority|noble_authority|trade_law|feast_law)(_[0-4]|_tooltip)?)', k)}
+        moved |= {'/starlords_ui/' + k for k in ('campaign_start', 'campaign_end', 'fleet_campaign_follow_desc', 'fleet_campaign_lead_desc')}
+        self.assertEqual(len(moved), 33)
+        self.assertEqual(old.keys() - moved, new.keys())
+        old = {k: v for k, v in old.items() if k not in moved}
         for key in old:
             expected = old[key].count('$string')
             if key.endswith('/offensive_bombard_saturation'): expected = 1  # original typo #string
@@ -121,6 +130,61 @@ class PresentationDataTests(unittest.TestCase):
             elif isinstance(node, list):
                 for value in node: check(value)
         check(data)
+
+
+class ProfileDataTests(unittest.TestCase):
+    """profiles.json may only reword institutional messages, with the tokens their context supplies."""
+    @classmethod
+    def setUpClass(cls):
+        load = lambda p: json.loads((ROOT/'data/lords/presentation'/p).read_text(encoding='utf-8'))
+        cls.messages = load('neutral.json')['messages']
+        cls.overridable = load('overridable_keys.json')['keys']
+        cls.profiles = load('profiles.json')
+
+    @staticmethod
+    def tokens(text):
+        return set(re.findall(r'\{[A-Za-z][A-Za-z0-9_.]*\}', text))
+
+    def test_overridable_keys_exist_and_profiles_stay_inside_them(self):
+        self.assertEqual(len(self.overridable), len(set(self.overridable)))
+        for key in self.overridable: self.assertIn(key, self.messages)
+        for name, profile in self.profiles['profiles'].items():
+            self.assertNotEqual(name, 'default')
+            for key, text in profile.get('messages', {}).items():
+                self.assertIn(key, self.overridable, (name, key))
+                self.assertTrue(text.strip(), (name, key))
+                self.assertLessEqual(self.tokens(text), self.tokens(self.messages[key]), (name, key))
+                # leading/trailing spaces are part of composed UI lines
+                self.assertEqual(text[:1] == ' ', self.messages[key][:1] == ' ', (name, key))
+                self.assertEqual(text[-1:] == ' ', self.messages[key][-1:] == ' ', (name, key))
+                self.assertEqual(text.count('|'), self.messages[key].count('|'), (name, key))
+
+    def test_bindings_and_inheritance_resolve(self):
+        profiles = self.profiles['profiles']
+        for faction, name in self.profiles['factions'].items():
+            seen = []
+            while name != 'default':
+                self.assertIn(name, profiles, faction)
+                self.assertNotIn(name, seen, faction)
+                seen.append(name)
+                name = profiles[name].get('extends', 'default')
+        for name, profile in profiles.items():
+            if 'titles' in profile:
+                self.assertEqual(len(profile['titles']), 3, name)
+                self.assertTrue(all(t.strip() for t in profile['titles']), name)
+
+    def test_rave_and_tournament_stay_universal(self):
+        # Julie's decision for Phase 3: only holdings, council, office, expedition and policies vary
+        for name, profile in self.profiles['profiles'].items():
+            for key in profile.get('messages', {}):
+                self.assertFalse(key.startswith(('event.feast', 'tournament', 'policy.name.feast_law')), (name, key))
+
+    def test_generated_rank_files_are_current(self):
+        neutral, resolved = sync_ranks.resolver()
+        for faction, names in resolved.items():
+            text = (ROOT/'data/world/factions'/(faction + '.faction')).read_text(encoding='utf-8')
+            data = json.loads(text[text.index('\n') + 1:])
+            self.assertEqual([data['ranks']['ranks']['starlords_tier_%d' % i]['name'] for i in range(3)], names, faction)
 
 
 @unittest.skipUnless(build.CONFIG.is_file(), 'Local Starsector/JDK configuration required')
@@ -157,6 +221,34 @@ class JavaPresentationTests(unittest.TestCase):
     def test_proposal_authority_market_names_and_every_proposal_type(self): self.check('proposals')
     def test_dialogue_line_option_hint_highlight_and_effect_order(self): self.check('dialogue')
     def test_schema_errors_and_absent_optional_faction(self): self.check('validation')
+    def test_profile_inheritance_contexts_player_setting_and_titles(self): self.check('profiles')
+    def test_profile_schema_errors_name_the_path(self): self.check('profile_validation')
+
+    def test_java_profile_resolution_matches_preview_tool(self):
+        result = subprocess.run([str(self.java), '-Djava.awt.headless=true', '-cp', self.classpath,
+                                 'PresentationChecks', str(ROOT), 'messages'], cwd=ROOT, capture_output=True,
+                                encoding='utf-8')
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        line = next(l for l in result.stdout.splitlines() if l.startswith('MESSAGES '))
+        java = json.loads(line[len('MESSAGES '):])
+        keys, factions, resolve = preview_profiles.resolver()
+        self.assertEqual(set(java), set(factions))
+        for faction in factions:
+            self.assertEqual(java[faction], {key: resolve(faction, key) for key in keys}, faction)
+
+    def test_java_titles_match_generated_rank_names(self):
+        result = subprocess.run([str(self.java), '-Djava.awt.headless=true', '-cp', self.classpath,
+                                 'PresentationChecks', str(ROOT), 'ranks'], cwd=ROOT, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        java = {}
+        for line in result.stdout.splitlines():
+            if line.startswith('RANKS '):
+                faction, *names = line[6:].split('|')
+                java[faction] = names
+        _, python = sync_ranks.resolver()
+        # the harness adds its own test factions; every shipped faction must agree
+        self.assertLessEqual(python.keys(), java.keys())
+        self.assertEqual({faction: java[faction] for faction in python}, python)
 
 
 if __name__ == '__main__': unittest.main()

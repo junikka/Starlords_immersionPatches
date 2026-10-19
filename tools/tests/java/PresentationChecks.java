@@ -20,7 +20,7 @@ import starlords.util.dialogControler.dialogAddon.DialogAddon_Base;
 /** Controlled game context, invoking production code against the real API JAR. */
 public class PresentationChecks {
     static Path root;
-    static JSONObject titleData, neutralData, legacyData;
+    static JSONObject titleData, neutralData, legacyData, profileData, overridableData;
     static final Map<String, FactionAPI> factions = new HashMap<>();
     static final Map<String, Object> persistent = new HashMap<>();
     static String commission;
@@ -90,6 +90,8 @@ public class PresentationChecks {
         neutralData = json("data/lords/presentation/neutral.json");
         titleData = json("data/lords/presentation/titles.json");
         legacyData = json("data/lords/faction.json");
+        profileData = json("data/lords/presentation/profiles.json");
+        overridableData = json("data/lords/presentation/overridable_keys.json");
         JSONObject strings = json("data/strings/strings.json");
         ModManagerAPI modManager = proxy(ModManagerAPI.class, (m,a) -> null);
         Global.setSettings(proxy(SettingsAPI.class, (m, a) -> {
@@ -98,15 +100,21 @@ public class PresentationChecks {
                     case "data/lords/presentation/neutral.json" -> neutralData;
                     case "data/lords/presentation/titles.json" -> titleData;
                     case "data/lords/faction.json" -> legacyData;
+                    case "data/lords/presentation/profiles.json" -> profileData;
                     default -> throw new AssertionError("Unexpected file: " + a[0]);
                 };
+                if (m.equals("loadJSON")) {
+                    if (!a[0].equals("data/lords/presentation/overridable_keys.json")) throw new AssertionError("Unexpected file: " + a[0]);
+                    return overridableData;
+                }
                 if (m.equals("getString")) return strings.getJSONObject((String)a[0]).getString((String)a[1]);
                 if (m.equals("getModManager")) return modManager;
                 if (m.endsWith("Color")) return Color.WHITE;
                 return null;
             } catch (JSONException e) { throw new RuntimeException(e); }
         }));
-        for (String id : List.of("player", "naval", "raider", "corporate", "unknown_mod")) faction(id);
+        for (String id : List.of("player", "naval", "raider", "corporate", "unknown_mod",
+                "hegemony", "pirates", "sindrian_diktat", "luddic_path", "modded_corp")) faction(id);
         speakerFaction = factions.get("raider");
         titleData.getJSONObject("factions").put("naval", new JSONArray(List.of("Lieutenant", "Captain", "Admiral")));
         titleData.getJSONObject("factions").put("raider", new JSONArray(List.of("Captain", "Warlord", "Overlord")));
@@ -257,11 +265,108 @@ public class PresentationChecks {
         try { Presentation.reload(); } catch (IllegalStateException e) { failed = e.getMessage().contains("schemaVersion"); }
         yes(failed);
     }
+    static void expectFailure(String fragment) {
+        try {
+            Presentation.reload();
+        } catch (IllegalStateException e) {
+            if (e.getMessage().contains(fragment)) return;
+            throw new AssertionError("Expected '" + fragment + "' in: " + e.getMessage());
+        }
+        throw new AssertionError("Expected a load failure containing '" + fragment + "'");
+    }
+    @SuppressWarnings("unchecked")
+    static void profiles() throws Exception {
+        FactionAPI heg = factions.get("hegemony"), pirates = factions.get("pirates"),
+                diktat = factions.get("sindrian_diktat"), path = factions.get("luddic_path");
+        // per-key inheritance: faction profile -> institutional profile -> default
+        eq(Presentation.textFor(heg, "laws.award_fief"), "Grant command");
+        eq(Presentation.textFor(diktat, "laws.current_marshal"), "Marshal of the Fleet:");
+        eq(Presentation.lawName(diktat, Lawset.LawType.CROWN_AUTHORITY), "Command Authority");
+        eq(Presentation.textFor(path, "laws.current_marshal"), "Knight-Commander:");
+        eq(Presentation.lawName(path, Lawset.LawType.TRADE_LAW), "Tithes");
+        eq(Presentation.lawName(path, Lawset.LawType.FEAST_LAW), "Rave Licensing");
+        eq(Presentation.textFor(pirates, "laws.days"), Presentation.text("laws.days"));
+        eq(Presentation.textFor(factions.get("unknown_mod"), "laws.award_fief"), "Grant holding");
+        eq(Presentation.textFor((FactionAPI) null, "laws.award_fief"), "Grant holding");
+        // two factions back to back must not leak into each other (the old shared-enum problem)
+        eq(Presentation.lawName(heg, Lawset.LawType.CROWN_AUTHORITY), "Command Authority");
+        eq(Presentation.lawName(pirates, Lawset.LawType.CROWN_AUTHORITY), "Boss's Word");
+        eq(Presentation.lawName(heg, Lawset.LawType.CROWN_AUTHORITY), "Command Authority");
+        eq(Presentation.levelName(pirates, LawLevel.VERY_HIGH), "V. High");
+        eq(Presentation.levelEffects(heg, Lawset.LawType.TRADE_LAW, 0), "Free Trade|-50% command revenue |+150% trade income");
+        eq(Presentation.levelEffects(pirates, Lawset.LawType.FEAST_LAW, 4), "Banned|No raves");
+        eq(Presentation.formatFor(heg, "holding.assign", "market", "Kestrel", "commander", "Ada"), "Grant Kestrel to Ada as a command");
+        eq(Presentation.formatFor(pirates, "holding.revoke", "market", "Kestrel", "commander", "Ada"), "Take Kestrel back from Ada");
+        // proposals use the deciding faction's words
+        Lord admiral = person("admiral", "Ada", "Kane", "hegemony", 1);
+        ((Map<String, Lord>) field(LordController.class, null, "lordsMap")).put("admiral", admiral);
+        eq(new LawProposal(Lawset.LawType.AWARD_FIEF, "admiral", "speaker", "kestrel", null, 0).getSummary(),
+                "Grant Kestrel $5\\Dock to Warlord Rook Tann as a command");
+        eq(new LawProposal(Lawset.LawType.CROWN_AUTHORITY, "admiral", null, null, null, 1).getTitle(), "Decrease Command Authority");
+        // the player's own faction follows the setting; unknown names fall back to default
+        Presentation.setPlayerProfile("corporate");
+        eq(Presentation.textFor(factions.get("player"), "laws.award_fief"), "Grant concession");
+        Presentation.setPlayerProfile("no_such_profile");
+        eq(Presentation.textFor(factions.get("player"), "laws.award_fief"), "Grant holding");
+        Presentation.setPlayerProfile("default");
+        // titles: titles.json wins; profile ladders cover factions without an entry
+        eq(Presentation.title("hegemony", 0), "Commodore");
+        profileData.getJSONObject("factions").put("modded_corp", "corporate");
+        Presentation.reload();
+        eq(Presentation.title("modded_corp", 2), "Executive Vice President");
+        eq(Presentation.textFor(factions.get("modded_corp"), "council.council"), " Board");
+    }
+    static void profileValidation() throws Exception {
+        JSONObject all = profileData.getJSONObject("profiles");
+        all.put("loop_a", new JSONObject().put("extends", "loop_b"));
+        all.put("loop_b", new JSONObject().put("extends", "loop_a"));
+        expectFailure("inheritance cycle");
+        all.remove("loop_a"); all.remove("loop_b");
+        all.put("orphan", new JSONObject().put("extends", "missing"));
+        expectFailure("profiles.orphan extends unknown profile missing");
+        all.remove("orphan");
+        all.put("typo", new JSONObject().put("messages", new JSONObject().put("laws.days", "sols")));
+        expectFailure("profiles.typo.messages.laws.days is not an overridable message");
+        all.put("typo", new JSONObject().put("messages", new JSONObject().put("holding.assign", "Grant {market} to {host.name}")));
+        expectFailure("uses tokens its context doesn't supply: [{host.name}]");
+        all.put("typo", new JSONObject().put("messages", new JSONObject().put("holding.assign", " ")));
+        expectFailure("must be nonempty text");
+        all.remove("typo");
+        all.put("default", new JSONObject());
+        expectFailure("cannot be redefined");
+        all.remove("default");
+        profileData.getJSONObject("factions").put("hegemony", "nonexistent");
+        expectFailure("factions.hegemony names unknown profile nonexistent");
+        profileData.getJSONObject("factions").put("hegemony", "naval");
+        overridableData.getJSONArray("keys").put("no.such.message");
+        expectFailure("lists unknown message no.such.message");
+    }
+    /** Prints faction|tier0|tier1|tier2 for the Python test that compares with tools/sync_ranks.py. */
+    static void ranks() throws Exception {
+        Set<String> ids = new TreeSet<>();
+        for (Iterator<?> it = titleData.getJSONObject("factions").keys(); it.hasNext();) ids.add((String) it.next());
+        for (Iterator<?> it = profileData.getJSONObject("factions").keys(); it.hasNext();) ids.add((String) it.next());
+        for (String id : ids)
+            System.out.println("RANKS " + id + "|" + Presentation.title(id, 0) + "|" + Presentation.title(id, 1) + "|" + Presentation.title(id, 2));
+    }
+    /** Prints every overridable message as each bound faction sees it, for comparison with tools/preview_profiles.py. */
+    static void messages() throws Exception {
+        JSONObject out = new JSONObject();
+        JSONArray keys = overridableData.getJSONArray("keys");
+        for (Iterator<?> it = profileData.getJSONObject("factions").keys(); it.hasNext();) {
+            String faction = (String) it.next();
+            JSONObject resolved = new JSONObject();
+            for (int i = 0; i < keys.length(); i++) resolved.put(keys.getString(i), Presentation.textFor(faction, keys.getString(i)));
+            out.put(faction, resolved);
+        }
+        System.out.println("MESSAGES " + out);
+    }
     public static void main(String[] args) throws Exception {
         root = Path.of(args[0]); setup();
         switch(args[1]) {
             case "renderer" -> renderer(); case "titles" -> titles(); case "context" -> context();
             case "proposals" -> proposals(); case "dialogue" -> dialogue(); case "validation" -> validation();
+            case "profiles" -> profiles(); case "profile_validation" -> profileValidation(); case "ranks" -> ranks(); case "messages" -> messages();
             default -> throw new IllegalArgumentException(args[1]);
         }
         System.out.println("PASS " + args[1]);

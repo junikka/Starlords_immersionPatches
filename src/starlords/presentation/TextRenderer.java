@@ -19,6 +19,10 @@ public final class TextRenderer {
         return missing;
     }
 
+    public static Set<String> namedTokens(String template) {
+        return missingNamedTokens(template, Map.of());
+    }
+
     public static String render(String template, Map<String, String> values) {
         if (template == null) return "";
         List<String> keys = new ArrayList<>();

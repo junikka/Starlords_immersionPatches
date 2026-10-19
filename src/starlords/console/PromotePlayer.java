@@ -49,7 +49,7 @@ public class PromotePlayer implements BaseCommand {
         if (!suspension.isEmpty()) Console.showMessage(suspension);
         List<String> missing = PlayerProgression.getMissingRequirements();
         if (PoliticsController.hasPendingPromotion(LordController.getPlayerLord())) {
-            Console.showMessage(Presentation.text("progression.no_vote_pending"));
+            Console.showMessage(Presentation.textFor(PlayerProgression.getFaction(), "progression.no_vote_pending"));
         } else if (PlayerProgression.getStanding() >= 2) {
             Console.showMessage(Presentation.text("promote_player.top"));
         } else if (missing.isEmpty()) {

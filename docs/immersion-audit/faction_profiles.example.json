@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "status": "DESIGN EXAMPLE ONLY: not loaded or supported by the current mod",
+  "status": "SUPERSEDED DESIGN EXAMPLE: not loaded. The runtime format is data/lords/presentation/profiles.json (see PRESENTATION.md); this file's neutral wording predates the approved wording pass.",
   "profiles": {
     "example:neutral": {
       "writingNotes": "Concrete, restrained language about fleets, resources, relationships, and political authority. These notes guide authors; they do not generate text.",
