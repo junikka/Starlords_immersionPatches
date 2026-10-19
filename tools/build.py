@@ -193,8 +193,13 @@ def compile_sources(source_root, work, javac, release, jars=(), processors=()):
     return classes, result.stdout
 
 
+# rules.csv resolves rule commands by simple name from the vanilla rulecmd package
+RULE_COMMANDS = {'LordsOpenCommCmd', 'StarlordsRankGreeting'}
+
+
 def owned_class(name):
-    return name.startswith('starlords/') or name == 'com/fs/starfarer/api/impl/campaign/rulecmd/LordsOpenCommCmd.class'
+    return name.startswith('starlords/') or name in {
+        f'com/fs/starfarer/api/impl/campaign/rulecmd/{command}.class' for command in RULE_COMMANDS}
 
 
 def package_classes(classes, target):
