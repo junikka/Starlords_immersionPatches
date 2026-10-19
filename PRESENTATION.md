@@ -92,11 +92,13 @@ Every error names the file and key: an unknown parent, an inheritance cycle, a b
 
 While you talk to a commander at a rave, and during the tournament, the game plays the music set `starlords_rave` instead of the normal campaign or market music. Leaving hands the music back, the way vanilla's Luddic shrines do it. If a rave dialog closes some other way (Esc, say), a failsafe restores the normal music after about a second and a half. The tournament fight itself keeps the normal combat music, and the rave track comes back afterwards. LunaLib's **Other → Rave music** turns it off (`raveMusic` in `starlord_settings.json` without LunaLib).
 
-The set is defined in `data/config/sounds.json`, which Starsector merges into its own. The current track is a **placeholder**: Tri-Tachyon's friendly market theme, taken from the game's own music archive, so the mod ships no music file yet. To use your own track:
+The set is defined in `data/config/sounds.json`, which Starsector merges into its own. It plays `sounds/music/starlords_rave.ogg` from this mod. To change or add tracks:
 
-1. Save it as OGG Vorbis in `sounds/music/` inside this mod, for example `sounds/music/starlords_rave.ogg`. Keep it to a few MB.
-2. In `data/config/sounds.json`, replace the placeholder entry with `{"source":"sounds/music", "volume":0.8, "files":["starlords_rave.ogg"]}`. List several files to make a playlist.
-3. Restart Starsector. No Java rebuild is needed; a rebuild just puts the track into the distribution ZIP.
+1. Save them as OGG Vorbis in `sounds/music/` inside this mod. Keep them to a few MB each; about 160–192 kbps is plenty for game music.
+2. List them in the `files` array of the `starlords_rave` entry in `data/config/sounds.json` to make a playlist.
+3. Restart Starsector. No Java rebuild is needed; a rebuild just puts the tracks into the distribution ZIP.
+
+Without a file of its own the mod can point at a track in the game's archive instead; the comment in `sounds.json` shows the original placeholder, Tri-Tachyon's friendly market theme.
 
 Only ship music you're allowed to redistribute, and credit it in the README if its licence asks for that.
 
