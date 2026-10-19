@@ -20,7 +20,7 @@ import starlords.util.dialogControler.dialogAddon.DialogAddon_Base;
 /** Controlled game context, invoking production code against the real API JAR. */
 public class PresentationChecks {
     static Path root;
-    static JSONObject titleData, neutralData, legacyData, profileData, overridableData;
+    static JSONObject titleData, neutralData, legacyData, profileData, overridableData, raveData;
     static final Map<String, FactionAPI> factions = new HashMap<>();
     static final Map<String, Object> persistent = new HashMap<>();
     static String commission;
@@ -92,6 +92,7 @@ public class PresentationChecks {
         legacyData = json("data/lords/faction.json");
         profileData = json("data/lords/presentation/profiles.json");
         overridableData = json("data/lords/presentation/overridable_keys.json");
+        raveData = json("data/lords/presentation/raves.json");
         JSONObject strings = json("data/strings/strings.json");
         ModManagerAPI modManager = proxy(ModManagerAPI.class, (m,a) -> null);
         Global.setSettings(proxy(SettingsAPI.class, (m, a) -> {
@@ -101,6 +102,7 @@ public class PresentationChecks {
                     case "data/lords/presentation/titles.json" -> titleData;
                     case "data/lords/faction.json" -> legacyData;
                     case "data/lords/presentation/profiles.json" -> profileData;
+                    case "data/lords/presentation/raves.json" -> raveData;
                     default -> throw new AssertionError("Unexpected file: " + a[0]);
                 };
                 if (m.equals("loadJSON")) {
@@ -349,6 +351,32 @@ public class PresentationChecks {
         overridableData.getJSONArray("keys").put("no.such.message");
         expectFailure("lists unknown message no.such.message");
     }
+    static void raves() throws Exception {
+        RaveScenes.reload();
+        // the Church's scene follows its Rave Licensing: 0 is Anything Goes, 3 Strict, 4 Banned
+        yes(RaveScenes.arrival("luddic_church", 3).startsWith("The Synod permits one gathering a year"));
+        yes(RaveScenes.arrival("luddic_church", 0).contains("sacrament"));
+        yes(RaveScenes.arrival("luddic_church", 4).startsWith("There should be no rave"));
+        yes(RaveScenes.arrival("luddic_church", 99).startsWith("There should be no rave"));
+        // a single text serves every level; unknown factions get the default venue
+        eq(RaveScenes.arrival("hegemony", 0), RaveScenes.arrival("hegemony", 4));
+        eq(RaveScenes.arrival("unknown_mod", 2), RaveScenes.arrival("default", 2));
+        eq(RaveScenes.image("luddic_path"), "teahouse");
+        eq(RaveScenes.image("unknown_mod"), "space_bar");
+        eq(RaveScenes.image(null), "space_bar");
+        // crowd lines: the default pool, plus a faction's own when it has some
+        int shared = RaveScenes.crowd("default").size();
+        yes(shared > 0);
+        eq(RaveScenes.crowd("pirates").size(), shared);
+        raveData.getJSONObject("factions").getJSONObject("pirates").put("crowd", new JSONArray(List.of("One more.")));
+        RaveScenes.reload();
+        eq(RaveScenes.crowd("pirates").size(), shared + 1);
+        // a level that isn't one names its path
+        raveData.getJSONObject("factions").getJSONObject("pirates").put("arrival", new JSONObject().put("loud", "x"));
+        boolean failed = false;
+        try { RaveScenes.reload(); } catch (IllegalStateException e) { failed = e.getMessage().contains("factions.pirates.arrival.loud"); }
+        yes(failed);
+    }
     /** Prints faction|tier0|tier1|tier2 for the Python test that compares with tools/sync_ranks.py. */
     static void ranks() throws Exception {
         Set<String> ids = new TreeSet<>();
@@ -374,7 +402,7 @@ public class PresentationChecks {
         switch(args[1]) {
             case "renderer" -> renderer(); case "titles" -> titles(); case "context" -> context();
             case "proposals" -> proposals(); case "dialogue" -> dialogue(); case "validation" -> validation();
-            case "profiles" -> profiles(); case "profile_validation" -> profileValidation(); case "ranks" -> ranks(); case "messages" -> messages();
+            case "profiles" -> profiles(); case "profile_validation" -> profileValidation(); case "ranks" -> ranks(); case "messages" -> messages(); case "raves" -> raves();
             default -> throw new IllegalArgumentException(args[1]);
         }
         System.out.println("PASS " + args[1]);

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "description": "Rave scenes per host faction: the venue picture (an 'illustrations' key from settings.json), the arrival scene shown above the first conversation at each rave, and crowd lines (one per rave conversation, from the faction's list plus default's). 'arrival' is either one text or one per Rave Licensing level: anything_goes, permissive, licensed, strict, banned; missing levels fall back to default. Another mod can add its faction in its own copy of this file. See docs/immersion-audit/RAVE_IDEAS.md.",
+  "factions": {
+    "default": {
+      "image": "space_bar",
+      "arrival": "The cargo hold has been stripped to the bulkheads and packed to them again. Strobes, sweat, a bass line that rattles the deck plates, and a crowd that left its ranks at the door along with most of its sense. The air tastes of ozone and something sweeter. Whatever the war is doing out there, in here it isn't invited.",
+      "crowd": [
+        "A dockhand and a commodore are trading dance moves by the speakers, and for once nobody is checking anyone's rank.",
+        "A crew in from the frontier cheers every time the bass drops, like it's the first time they've heard music this loud. It might be.",
+        "Someone started a chant three songs ago. Half the room still doesn't know the words, and it hasn't slowed anyone down.",
+        "A pilot hoists her wingmate onto her shoulders so he can see the lights. He spends the whole song pointing at them.",
+        "Two crews who nearly came to blows over a docking slot last week are sharing a table, arguing happily about whose ship is the worst.",
+        "The DJ drops an old Domain-era anthem, and a whole corner of the hall sings it back word for word, grinning at each other.",
+        "A rating from an engine crew, barely old enough to be here, dances like nobody ever told them how. Nobody does.",
+        "Someone has projected a sky from a world most of the room has never seen across the ceiling. People keep looking up and smiling."
+      ]
+    },
+    "luddic_church": {
+      "image": "teahouse",
+      "arrival": {
+        "banned": "There should be no rave. There is one anyway, in a stripped-out chapel bay with the icons turned to face the wall. Between tracks nobody speaks above a whisper. Everyone here knows the names of the Knights who would come if they heard.",
+        "strict": "The Synod permits one gathering a year, and permits it the way a surgeon permits pain. A curate reads the Litany of Restraint over the opening bars; censer smoke hangs where the lights would be. The music was approved only after it was declared a hymn. Every dancer keeps one eye on the honour guard at the door, and the guard keeps both eyes on them.",
+        "licensed": "The speakers are blessed before the first track, though the blessing has grown shorter every year. Bass is permitted now, provided it is devout bass. The faithful sway in hooded rows while a deacon writes down the names of those who sway too freely.",
+        "permissive": "The censers are full of something that is not incense. A bishop in full vestments is preaching to the speaker stacks, and the congregation answers on the beat. Somewhere in the crowd a Knight has taken off his helm, and he is not putting it back on.",
+        "anything_goes": "The Synod has declared the rave a sacrament, and the faithful have taken the sacrament very seriously. The icons wear glowsticks. The choir has gone feral. An archbishop rides a reliquary over the crowd while every preacher in the hall swears Ludd always meant it this way. Nobody can remember who said so first, and nobody is sober enough to look it up."
+      }
+    },
+    "luddic_path": {
+      "image": "teahouse",
+      "arrival": "The Path does not hold raves. The Path holds a Cleansing of the Instruments, which by pure coincidence requires every speaker in the system to be dragged into one hold and played at full volume while the faithful beat it to death with wrenches. The congregation dances on the wreckage in time with whatever still works. A Brother-Captain has set a synthesizer on fire and is preaching from on top of it. By the third hour nobody can tell the sermon from the bass, two Pathers are headbutting a subwoofer in what they insist is penance, and the Elders have stopped trying to tell the faithful that this is not what Ludd meant."
+    },
+    "sindrian_diktat": {
+      "image": "bar_diktat",
+      "arrival": "Sindria throws the best raves in the Sector, and every channel in the system will tell you so. The bass rig was pulled from a Domain-era capital ship and certified the deepest in human space by a commission the Supreme Executor chaired himself. Credits rain from the balconies. Andrada's face fills every screen, smiling down on the floor, and the playlist is, by decree, the greatest ever assembled. Rumour says he picks the opening track personally. Rumour says he picks it every time."
+    },
+    "tritachyon": {
+      "image": "tritachyon_bar",
+      "arrival": "Tri-Tachyon doesn't rent a venue; it buys one for the night and writes it off. Something gold runs in a channel cut into the bar, drone servers carry trays of things nobody can name, and the light show was designed by a system the company swears is not an AI. Executives dance like they're closing deals and close deals like they're dancing, and by morning none of them will know which was which. Somewhere upstairs, someone is paying for all of it, and someone else is paying for that."
+    },
+    "hegemony": {
+      "image": "hegemony_bar",
+      "arrival": "Officially this is a morale exercise, and officially it never took place. The hangar is sealed, transponders logged, personal recorders surrendered at the door. Behind the blast doors the Hegemony's finest dance like the Domain never fell. Tomorrow every one of them will deny it under oath, and the ones who don't will be quietly reassigned."
+    },
+    "pirates": {
+      "image": "pirate_bar",
+      "arrival": "You hear it two decks out. Inside it's hot, dark and heaving; the bass shakes rust out of the ceiling, someone is selling something from a bag that rattles, and half the crowd has pupils like reactor cores. Nobody here expects to live long. Tonight that's the point."
+    },
+    "persean": {
+      "image": "space_bar",
+      "arrival": "Every House brought its own sound system and its own grudge. The two compete across the hall until the songs collide into something nobody planned, and the dancing turns into a war of attrition fought in fine clothes."
+    }
+  }
+}

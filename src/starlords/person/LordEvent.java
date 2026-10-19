@@ -57,6 +57,9 @@ public class LordEvent {
     private Lord originator;
     @Setter
     private boolean alive;
+    // rave only: whether the player has seen the venue and arrival scene (RaveScenes)
+    @Setter
+    private boolean arrivalShown;
     @Setter
     private boolean defensive; // factions are rate-limited in offensive campaigns, but not defensive ones
     @Setter

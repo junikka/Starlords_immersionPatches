@@ -1,6 +1,7 @@
 package starlords.ui;
 
 import com.fs.starfarer.api.Global;
+import starlords.presentation.RaveScenes;
 import starlords.presentation.Presentation;
 import com.fs.starfarer.api.campaign.FactionAPI;
 import com.fs.starfarer.api.campaign.SectorEntityToken;
@@ -54,6 +55,8 @@ public class EventIntelPlugin extends BaseIntelPlugin {
             case LordEvent.FEAST:
                 info.addPara(Presentation.format("event.feast.description", "host", originator.getLordAPI().getNameString()), opad);
                 info.addPara(Presentation.format("event.location", "location", Utils.getNearbyDescription(originator.getFleet())), uiColor, opad);
+                String venue = RaveScenes.imageSprite(faction.getId());
+                if (venue != null) info.addImage(venue, width, opad);
                 break;
         }
         LabelAPI supportText = info.addPara(Presentation.text("event.attendees"), uiColor, pad);

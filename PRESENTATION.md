@@ -102,6 +102,16 @@ Without a file of its own the mod can point at a track in the game's archive ins
 
 Only ship music you're allowed to redistribute, and credit it in the README if its licence asks for that.
 
+## Rave scenes
+
+`data/lords/presentation/raves.json` gives a rave its look, by the host's faction:
+
+- **`image`**: the venue picture, an `illustrations` key from Starsector's `settings.json` (vanilla's bars: `tritachyon_bar`, `pirate_bar`, `hegemony_bar`, `bar_diktat`, `teahouse`, `space_bar`). It's shown in the text, above the arrival scene, and in the *Ongoing rave* intel.
+- **`arrival`**: the scene shown once per rave, the first time you talk to someone there. Either one text, or one per Rave Licensing level of the host's faction: `anything_goes`, `permissive`, `licensed`, `strict`, `banned` (the Church uses all five). Missing levels fall back to the faction's single text, then to `default`.
+- **`crowd`**: lines of background life. Each rave conversation shows one, picked from the faction's list plus `default`'s.
+
+`default` is required and covers every faction without an entry. Another mod adds its faction in its own copy of `raves.json`; for its own picture, it registers the image under `illustrations` in its `data/config/settings.json`. Scene text takes no tokens. Restart Starsector after editing; no rebuild needed.
+
 ## Where wording lives
 
 | File | Purpose |

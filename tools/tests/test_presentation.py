@@ -204,6 +204,38 @@ class ProfileDataTests(unittest.TestCase):
             self.assertEqual([data['ranks']['ranks']['starlords_tier_%d' % i]['name'] for i in range(3)], names, faction)
 
 
+class RaveSceneDataTests(unittest.TestCase):
+    LEVELS = ('anything_goes', 'permissive', 'licensed', 'strict', 'banned')
+
+    def test_raves_json_shape(self):
+        data = json.loads((ROOT/'data/lords/presentation/raves.json').read_text(encoding='utf-8'))
+        self.assertEqual(data['schemaVersion'], 1)
+        factions = data['factions']
+        self.assertTrue(isinstance(factions['default']['arrival'], str) and factions['default']['image'])
+        self.assertTrue(factions['default']['crowd'])
+        for faction, venue in factions.items():
+            arrival = venue.get('arrival')
+            texts = [arrival] if isinstance(arrival, str) else list((arrival or {}).values())
+            if isinstance(arrival, dict):
+                self.assertLessEqual(set(arrival), set(self.LEVELS), faction)
+            for text in texts + venue.get('crowd', []):
+                self.assertTrue(isinstance(text, str) and text.strip(), faction)
+                self.assertNotIn('%', text, faction)  # scene text takes no tokens
+        # Julie's decisions: the Church follows its licensing, the Path has its own scene, both in the teahouse
+        self.assertEqual(set(factions['luddic_church']['arrival']), set(self.LEVELS))
+        self.assertIsInstance(factions['luddic_path']['arrival'], str)
+        self.assertEqual(factions['luddic_church']['image'], 'teahouse')
+
+    @unittest.skipUnless(build.CONFIG.is_file(), 'Local Starsector configuration required')
+    def test_every_venue_picture_exists_in_the_game(self):
+        core = next(Path(p).parent for p in json.loads(build.CONFIG.read_text(encoding='utf-8'))['classpath']
+                    if p.replace('\\', '/').endswith('starsector-core/*.jar'))
+        settings = (core/'data/config/settings.json').read_text(encoding='utf-8', errors='replace')
+        data = json.loads((ROOT/'data/lords/presentation/raves.json').read_text(encoding='utf-8'))
+        for faction, venue in data['factions'].items():
+            if 'image' in venue: self.assertIn('"%s":' % venue['image'], settings, faction)
+
+
 class RaveMusicDataTests(unittest.TestCase):
     def test_music_set_named_in_code_is_defined_and_toggle_exists(self):
         source = (ROOT/'src/starlords/util/RaveMusic.java').read_text(encoding='utf-8')
@@ -255,6 +287,7 @@ class JavaPresentationTests(unittest.TestCase):
     def test_schema_errors_and_absent_optional_faction(self): self.check('validation')
     def test_profile_inheritance_contexts_player_setting_and_titles(self): self.check('profiles')
     def test_profile_schema_errors_name_the_path(self): self.check('profile_validation')
+    def test_rave_scenes_follow_licensing_and_fall_back(self): self.check('raves')
 
     def test_java_profile_resolution_matches_preview_tool(self):
         result = subprocess.run([str(self.java), '-Djava.awt.headless=true', '-cp', self.classpath,

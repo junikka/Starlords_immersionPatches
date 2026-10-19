@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.impl.campaign.FleetInteractionDialogPluginImpl;
+import starlords.presentation.RaveScenes;
 import starlords.util.RaveMusic;
 import starlords.controllers.*;
 import starlords.faction.LawProposal;
@@ -235,8 +236,11 @@ public class LordInteractionDialogPluginImpl implements InteractionDialogPlugin 
         if (log.isDebugEnabled()) log.debug("RUNNING THE CORRECT GREETING OPTION DATA");
         boolean isFeast = targetLord.getCurrAction() == LordAction.FEAST;
         LordEvent feast = isFeast ? EventController.getCurrentFeast(targetLord.getLordAPI().getFaction()) : null;
+        // the venue and arrival scene once per rave, then the greeting and a glimpse of the crowd
+        if (feast != null) RaveScenes.showArrival(textPanel, feast);
         //only run greetings if player has not yet heard them this conversation
         DialogSet.addParaWithInserts(selectedOption,targetLord,secondLord,targetMarket,textPanel,options,dialog);
+        if (feast != null) RaveScenes.showCrowdLine(textPanel, feast);
         if (!hasGreeted){
             hasGreeted = true;
         }

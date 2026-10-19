@@ -45,7 +45,16 @@ Each faction names its own institutions. Raves and tournaments are the same ever
 
 To read every message as each faction sees it without launching the game, run `python tools/preview_profiles.py` and open `docs/immersion-audit/generated/profile_preview.md`.
 
-## Rave music
+## Rave scenes and music
+
+The scenes:
+
+1. Run `startrave` near a Hegemony commander (or any faction), wait for the fleet to arrive, and hail any commander at the rave. Above the greeting you should see the venue picture (the Hegemony's officers' bar) and the arrival scene. Below it, one grey crowd line.
+2. Hail another commander at the same rave: no picture or arrival scene this time, but a new crowd line.
+3. Open the *Ongoing rave* intel: the venue picture sits under the location line.
+4. The Church's scene follows its current Rave Licensing. It starts at *Strict* (the Litany of Restraint). Take a Church commission, use `promoteplayer 2`, and propose looser licensing; once the Synod passes it, `startrave` a Church commander and the scene should match the new level, up to the *Anything Goes* sacrament. Under *Banned*, only `startrave` can make a rave, and it gets the whispered illicit scene. The Path always gets its own scene.
+
+The music:
 
 1. Go to a rave: the intel screen lists it as **Ongoing rave**, with the host and location. To skip the wait, run `startrave` (or `startrave <first name>`): the nearest commander throws one at the nearest friendly world, ignoring Rave Licensing, the cooldown and the cost. Hail a commander who is at it: within a second the music should switch to the rave track.
 2. Leave the conversation: the normal music should come back.
