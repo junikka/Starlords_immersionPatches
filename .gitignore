@@ -45,3 +45,19 @@ bin/
 .run/Run_Starsector_w_o_Launcher.run.xml
 .github/
 src/META-INF
+
+# Local compiler/dependency paths and generated artifacts
+# (jars/StarLords.jar and build.lock.json stay tracked)
+/build.local.json
+/build/
+*.class
+*.log
+
+### Python ###
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+### OS ###
+Thumbs.db
+desktop.ini
