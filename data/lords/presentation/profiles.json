@@ -282,7 +282,7 @@
         "request.holding.offer": "{player}, my name is {commander}. I've given {faction} years of service, and all I have to show for it is a dead-end posting. Grant me a parish of my own and my fleet will fly under your colours."
       }
     },
-    "raider": {
+    "pirate": {
       "titles": [
         "Captain",
         "Warlord",
@@ -504,6 +504,6 @@
     "persean": "persean",
     "luddic_church": "religious",
     "luddic_path": "luddic_path",
-    "pirates": "raider"
+    "pirates": "pirate"
   }
 }

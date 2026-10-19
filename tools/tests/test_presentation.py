@@ -179,6 +179,17 @@ class ProfileDataTests(unittest.TestCase):
             for key in profile.get('messages', {}):
                 self.assertFalse(key.startswith(('event.feast', 'tournament', 'policy.name.feast_law')), (name, key))
 
+    def test_player_profile_setting_offers_real_profiles(self):
+        rows = list(csv.reader(io.StringIO((ROOT/'data/config/LunaSettings.csv').read_text(encoding='utf-8'))))
+        row = next(r for r in rows if r and r[0] == 'Other_playerFactionProfile')
+        headers = rows[0]
+        options = row[headers.index('secondaryValue')].split(',')
+        self.assertEqual(options[0], 'default')
+        self.assertEqual(row[headers.index('defaultValue')], 'default')
+        for option in options[1:]: self.assertIn(option, self.profiles['profiles'], option)
+        settings = json.loads((ROOT/'data/config/starlord_settings.json').read_text(encoding='utf-8'))
+        self.assertIn(settings['playerFactionProfile'], options)
+
     def test_profile_wording_never_says_raid(self):
         # Julie's rule: pirates muster an armada under a Warmaster; no profile text uses "raid"
         for name, profile in self.profiles['profiles'].items():

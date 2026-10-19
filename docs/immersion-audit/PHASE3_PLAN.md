@@ -57,7 +57,7 @@ Draft wording for your review. Only the overridden keys are listed; everything e
 | `corporate` | default | Tri-Tachyon | Concession | Board | Director of Operations | Operation |
 | `aristocratic` | default | Persean League (as *League Council*) | Seat | High Council | Strategos | Expedition |
 | `religious` | default | Luddic Church, Luddic Path | Parish | Synod | Knight-Commander | Crusade |
-| `raider` | default | Pirates | Turf | Captains' Table | Warmaster | Armada |
+| `pirate` (first drafted as `raider`) | default | Pirates | Turf | Captains' Table | Warmaster | Armada |
 
 Faction-level overrides on top of that (each is a few keys):
 - **Sindrian Diktat** (naval): council → *Executive Council*; holding → *Prefecture*; office → *Marshal of the Fleet* (question 3).
@@ -65,7 +65,7 @@ Faction-level overrides on top of that (each is a few keys):
 
 Policy names per profile (levels can be renamed too):
 
-| Policy (house name) | naval | corporate | aristocratic | religious | raider |
+| Policy (house name) | naval | corporate | aristocratic | religious | pirate |
 |---|---|---|---|---|---|
 | Central Authority | Chain of Command | Executive Control | Crown Prerogative | Doctrine of Obedience | Boss's Word |
 | Privilege of Rank | Seniority | Executive Privilege | Privilege of Rank | Clerical Privilege | Captains' Share |
