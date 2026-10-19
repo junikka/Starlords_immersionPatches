@@ -204,6 +204,21 @@ class ProfileDataTests(unittest.TestCase):
             self.assertEqual([data['ranks']['ranks']['starlords_tier_%d' % i]['name'] for i in range(3)], names, faction)
 
 
+class RaveMusicDataTests(unittest.TestCase):
+    def test_music_set_named_in_code_is_defined_and_toggle_exists(self):
+        source = (ROOT/'src/starlords/util/RaveMusic.java').read_text(encoding='utf-8')
+        music_set = re.search(r'MUSIC_SET = "([^"]+)"', source).group(1)
+        # Starsector's JSON allows # comments and trailing commas; strip them for Python's parser
+        text = re.sub(r'(?m)^\s*#.*$', '', (ROOT/'data/config/sounds.json').read_text(encoding='utf-8'))
+        sounds = json.loads(re.sub(r',(\s*[}\]])', r'\1', text))
+        entries = sounds['music'][music_set]
+        self.assertTrue(entries and all(entry.get('files') and entry.get('source') for entry in entries))
+        rows = list(csv.reader(io.StringIO((ROOT/'data/config/LunaSettings.csv').read_text(encoding='utf-8'))))
+        self.assertIn('Other_raveMusic', [r[0] for r in rows if r])
+        settings = json.loads((ROOT/'data/config/starlord_settings.json').read_text(encoding='utf-8'))
+        self.assertIs(settings['raveMusic'], True)
+
+
 @unittest.skipUnless(build.CONFIG.is_file(), 'Local Starsector/JDK configuration required')
 class JavaPresentationTests(unittest.TestCase):
     @classmethod

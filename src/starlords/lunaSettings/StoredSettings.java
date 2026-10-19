@@ -236,6 +236,7 @@ public class StoredSettings {
         Utils.setShowMessageLordCaptureReleaseEscape(LunaSettings.getBoolean(Constants.MOD_ID,"Other_showMessageLordCaptureReleaseEscape"));
         PoliticsController.PLAYER_EXTRA_COUNCIL_WEIGHT = LunaSettings.getInt(Constants.MOD_ID,"Other_playerExtraCouncilWeight");
         starlords.presentation.Presentation.setPlayerProfile(LunaSettings.getString(Constants.MOD_ID,"Other_playerFactionProfile"));
+        RaveMusic.setEnabled(LunaSettings.getBoolean(Constants.MOD_ID,"Other_raveMusic"));
         DefectionUtils.MIN_STABILITY_TO_PREVENT_FIEF_DEFECTION = LunaSettings.getInt(Constants.MOD_ID,"Other_minStabilityToPreventFiefDefection");
         //player faction being attacked settings
         TargetUtils.setCanPlayerBeAttacked(LunaSettings.getBoolean(Constants.MOD_ID,"features_canPlayerFactionBeAttacked"));
@@ -439,6 +440,7 @@ public class StoredSettings {
         Utils.setShowMessageLordCaptureReleaseEscape(json.getBoolean("showMessageLordCaptureReleaseEscape"));
         PoliticsController.PLAYER_EXTRA_COUNCIL_WEIGHT = json.getInt("playerExtraCouncilWeight");
         starlords.presentation.Presentation.setPlayerProfile(json.optString("playerFactionProfile", "default"));
+        RaveMusic.setEnabled(json.optBoolean("raveMusic", true));
         DefectionUtils.MIN_STABILITY_TO_PREVENT_FIEF_DEFECTION = json.getInt("minStabilityToPreventFiefDefection");
         TargetUtils.setCanPlayerBeAttacked(json.getBoolean("features_canPlayerFactionBeAttacked"));
         TargetUtils.setCanPlayerBeAttackedBeforeStarlords(json.getBoolean("features_canPlayerFactionBeAttackedBeforeStarlords"));

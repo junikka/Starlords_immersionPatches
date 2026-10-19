@@ -1,5 +1,6 @@
 package starlords.plugins;
 
+import starlords.util.RaveMusic;
 import starlords.presentation.Presentation;
 
 import com.fs.starfarer.api.Global;
@@ -100,6 +101,7 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
 
     @Override
     public void init(InteractionDialogAPI dialog) {
+        RaveMusic.start();
         this.dialog = dialog;
         dialog.setInteractionTarget(feast.getOriginator().getFleet());
         textPanel = dialog.getTextPanel();
@@ -303,6 +305,7 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
                     if (otherFleet != null) otherFleet.despawn();
                     Global.getSector().setPlayerFleet(origPlayerFleet);
                     origPlayerFleet.getCargo().getCredits().add(winnings);
+                    RaveMusic.stop();
                     for (CampaignFleetAPI fleet : context.getBattle().getBothSides()) {
                         context.getBattle().leave(fleet, false);
                     }
@@ -486,6 +489,7 @@ public class TournamentDialogPlugin extends FleetInteractionDialogPluginImpl {
 
     @Override
     public void backFromEngagement(EngagementResultAPI result) {
+        RaveMusic.resume();
         result.setBattle(context.getBattle());
         lastResult = result;
         boolean advance = false;

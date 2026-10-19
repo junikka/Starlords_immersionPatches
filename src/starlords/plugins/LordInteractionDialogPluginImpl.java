@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.impl.campaign.FleetInteractionDialogPluginImpl;
+import starlords.util.RaveMusic;
 import starlords.controllers.*;
 import starlords.faction.LawProposal;
 import org.apache.log4j.Logger;
@@ -71,6 +72,8 @@ public class LordInteractionDialogPluginImpl implements InteractionDialogPlugin 
             DATA_HOLDER = new DialogDataHolder();
             DATA_HOLDER.setTargetID(targetLord.getLordAPI().getId());
         }
+        // commanders at a rave talk over the rave's own music
+        if (targetLord.getCurrAction() == LordAction.FEAST) RaveMusic.start();
         DialogType = setDialogType();
         startingDialogSet = setStartingDialogSet();
         hasGreeted = false;
@@ -278,6 +281,7 @@ public class LordInteractionDialogPluginImpl implements InteractionDialogPlugin 
         DialogSet.addParaWithInserts(selectedOption+dateType,targetLord,secondLord,targetMarket,textPanel,options,dialog);
     }
     private void optionSelected_exitDialog(){
+        RaveMusic.stop();
         if (prevPlugin.equals(this)) {
             dialog.dismiss();
         } else {

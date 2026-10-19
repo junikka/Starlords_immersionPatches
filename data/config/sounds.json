@@ -1,0 +1,19 @@
+{
+	# Merged into Starsector's own sounds.json.
+	"music":{
+		# Plays while you talk to commanders at a rave and during the tournament (starlords.util.RaveMusic).
+		# PLACEHOLDER: Tri-Tachyon's friendly market theme from the game's own music archive.
+		# To use your own track, put it in sounds/music/ inside this mod (OGG Vorbis) and replace the entry with:
+		#   {"source":"sounds/music", "volume":0.8, "files":["starlords_rave.ogg"]},
+		# Several files in "files" make a playlist for variety.
+		"starlords_rave":[
+			{
+				"source":"sounds/music/music.bin",
+				"volume":0.8,
+				"files":[
+					"faction_tritach_market_03_friendly.ogg",
+				],
+			},
+		],
+	},
+}

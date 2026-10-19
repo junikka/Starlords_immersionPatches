@@ -203,3 +203,4 @@ generator_minShipSpawnRatio_target,Target multiplier,Int,5,,,1,100,Generator
 generator_minShipSpawnRatio_i,Min num weight,Double,1.1,,"Controls how strongly the random multipler is pulled towards the target value. Higher weight results in less variance.
 The equation results in the chance being 1/(weight^steps).",1,5,Generator
 Other_playerFactionProfile,Your faction's wording,Radio,default,"default,naval,corporate,aristocratic,religious,pirate","Which institutional words your own faction uses: what holdings, the council, the Fleet Commander, expeditions and policies are called. Wording only; nothing about how your faction works changes.",,,Other
+Other_raveMusic,Rave music,Boolean,TRUE,,"Play the rave's own music while you talk to commanders at a rave and during the tournament. The track is set in data/config/sounds.json.",,,Other

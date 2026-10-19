@@ -45,6 +45,13 @@ Each faction names its own institutions. Raves and tournaments are the same ever
 
 To read every message as each faction sees it without launching the game, run `python tools/preview_profiles.py` and open `docs/immersion-audit/generated/profile_preview.md`.
 
+## Rave music
+
+1. Go to a rave: the intel screen lists it as **Ongoing rave**, with the host and location. Hail a commander who is at it: within a second the music should switch to the rave track (the placeholder is Tri-Tachyon's friendly market theme).
+2. Leave the conversation: the normal music should come back.
+3. Enter the tournament from a rave conversation: the rave track keeps playing, the fight has normal combat music, and the rave track returns after each round. Leaving the tournament restores the normal music.
+4. Turn off LunaLib's **Other → Rave music** and hail a raving commander again: the music shouldn't change.
+
 ## Optional: prove faction-specific ranks
 
 In the **installed** `data/lords/presentation/titles.json`, temporarily set:

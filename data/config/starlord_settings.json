@@ -8,6 +8,7 @@
   "showMessageLordCaptureReleaseEscape": false,
   "playerExtraCouncilWeight": 2000,
   "playerFactionProfile": "default",
+  "raveMusic": true,
   "minStabilityToPreventFiefDefection": 7,
   "features_canPlayerFactionBeAttacked": true,
   "features_canPlayerFactionBeAttackedBeforeStarlords": false,

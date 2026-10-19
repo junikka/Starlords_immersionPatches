@@ -88,6 +88,18 @@ Every error names the file and key: an unknown parent, an inheritance cycle, a b
 
 `data/lords/presentation/greetings.json` holds what ordinary fleets of your council faction say when you hail them: three lines per faction, one per rank, plus a `default` set. Tokens: `{title}`, `{lastName}`, `{fullName}`, `{sirOrMadam}`. Another mod can add its faction under `factions` in its own copy of the file; Starsector merges them. The rule that triggers them is `starlords_rankGreeting` in `data/campaign/rules.csv`.
 
+## Rave music
+
+While you talk to a commander at a rave, and during the tournament, the game plays the music set `starlords_rave` instead of the normal campaign or market music. Leaving hands the music back, the way vanilla's Luddic shrines do it. If a rave dialog closes some other way (Esc, say), a failsafe restores the normal music after about a second and a half. The tournament fight itself keeps the normal combat music, and the rave track comes back afterwards. LunaLib's **Other → Rave music** turns it off (`raveMusic` in `starlord_settings.json` without LunaLib).
+
+The set is defined in `data/config/sounds.json`, which Starsector merges into its own. The current track is a **placeholder**: Tri-Tachyon's friendly market theme, taken from the game's own music archive, so the mod ships no music file yet. To use your own track:
+
+1. Save it as OGG Vorbis in `sounds/music/` inside this mod, for example `sounds/music/starlords_rave.ogg`. Keep it to a few MB.
+2. In `data/config/sounds.json`, replace the placeholder entry with `{"source":"sounds/music", "volume":0.8, "files":["starlords_rave.ogg"]}`. List several files to make a playlist.
+3. Restart Starsector. No Java rebuild is needed; a rebuild just puts the track into the distribution ZIP.
+
+Only ship music you're allowed to redistribute, and credit it in the README if its licence asks for that.
+
 ## Where wording lives
 
 | File | Purpose |
