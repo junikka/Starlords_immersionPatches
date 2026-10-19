@@ -46,3 +46,7 @@ Phase 2 still needs the user's in-game review of dialogue, policy UI, gatherings
 Phase 3 implements neutral → institutional → faction profile inheritance and examples, including faction-specific offices, laws, events and messages. The example profile JSON remains a design illustration and is not loaded at runtime. Direct title bindings already work through `data/lords/presentation/titles.json`.
 
 Later phases add richer faction/personality voices and modular commander packs. Authored historical biographies remain historical; changing allegiance does not rewrite their backgrounds. New commander content currently uses the existing `lords.json` format and a new campaign. Old-save compatibility remains optional.
+
+## Future extensions
+
+- [Weaving Starlords into the Sector's lore](LORE_INTEGRATION_STUDY.md): faction leaders as the court, crown worlds, commanders as the military command of their holdings. Deferred by Julie on 2026-10-19; not part of Phases 3–5.
