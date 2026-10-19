@@ -47,7 +47,7 @@ To read every message as each faction sees it without launching the game, run `p
 
 ## Rave music
 
-1. Go to a rave: the intel screen lists it as **Ongoing rave**, with the host and location. Hail a commander who is at it: within a second the music should switch to the rave track (the placeholder is Tri-Tachyon's friendly market theme).
+1. Go to a rave: the intel screen lists it as **Ongoing rave**, with the host and location. To skip the wait, run `startrave` (or `startrave <first name>`): the nearest commander throws one at the nearest friendly world, ignoring Rave Licensing, the cooldown and the cost. Hail a commander who is at it: within a second the music should switch to the rave track.
 2. Leave the conversation: the normal music should come back.
 3. Enter the tournament from a rave conversation: the rave track keeps playing, the fight has normal combat music, and the rave track returns after each round. Leaving the tournament restores the normal music.
 4. Turn off LunaLib's **Other → Rave music** and hail a raving commander again: the music shouldn't change.

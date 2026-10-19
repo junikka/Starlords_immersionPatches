@@ -16,3 +16,4 @@ PrintLordTravel,starlords.console.PrintLordTravel,starlords, printlordtravel <lo
 PrintLordsAlignments,starlords.console.PrintLordsAlignments,starlords, printlordsalignments," ""Print tab separated commander id", name, faction," alignments"""
 PrintLordsDefectionWeights,starlords.console.PrintLordsDefectionWeights,starlords, printlordsdefectionweights," ""Print tab separated commander id", name, faction, Weight," Alignment Difference"""
 PromotePlayer,starlords.console.PromotePlayer,starlords, promoteplayer [status|vote|commissioned|0|1|2],"Testing: moves you one step up the council of the faction you hold a commission with, or to the given step. status shows what the next promotion needs; vote starts a real promotion vote."
+StartRave,starlords.console.StartRave,starlords, startrave [first name|ID],"Testing: the nearest commander (or the one named) throws a rave at the nearest friendly world right away, ignoring Rave Licensing, the cooldown and the cost."
