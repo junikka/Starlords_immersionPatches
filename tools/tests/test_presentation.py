@@ -179,6 +179,12 @@ class ProfileDataTests(unittest.TestCase):
             for key in profile.get('messages', {}):
                 self.assertFalse(key.startswith(('event.feast', 'tournament', 'policy.name.feast_law')), (name, key))
 
+    def test_profile_wording_never_says_raid(self):
+        # Julie's rule: pirates muster an armada under a Warmaster; no profile text uses "raid"
+        for name, profile in self.profiles['profiles'].items():
+            for key, text in profile.get('messages', {}).items():
+                self.assertIsNone(re.search(r'raid', text, re.I), (name, key, text))
+
     def test_generated_rank_files_are_current(self):
         neutral, resolved = sync_ranks.resolver()
         for faction, names in resolved.items():

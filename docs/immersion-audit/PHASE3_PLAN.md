@@ -1,6 +1,6 @@
 # Phase 3 plan: faction profiles
 
-**Status: approved by Julie and implemented (2026-10-19).** Decisions: raves and tournaments stay universal; the profile tables below are approved as drafted; the Diktat's council-appointed office becomes *Marshal of the Fleet*; a LunaLib setting picks the player faction's profile; work started while the in-game test of Phase 2 runs. Evidence is in [IMPLEMENTATION_PROGRESS.md](IMPLEMENTATION_PROGRESS.md). Two changes from the plan while implementing: the expedition notifications and fleet status lines also moved out of `strings.json`, because they name the office and the expedition (84 overridable messages instead of 57), and the player-faction setting changes words only, not rank titles, so the comm panel's rank line stays consistent.
+**Status: approved by Julie and implemented (2026-10-19).** Decisions: raves and tournaments stay universal; the profile tables below are approved as drafted; the Diktat's council-appointed office becomes *Marshal of the Fleet*; a LunaLib setting picks the player faction's profile; work started while the in-game test of Phase 2 runs. Evidence is in [IMPLEMENTATION_PROGRESS.md](IMPLEMENTATION_PROGRESS.md). **Revised by Julie later the same day:** the tables below show the final wording. Changes from the first draft: the aristocratic council is the *High Council* (the Persean League keeps *League Council* through its own faction profile); pirates have a *Warmaster* and call an *Armada*; and the policy names were renamed. No profile wording uses the word "raid". Two changes from the plan while implementing: the expedition notifications and fleet status lines also moved out of `strings.json`, because they name the office and the expedition (84 overridable messages instead of 57), and the player-faction setting changes words only, not rank titles, so the comm panel's rank line stays consistent.
 
 ## What the accepted design asks for
 
@@ -55,9 +55,9 @@ Draft wording for your review. Only the overridden keys are listed; everything e
 | `default` (house voice) | — | anything unbound, player | Holding | Council | Fleet Commander | Expedition |
 | `naval` | default | Hegemony, independents | Command | Admiralty Board | Fleet Commander | Expedition |
 | `corporate` | default | Tri-Tachyon | Concession | Board | Director of Operations | Operation |
-| `aristocratic` | default | Persean League | Seat | League Council | Strategos | Expedition |
+| `aristocratic` | default | Persean League (as *League Council*) | Seat | High Council | Strategos | Expedition |
 | `religious` | default | Luddic Church, Luddic Path | Parish | Synod | Knight-Commander | Crusade |
-| `raider` | default | Pirates | Turf | Captains' Table | Raid Boss | Raid |
+| `raider` | default | Pirates | Turf | Captains' Table | Warmaster | Armada |
 
 Faction-level overrides on top of that (each is a few keys):
 - **Sindrian Diktat** (naval): council → *Executive Council*; holding → *Prefecture*; office → *Marshal of the Fleet* (question 3).
@@ -67,9 +67,9 @@ Policy names per profile (levels can be renamed too):
 
 | Policy (house name) | naval | corporate | aristocratic | religious | raider |
 |---|---|---|---|---|---|
-| Central Authority | Command Authority | Executive Control | Archon's Prerogative | Pontifical Authority | Boss's Word |
-| Privilege of Rank | Privilege of Rank | Seniority Rights | Ancient Privilege | Clerical Privilege | Captains' Rights |
-| Revenue Policy | Revenue Policy | Margin Policy | Levies | Tithes | Cut of the Take |
+| Central Authority | Chain of Command | Executive Control | Crown Prerogative | Doctrine of Obedience | Boss's Word |
+| Privilege of Rank | Seniority | Executive Privilege | Privilege of Rank | Clerical Privilege | Captains' Share |
+| Revenue Policy | Levy Policy | Margin Policy | Tribute Policy | Tithes | Cut of the Take |
 | Rave Licensing | Rave Licensing | Rave Licensing | Rave Licensing | Rave Licensing | Rave Licensing |
 
 The proposal also had a "dynastic" option; the Persean League's `aristocratic` profile covers it. These are first drafts to argue with, not decisions.

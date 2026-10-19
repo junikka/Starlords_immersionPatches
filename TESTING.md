@@ -15,7 +15,7 @@ Console command IDs remain unchanged: use `WarpLord`, not `WarpCommander`. If Vi
 
 1. Start a new campaign. Open Politics for a few factions you can view (or take a commission with each): the Church should start at *Strict* Rave Licensing, the Path at *Banned*, Tri-Tachyon at *Free Trade*, pirates at *Very Low* Boss's Word (their name for Central Authority). Independent and your own faction stay in the middle.
 2. Take a commission with the Hegemony. Politics should show you as **Commissioned officer**, with every proposal button greyed out and a tooltip saying you need a seat. `promoteplayer status` lists what's missing (60 days of service and Welcoming).
-3. Run `promoteplayer`. You should become a Commodore, with your Hegemony reputation raised to at least Welcoming: commands, Revenue Policy and Rave Licensing unlock, while war, peace, Command Authority, Privilege of Rank and Fleet Commander stay locked with "You need the rank of Admiral".
+3. Run `promoteplayer`. You should become a Commodore, with your Hegemony reputation raised to at least Welcoming: commands, Levy Policy and Rave Licensing unlock, while war, peace, Chain of Command, Seniority and Fleet Commander stay locked with "You need the rank of Admiral".
 4. Run `AddLordRelation <name> 50` on a Hegemony commander, then `promoteplayer vote`. A message should say who put you forward for Admiral, and the proposal should appear in the council list. Wait for the council to take it up (`promoteplayer status` reports if it's still waiting). If the vote fails, relations with the commanders who opposed it shouldn't drop.
 5. Hail a Hegemony commander you get on with and open *Ask a question*. "Ask them to put your name forward for promotion" should be there. Asking either starts a vote or explains what's missing. Try it with a commander at relation 0 or below for the refusal line.
 6. Run `promoteplayer 2`. Nominating yourself as Fleet Commander should now be possible.
@@ -28,13 +28,13 @@ Each faction names its own institutions. Raves and tournaments are the same ever
 
 | Faction | Holding | Council | Fleet Commander | Expedition | Policies (Central Authority / Privilege of Rank / Revenue Policy) |
 |---|---|---|---|---|---|
-| Hegemony, independents | Command | Admiralty Board | Fleet Commander | Expedition | Command Authority / Privilege of Rank / Revenue Policy |
+| Hegemony, independents | Command | Admiralty Board | Fleet Commander | Expedition | Chain of Command / Seniority / Levy Policy |
 | Sindrian Diktat | Prefecture | Executive Council | Marshal of the Fleet | Expedition | as Hegemony |
-| Tri-Tachyon | Concession | Board | Director of Operations | Operation | Executive Control / Seniority Rights / Margin Policy |
-| Persean League | Seat | League Council | Strategos | Expedition | Archon's Prerogative / Ancient Privilege / Levies |
-| Luddic Church | Parish | Synod | Knight-Commander | Crusade | Pontifical Authority / Clerical Privilege / Tithes |
+| Tri-Tachyon | Concession | Board | Director of Operations | Operation | Executive Control / Executive Privilege / Margin Policy |
+| Persean League | Seat | League Council (High Council for other aristocratic factions) | Strategos | Expedition | Crown Prerogative / Privilege of Rank / Tribute Policy |
+| Luddic Church | Parish | Synod | Knight-Commander | Crusade | Doctrine of Obedience / Clerical Privilege / Tithes |
 | Luddic Path | Cell | Conclave | Knight-Commander | Purge | as Church |
-| Pirates | Turf | Captains' Table | Raid Boss | Raid | Boss's Word / Captains' Rights / Cut of the Take |
+| Pirates | Turf | Captains' Table | Warmaster | Armada | Boss's Word / Captains' Share / Cut of the Take |
 
 1. Open the Politics screen with a Tri-Tachyon commission, then a Hegemony one (`promoteplayer 2` unlocks everything). Each screen should use its own faction's words: the policy names and tooltips, the Fleet Commander line, the holding buttons, and the "Call ..." button if you're the Fleet Commander. Switch back and forth: nothing from one faction should leak into the other.
 2. Submit a proposal in each. The proposal title, the council message ("The Board is now voting...") and the vote reasons ("Recipient has few concessions") should match that faction.

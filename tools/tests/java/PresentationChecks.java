@@ -281,7 +281,7 @@ public class PresentationChecks {
         // per-key inheritance: faction profile -> institutional profile -> default
         eq(Presentation.textFor(heg, "laws.award_fief"), "Grant command");
         eq(Presentation.textFor(diktat, "laws.current_marshal"), "Marshal of the Fleet:");
-        eq(Presentation.lawName(diktat, Lawset.LawType.CROWN_AUTHORITY), "Command Authority");
+        eq(Presentation.lawName(diktat, Lawset.LawType.CROWN_AUTHORITY), "Chain of Command");
         eq(Presentation.textFor(path, "laws.current_marshal"), "Knight-Commander:");
         eq(Presentation.lawName(path, Lawset.LawType.TRADE_LAW), "Tithes");
         eq(Presentation.lawName(path, Lawset.LawType.FEAST_LAW), "Rave Licensing");
@@ -289,9 +289,9 @@ public class PresentationChecks {
         eq(Presentation.textFor(factions.get("unknown_mod"), "laws.award_fief"), "Grant holding");
         eq(Presentation.textFor((FactionAPI) null, "laws.award_fief"), "Grant holding");
         // two factions back to back must not leak into each other (the old shared-enum problem)
-        eq(Presentation.lawName(heg, Lawset.LawType.CROWN_AUTHORITY), "Command Authority");
+        eq(Presentation.lawName(heg, Lawset.LawType.CROWN_AUTHORITY), "Chain of Command");
         eq(Presentation.lawName(pirates, Lawset.LawType.CROWN_AUTHORITY), "Boss's Word");
-        eq(Presentation.lawName(heg, Lawset.LawType.CROWN_AUTHORITY), "Command Authority");
+        eq(Presentation.lawName(heg, Lawset.LawType.CROWN_AUTHORITY), "Chain of Command");
         eq(Presentation.levelName(pirates, LawLevel.VERY_HIGH), "V. High");
         eq(Presentation.levelEffects(heg, Lawset.LawType.TRADE_LAW, 0), "Free Trade|-50% command revenue |+150% trade income");
         eq(Presentation.levelEffects(pirates, Lawset.LawType.FEAST_LAW, 4), "Banned|No raves");
@@ -302,7 +302,7 @@ public class PresentationChecks {
         ((Map<String, Lord>) field(LordController.class, null, "lordsMap")).put("admiral", admiral);
         eq(new LawProposal(Lawset.LawType.AWARD_FIEF, "admiral", "speaker", "kestrel", null, 0).getSummary(),
                 "Grant Kestrel $5\\Dock to Warlord Rook Tann as a command");
-        eq(new LawProposal(Lawset.LawType.CROWN_AUTHORITY, "admiral", null, null, null, 1).getTitle(), "Decrease Command Authority");
+        eq(new LawProposal(Lawset.LawType.CROWN_AUTHORITY, "admiral", null, null, null, 1).getTitle(), "Decrease Chain of Command");
         // the player's own faction follows the setting; unknown names fall back to default
         Presentation.setPlayerProfile("corporate");
         eq(Presentation.textFor(factions.get("player"), "laws.award_fief"), "Grant concession");
@@ -315,6 +315,14 @@ public class PresentationChecks {
         Presentation.reload();
         eq(Presentation.title("modded_corp", 2), "Executive Vice President");
         eq(Presentation.textFor(factions.get("modded_corp"), "council.council"), " Board");
+        // the League's own council over the aristocratic profile's High Council; the rest is inherited
+        profileData.getJSONObject("factions").put("modded_house", "aristocratic");
+        Presentation.reload();
+        eq(Presentation.textFor("modded_house", "progression.requires_seat"), "You need a place on the High Council to propose this.");
+        eq(Presentation.textFor("persean", "progression.requires_seat"), "You need a place on the League Council to propose this.");
+        eq(Presentation.textFor("persean", "council.council"), " Council");
+        eq(Presentation.textFor("persean", "laws.current_marshal"), "Strategos:");
+        eq(Presentation.textFor("pirates", "event.campaign.heading"), "Ongoing armada");
     }
     static void profileValidation() throws Exception {
         JSONObject all = profileData.getJSONObject("profiles");
