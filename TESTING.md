@@ -52,7 +52,8 @@ The scenes:
 1. Run `startrave` near a Hegemony commander (or any faction), wait for the fleet to arrive, and hail any commander at the rave. Above the greeting you should see the venue picture (the Hegemony's officers' bar) and the arrival scene. Below it, one grey crowd line.
 2. Hail another commander at the same rave: no picture or arrival scene this time, but a new crowd line.
 3. Open the *Ongoing rave* intel: the venue picture sits under the location line.
-4. The Church's scene follows its current Rave Licensing. It starts at *Strict* (the Litany of Restraint). Take a Church commission, use `promoteplayer 2`, and propose looser licensing; once the Synod passes it, `startrave` a Church commander and the scene should match the new level, up to the *Anything Goes* sacrament. Under *Banned*, only `startrave` can make a rave, and it gets the whispered illicit scene. The Path always gets its own scene.
+4. Hail a commander at the rave: the main menu has **Join the rave.** (only at raves). It opens the rave menu: **Hit the dance floor together** (a scene per personality, small relation gain, once per commander per rave), **Profess your most ardent admiration** (once per rave), and, once a commander accepts your admiration, **Spend some time together at the rave** and the marriage proposal. **Back** returns to the main menu. *Ask another question* no longer lists admiration or the date.
+5. The Church's scene follows its current Rave Licensing. It starts at *Strict* (the Litany of Restraint). Take a Church commission, use `promoteplayer 2`, and propose looser licensing; once the Synod passes it, `startrave` a Church commander and the scene should match the new level, up to the *Anything Goes* sacrament. Under *Banned*, only `startrave` can make a rave, and it gets the whispered illicit scene. The Path always gets its own scene.
 
 The music:
 

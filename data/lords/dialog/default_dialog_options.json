@@ -3,6 +3,8 @@
   "dedicate_tournament": "optionSet_dedicate_tournament",
   "start_tournament": "optionSet_start_tournament_cant",
   "ask_question": "optionSet_askQuestion",
+  "join_rave": "optionSet_join_rave",
+  "dance_floor": "optionSet_join_rave",
   "admiration_response": "optionSet_admiration_response",
 
 

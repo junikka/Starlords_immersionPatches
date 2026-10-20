@@ -1980,7 +1980,19 @@
           "quest_available": "I do have one issue to take care of. I've transferred the relevant information if you're interested.",
           "no_quest_available": "I have no tasks that need attending to at this time.",
           "promotion_sponsored": "You've earned it. I'll speak for you at the next council, and I'll mean every word.",
-          "promotion_refused": "I can't vouch for someone I barely know, %PLAYER_NAME. Earn some trust first."
+          "promotion_refused": "I can't vouch for someone I barely know, %PLAYER_NAME. Earn some trust first.",
+          "dance_floor": {
+            "line": "%LORD_NAME can't dance and doesn't pretend to. They laugh at themselves, take your hands, and just move. For a few songs there's no war, no faction, no ledger of the dead. Only two tired people being bad at something together.",
+            "addons": {
+              "repChange": 3,
+              "setLordMemoryData": {
+                "starlords_dancedAtRave": {
+                  "time": 30,
+                  "data": true
+                }
+              }
+            }
+          }
         }
       },
       "prisoner": {
@@ -3952,7 +3964,19 @@
           "quest_available": "I do have one issue to take care of. I've transferred the relevant information if you're interested.",
           "no_quest_available": "I have no tasks that need attending to at this time.",
           "promotion_sponsored": "Fine. It'll annoy half the council, which is reason enough.",
-          "promotion_refused": "Put my name next to yours? I'd sooner walk out an airlock."
+          "promotion_refused": "Put my name next to yours? I'd sooner walk out an airlock.",
+          "dance_floor": {
+            "line": "%LORD_NAME shoves into the thick of it and dances hard, like they're fighting someone only they can see. When the track ends they're breathing heavy and quieter than you've ever heard them. \"Needed that,\" is all they say.",
+            "addons": {
+              "repChange": 3,
+              "setLordMemoryData": {
+                "starlords_dancedAtRave": {
+                  "time": 30,
+                  "data": true
+                }
+              }
+            }
+          }
         }
       },
       "prisoner": {
@@ -5960,7 +5984,19 @@
           "quest_available": "I do have one issue to take care of. I've transferred the relevant information if you're interested.",
           "no_quest_available": "I have no tasks that need attending to at this time.",
           "promotion_sponsored": "You fight well. I'll put your name forward. Don't make me regret it.",
-          "promotion_refused": "I haven't seen enough of you under fire to vouch for you."
+          "promotion_refused": "I haven't seen enough of you under fire to vouch for you.",
+          "dance_floor": {
+            "line": "%LORD_NAME dances stiffly at first, the way soldiers do when there's no drill to follow. Somewhere in the third track it stops being a performance. Afterwards, leaning on the rail, they tell you it's the first time in months their hands haven't been shaking.",
+            "addons": {
+              "repChange": 3,
+              "setLordMemoryData": {
+                "starlords_dancedAtRave": {
+                  "time": 30,
+                  "data": true
+                }
+              }
+            }
+          }
         }
       },
       "prisoner": {
@@ -7980,7 +8016,19 @@
           "quest_available": "I do have one issue to take care of. I've transferred the relevant information if you're interested.",
           "no_quest_available": "I have no tasks that need attending to at this time.",
           "promotion_sponsored": "I'll back you. A friend higher up the ladder is a sound investment.",
-          "promotion_refused": "And what would I get for spending my credit on you? Nothing yet, I think."
+          "promotion_refused": "And what would I get for spending my credit on you? Nothing yet, I think.",
+          "dance_floor": {
+            "line": "%LORD_NAME dances with careful economy, watching the room. Then a song comes on that they clearly know. They close their eyes and mouth every word. When it ends they look almost embarrassed. \"My mother played that on the freighter,\" they say. \"Every shift change. Don't tell anyone.\"",
+            "addons": {
+              "repChange": 3,
+              "setLordMemoryData": {
+                "starlords_dancedAtRave": {
+                  "time": 30,
+                  "data": true
+                }
+              }
+            }
+          }
         }
       },
       "prisoner": {
@@ -8640,6 +8688,7 @@
               "setData_default",
               "option_avoid_battle",
               "option_ask_tournament",
+              "option_join_rave",
               "option_dedicate_tournament",
               "option_host_wedding",
               "option_ask_current_task",
@@ -8841,8 +8890,6 @@
             "options": [
               "option_ask_location",
               "option_ask_quest",
-              "option_profess_admiration",
-              "option_ask_date",
               "option_ask_marriage",
               "option_ask_leave_party",
               "option_ask_join_party",
@@ -10364,7 +10411,51 @@
           "promotion_pending": "Your name is already before the council. Let them get to it.",
           "promotion_cooldown": "The council voted on you only recently. Give it a few weeks before anyone raises it again.",
           "promotion_refused": "Speak for you? Find someone who actually likes you, %PLAYER_NAME.",
-          "promotion_busy": "My own proposal is in front of the council right now. Ask me again after the vote."
+          "promotion_busy": "My own proposal is in front of the council right now. Ask me again after the vote.",
+          "option_join_rave": {
+            "line": "Join the rave.",
+            "optionData": "join_rave",
+            "show": {
+              "isAtFeast": true,
+              "hostileFaction": false
+            }
+          },
+          "join_rave": "%LORD_NAME nods toward the floor, raising their voice over the bass. \"Well? You didn't come all this way to stand by the door.\"",
+          "optionSet_join_rave": {
+            "options": [
+              "option_dance_floor",
+              "option_profess_admiration",
+              "option_ask_date",
+              "option_ask_marriage",
+              "option_back_from_rave"
+            ]
+          },
+          "option_dance_floor": {
+            "line": "Hit the dance floor together.",
+            "optionData": "dance_floor",
+            "show": {
+              "getLordMemoryData": {
+                "starlords_dancedAtRave": false
+              }
+            }
+          },
+          "option_back_from_rave": {
+            "line": "Back.",
+            "optionData": "optionSet_beginning",
+            "shortcut": "ESCAPE"
+          },
+          "dance_floor": {
+            "line": "%LORD_NAME pulls you into the crowd, and for a while the two of you are just part of it: elbows, lights, a bass line you feel in your teeth. Neither of you talks about the war. When the track ends you're both grinning, and neither of you could say why.",
+            "addons": {
+              "repChange": 3,
+              "setLordMemoryData": {
+                "starlords_dancedAtRave": {
+                  "time": 30,
+                  "data": true
+                }
+              }
+            }
+          }
         }
       },
       "prisoner": {

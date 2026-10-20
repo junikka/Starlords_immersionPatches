@@ -47,15 +47,23 @@ class PresentationDataTests(unittest.TestCase):
                        e['surface'] in {'dialogue', 'dialogue_highlight', 'biography', 'fleet_name'}}
             before = dict(leaves(json.loads(historical(path))))
             after = dict(leaves(json.loads((ROOT/path).read_text(encoding='utf-8'))))
-            # the only addition: the "ask for promotion" option, its answers and its slot in the question menu
-            menu = '/default/lines/default/lines/optionSet_askQuestion/options/'
+            # the only additions: the "ask for promotion" option and its answers, and the rave menu with its
+            # dance-floor scenes. The question and greeting menus may be rearranged (courtship moved to the rave menu).
+            menus = ('/default/lines/default/lines/optionSet_askQuestion/options/',
+                     '/default/lines/default/lines/optionSet_greeting/options/')
+            new_content = ('promotion', 'rave', 'dance_floor')
             added = after.keys() - before.keys()
             self.assertTrue(path.endswith('dialog.json') or not added, path)
-            self.assertEqual({k for k in added if 'promotion' not in k and not k.startswith(menu)}, set(), path)
-            self.assertEqual(before.keys() - after.keys(), set(), path)
-            changed = {key for key in before if before[key] != after[key]}
+            self.assertEqual({k for k in added if not any(w in k for w in new_content) and not k.startswith(menus)}, set(), path)
+            self.assertEqual({k for k in before.keys() - after.keys() if not k.startswith(menus)}, set(), path)
+            changed = {key for key in before.keys() & after.keys() if before[key] != after[key]}
             self.assertTrue(changed)
-            self.assertEqual({k for k in changed - allowed if not k.startswith(menu)}, set(), path)
+            self.assertEqual({k for k in changed - allowed if not k.startswith(menus)}, set(), path)
+        # nothing was lost from the menus: every option the question menu had is still offered somewhere
+        dialog = json.loads((ROOT/'data/lords/dialog/dialog.json').read_text(encoding='utf-8'))['default']['lines']['default']['lines']
+        old_menu = json.loads(historical('data/lords/dialog/dialog.json'))['default']['lines']['default']['lines']['optionSet_askQuestion']['options']
+        offered = set(dialog['optionSet_askQuestion']['options']) | set(dialog['optionSet_join_rave']['options'])
+        self.assertLessEqual(set(old_menu), offered)
 
     def test_console_command_ids_and_numeric_settings_unchanged(self):
         for path, columns in [('data/console/commands.csv', {'help'}),
