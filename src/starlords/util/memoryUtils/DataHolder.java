@@ -68,7 +68,7 @@ public class DataHolder {
 
     public String getString(String key){
         if (!strings.containsKey(key)) return "";
-        if (sExpire.containsKey(key) && sExpire.get(key) > Global.getSector().getClock().getElapsedDaysSince(sTimestamp.get(key))){
+        if (sExpire.containsKey(key) && sExpire.get(key) <= Global.getSector().getClock().getElapsedDaysSince(sTimestamp.get(key))){
             sExpire.remove(key);
             sTimestamp.remove(key);
             strings.remove(key);
@@ -78,7 +78,7 @@ public class DataHolder {
     }
     public boolean getBoolean(String key){
         if (!booleans.containsKey(key)) return false;
-        if (bExpire.containsKey(key) && bExpire.get(key) >= Global.getSector().getClock().getElapsedDaysSince(bTimestamp.get(key))){
+        if (bExpire.containsKey(key) && bExpire.get(key) <= Global.getSector().getClock().getElapsedDaysSince(bTimestamp.get(key))){
             bExpire.remove(key);
             bTimestamp.remove(key);
             booleans.remove(key);
