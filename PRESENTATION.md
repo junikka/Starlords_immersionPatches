@@ -129,6 +129,8 @@ Message IDs are stable identifiers, not visible prose. Some IDs still contain `l
 
 ## Dialogue authoring
 
+For tone and style, see [docs/immersion-audit/WRITING_GUIDE.md](docs/immersion-audit/WRITING_GUIDE.md): one loud, joyful mood, written gonzo-style as events you witness rather than character descriptions.
+
 The existing `%PLAYER_NAME`, `%PLAYER_NAME_FIRST`, `%LORD_TITLE`, `%SECOND_LORD_NAME`, host/spouse markers, `%c0` custom inserts, and `dialogOverride` format remain supported. Tokens match exactly and are substituted once. Inserted names/values are literal: `$`, backslashes and token-shaped text inside a name are not interpreted again.
 
 New bounded aliases available to dialogue include:
