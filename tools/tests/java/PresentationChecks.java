@@ -377,6 +377,21 @@ public class PresentationChecks {
         try { RaveScenes.reload(); } catch (IllegalStateException e) { failed = e.getMessage().contains("factions.pirates.arrival.loud"); }
         yes(failed);
     }
+    @SuppressWarnings("unchecked")
+    static void absentFactions() throws Exception {
+        // a commander written for a faction mod that isn't installed is skipped at new game, not created
+        JSONObject victor = json("data/lords/lords.json").getJSONObject("Victor Wallis");
+        LordTemplate installed = new LordTemplate("Installed", new JSONObject(victor.toString()).put("faction", "naval"));
+        LordTemplate absent = new LordTemplate("Absent", new JSONObject(victor.toString()).put("faction", "not_installed_mod"));
+        set(LordController.class, null, "lordTemplates", new HashMap<>(Map.of("Installed", installed, "Absent", absent)));
+        eq(LordController.templatesOfInstalledFactions(), List.of(installed));
+        // presentation data for an absent faction is inert: nothing asks for it, and asking falls back
+        profileData.getJSONObject("factions").put("not_installed_mod", "corporate");
+        titleData.getJSONObject("factions").put("not_installed_mod", new JSONArray(List.of("A", "B", "C")));
+        raveData.getJSONObject("factions").put("not_installed_mod", new JSONObject().put("image", "space_bar").put("arrival", "x"));
+        Presentation.reload(); RaveScenes.reload();
+        eq(Presentation.textFor("hegemony", "laws.award_fief"), "Grant command");
+    }
     /** Prints faction|tier0|tier1|tier2 for the Python test that compares with tools/sync_ranks.py. */
     static void ranks() throws Exception {
         Set<String> ids = new TreeSet<>();
@@ -402,7 +417,7 @@ public class PresentationChecks {
         switch(args[1]) {
             case "renderer" -> renderer(); case "titles" -> titles(); case "context" -> context();
             case "proposals" -> proposals(); case "dialogue" -> dialogue(); case "validation" -> validation();
-            case "profiles" -> profiles(); case "profile_validation" -> profileValidation(); case "ranks" -> ranks(); case "messages" -> messages(); case "raves" -> raves();
+            case "profiles" -> profiles(); case "profile_validation" -> profileValidation(); case "ranks" -> ranks(); case "messages" -> messages(); case "raves" -> raves(); case "absent_factions" -> absentFactions();
             default -> throw new IllegalArgumentException(args[1]);
         }
         System.out.println("PASS " + args[1]);

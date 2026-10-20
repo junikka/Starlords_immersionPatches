@@ -279,6 +279,20 @@ public class LordController {
         playerLord = Lord.createPlayer();
     }
 
+    // Commanders written for a faction mod the player hasn't installed are skipped, not created:
+    // lords.json may carry support for optional faction mods.
+    public static List<LordTemplate> templatesOfInstalledFactions() {
+        List<LordTemplate> templates = new ArrayList<>();
+        for (LordTemplate template : lordTemplates.values()) {
+            if (Global.getSector().getFaction(template.factionId) == null) {
+                log.info("Skipping commander " + template.name + ": faction " + template.factionId + " is not installed");
+                continue;
+            }
+            templates.add(template);
+        }
+        return templates;
+    }
+
     // Creates lords from templates in new game
     public static void createAllLords() {
         // Generate lords and lord fleets
@@ -286,12 +300,13 @@ public class LordController {
         lordsList.clear();
         lordsMap.clear();
 
+        List<LordTemplate> templates = templatesOfInstalledFactions();
         HashSet<String> allocatedFiefs = new HashSet<>();
-        for (LordTemplate template : lordTemplates.values()) {
+        for (LordTemplate template : templates) {
             if (template.fief != null) allocatedFiefs.add(template.fief);
         }
 
-        for (LordTemplate template : lordTemplates.values()) {
+        for (LordTemplate template : templates) {
             Lord currLord = new Lord(template);
             MarketAPI lordMarket = null;
             if (currLord.getFiefs().isEmpty()) {

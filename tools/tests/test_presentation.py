@@ -296,6 +296,7 @@ class JavaPresentationTests(unittest.TestCase):
     def test_profile_inheritance_contexts_player_setting_and_titles(self): self.check('profiles')
     def test_profile_schema_errors_name_the_path(self): self.check('profile_validation')
     def test_rave_scenes_follow_licensing_and_fall_back(self): self.check('raves')
+    def test_data_for_uninstalled_faction_mods_is_skipped_or_inert(self): self.check('absent_factions')
 
     def test_java_profile_resolution_matches_preview_tool(self):
         result = subprocess.run([str(self.java), '-Djava.awt.headless=true', '-cp', self.classpath,
