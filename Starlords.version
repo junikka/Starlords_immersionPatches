@@ -1,14 +1,13 @@
 {
-    "masterVersionFile":"https://raw.githubusercontent.com/Alaricdragon/Starlords_Temp/master/Starlords.version",
-    "modName":"Starlords",
-    "modThreadId":34114,
-    "modVersion":
-    {
-        "major":0,
-        "minor":3,
-        "patch":"78"
+    "masterVersionFile": "https://raw.githubusercontent.com/junikka/Starlords_immersionPatches/master/Starlords.version",
+    "modName": "Starlords Immersion Patches",
+    "modThreadId": 34114,
+    "modVersion": {
+        "major": 1,
+        "minor": 1,
+        "patch": 0
     },
-	"starsectorVersion":"0.98a-RC5",
-	"directDownloadURL":"https://github.com/Alaricdragon/Starlords_Temp/archive/refs/heads/master.zip",
-	"changelogURL":"https://raw.githubusercontent.com/Alaricdragon/Starlords_Temp/master/changelog.text"
+    "starsectorVersion": "0.98a-RC5",
+    "directDownloadURL": "https://github.com/junikka/Starlords_immersionPatches/releases/latest",
+    "changelogURL": "https://raw.githubusercontent.com/junikka/Starlords_immersionPatches/master/changelog.text"
 }

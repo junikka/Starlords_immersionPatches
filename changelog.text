@@ -1,3 +1,11 @@
+V1.1 (immersion patches):
+    raves: venue picture and an arrival scene per host faction (the Church follows its Rave Licensing), crowd lines,
+           a Join the rave menu with the dance floor and the rave courtship options, venue picture in the rave intel.
+    fixed timed text and flag memory expiring as soon as it was set.
+V1.0 (immersion patches):
+    space-opera wording, faction rank ladders and comm-panel ranks, council progression gated by reputation and time,
+    per-faction starting policies, fleet greetings by rank, faction wording profiles, rave music, startrave console command.
+    based on Starlords 0.3.78.
 V0.3.78:
     fixed the player being able to be killed as a starlord, laving only a ghost behind that is still a starlord but dead!
     fixed incorrect detection of laws failing when it involves the player.
