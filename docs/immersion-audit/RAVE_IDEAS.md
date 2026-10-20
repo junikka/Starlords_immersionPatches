@@ -2,7 +2,7 @@
 
 **Status: approved by Julie (2026-10-20); step 1 implemented.** Decisions: the picture is an establishing shot in the text; the Church keeps vanilla's Luddic teahouse; the Luddic Path gets its own scene, "even more ridiculous than the Church and a bit violent"; the order below stands. Step 1 (arrival scenes, establishing shot, crowd lines, intel picture) lives in `data/lords/presentation/raves.json`; the texts there are the current ones. Step 2 is done too: a **Join the rave** menu at the top level of every rave conversation, holding the dance floor and the rave's courtship options, which used to hide under *Ask another question* where Julie never found them.
 
-**Tone.** A rave is a real party, loud and a bit mad, not a picnic. The Sector around it is grim, and the parties feel like it: people dance hard *because* of what's waiting outside. Humour comes from faction character (Andrada's ego, Tri-Tachyon's excess, the Church's slide into a sanctified frenzy), not from slapstick. Intoxicants are implied, never named, except among pirates. Quiet moments between people should feel human and relatable, like the karaoke night in *The Expanse*. The crowd is people genuinely having fun, forgetting the war for a night.
+**Tone.** A rave is a real party, loud and a bit mad, not a picnic. The Sector around it is grim, and the parties feel like it: people dance hard *because* of what's waiting outside. Humour comes from faction character (Andrada's ego, Tri-Tachyon's excess, the Church's slide into a sanctified frenzy), not from slapstick. Intoxicants are implied, never named, except among pirates. Moments between people should feel human and relatable, and on the dance floor these commanders are good at it. The crowd is people genuinely having fun, forgetting the war for a night.
 
 ## What a rave has today
 
@@ -53,14 +53,15 @@ One paragraph the first time you talk to someone at a given rave, under the pict
 
 **Default**: "The cargo hold has been stripped to the bulkheads and packed to them again. Strobes, sweat, a bass line that rattles the deck plates, and a crowd that left its ranks at the door along with most of its sense. The air tastes of ozone and something sweeter. Whatever the war is doing out there, in here it isn't invited."
 
-## 2. Hit the dance floor (M)
+## 2. Hit the dance floor (M), done
 
-A new option beside *Spend some time together*. Same small relation gain as a date, one set per personality. The aim is a small, honest moment between two people in the middle of the noise:
+In the **Join the rave** menu. +3 relation, once per commander per rave. A decade of space combat turns anyone into a professional raver, so they dance great, each in their own style (rewritten on Julie's note; the earlier drafts were too sombre):
 
-- *Martial*: "%LORD_NAME dances stiffly at first, the way soldiers do when there's no drill to follow. Somewhere in the third track it stops being a performance. Afterwards, leaning on the rail, they tell you it's the first time in months their hands haven't been shaking."
-- *Upstanding*: "%LORD_NAME can't dance and doesn't pretend to. They laugh at themselves, take your hands, and just move. For a few songs there's no war, no faction, no ledger of the dead. Only two tired people being bad at something together."
-- *Calculating*: "%LORD_NAME dances with careful economy, watching the room. Then a song comes on that they clearly know. They close their eyes and mouth every word. When it ends they look almost embarrassed. 'My mother played that on the freighter,' they say. 'Every shift change. Don't tell anyone.'"
-- *Quarrelsome*: "%LORD_NAME shoves into the thick of it and dances hard, like they're fighting someone only they can see. When the track ends they're breathing heavy and quieter than you've ever heard them. 'Needed that,' is all they say."
+- *Default*: "%LORD_NAME takes the floor like they own it, and within one track they do. Years of high-g manoeuvres have given them balance a gymnast would envy and reflexes that hit every beat before it lands. The crowd opens up around the two of you. When the bass finally drops out, people are cheering, and some of them are cheering for you."
+- *Martial*: "%LORD_NAME dances the way they fight: no wasted motion, perfect timing, absolutely no mercy. They read the floor like a battlespace, slip through the crowd on a flanking line, and land every drop like a broadside. By the end there's a ring of people around you both, trying to copy the moves."
+- *Upstanding*: "%LORD_NAME turns out to be a menace on the dance floor, all big grins and bigger moves. They pull strangers in, spin you through a gap you didn't know was there, and somehow keep the whole circle in step. "Twenty years of shore leave," they shout over the bass. "You pick things up!""
+- *Calculating*: "%LORD_NAME barely seems to move at first: cool, precise, every step exactly on the beat. Then the DJ shifts tempo and they go from understated to unstoppable without missing a count. Afterwards they straighten their cuffs. "Rhythm is just timing," they say. "And timing is my whole job.""
+- *Quarrelsome*: "%LORD_NAME treats the dance floor as contested space, and wins it. Every challenger gets stared down, out-stepped and sent back to the bar. When two pilots try a dance-off, %LORD_NAME takes them both at once, then drags you in for the finale like it was the plan all along."
 
 ## 3. Crowd lines (S)
 

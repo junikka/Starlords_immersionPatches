@@ -1982,7 +1982,7 @@
           "promotion_sponsored": "You've earned it. I'll speak for you at the next council, and I'll mean every word.",
           "promotion_refused": "I can't vouch for someone I barely know, %PLAYER_NAME. Earn some trust first.",
           "dance_floor": {
-            "line": "%LORD_NAME can't dance and doesn't pretend to. They laugh at themselves, take your hands, and just move. For a few songs there's no war, no faction, no ledger of the dead. Only two tired people being bad at something together.",
+            "line": "%LORD_NAME turns out to be a menace on the dance floor, all big grins and bigger moves. They pull strangers in, spin you through a gap you didn't know was there, and somehow keep the whole circle in step. \"Twenty years of shore leave,\" they shout over the bass. \"You pick things up!\"",
             "addons": {
               "repChange": 3,
               "setLordMemoryData": {
@@ -3966,7 +3966,7 @@
           "promotion_sponsored": "Fine. It'll annoy half the council, which is reason enough.",
           "promotion_refused": "Put my name next to yours? I'd sooner walk out an airlock.",
           "dance_floor": {
-            "line": "%LORD_NAME shoves into the thick of it and dances hard, like they're fighting someone only they can see. When the track ends they're breathing heavy and quieter than you've ever heard them. \"Needed that,\" is all they say.",
+            "line": "%LORD_NAME treats the dance floor as contested space, and wins it. Every challenger gets stared down, out-stepped and sent back to the bar. When two pilots try a dance-off, %LORD_NAME takes them both at once, then drags you in for the finale like it was the plan all along.",
             "addons": {
               "repChange": 3,
               "setLordMemoryData": {
@@ -5986,7 +5986,7 @@
           "promotion_sponsored": "You fight well. I'll put your name forward. Don't make me regret it.",
           "promotion_refused": "I haven't seen enough of you under fire to vouch for you.",
           "dance_floor": {
-            "line": "%LORD_NAME dances stiffly at first, the way soldiers do when there's no drill to follow. Somewhere in the third track it stops being a performance. Afterwards, leaning on the rail, they tell you it's the first time in months their hands haven't been shaking.",
+            "line": "%LORD_NAME dances the way they fight: no wasted motion, perfect timing, absolutely no mercy. They read the floor like a battlespace, slip through the crowd on a flanking line, and land every drop like a broadside. By the end there's a ring of people around you both, trying to copy the moves.",
             "addons": {
               "repChange": 3,
               "setLordMemoryData": {
@@ -8018,7 +8018,7 @@
           "promotion_sponsored": "I'll back you. A friend higher up the ladder is a sound investment.",
           "promotion_refused": "And what would I get for spending my credit on you? Nothing yet, I think.",
           "dance_floor": {
-            "line": "%LORD_NAME dances with careful economy, watching the room. Then a song comes on that they clearly know. They close their eyes and mouth every word. When it ends they look almost embarrassed. \"My mother played that on the freighter,\" they say. \"Every shift change. Don't tell anyone.\"",
+            "line": "%LORD_NAME barely seems to move at first: cool, precise, every step exactly on the beat. Then the DJ shifts tempo and they go from understated to unstoppable without missing a count. Afterwards they straighten their cuffs. \"Rhythm is just timing,\" they say. \"And timing is my whole job.\"",
             "addons": {
               "repChange": 3,
               "setLordMemoryData": {
@@ -10445,7 +10445,7 @@
             "shortcut": "ESCAPE"
           },
           "dance_floor": {
-            "line": "%LORD_NAME pulls you into the crowd, and for a while the two of you are just part of it: elbows, lights, a bass line you feel in your teeth. Neither of you talks about the war. When the track ends you're both grinning, and neither of you could say why.",
+            "line": "%LORD_NAME takes the floor like they own it, and within one track they do. Years of high-g manoeuvres have given them balance a gymnast would envy and reflexes that hit every beat before it lands. The crowd opens up around the two of you. When the bass finally drops out, people are cheering, and some of them are cheering for you.",
             "addons": {
               "repChange": 3,
               "setLordMemoryData": {
