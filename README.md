@@ -1,133 +1,110 @@
-# Star Lords
+# Starlords: Immersion Patches
 
-Development: see [BUILDING.md](BUILDING.md) for the reproducible source build and [the immersion design](docs/immersion-audit/MODULAR_PRESENTATION_PROPOSAL.md) for the accepted overhaul plan.
+A fork of **[Star Lords](https://github.com/Alaricdragon/Starlords_Temp)** for [Starsector](https://fractalsoftworks.com/) that makes the Sector's commanders feel like they belong in it: faction-specific words and ranks, a council you climb, elite raves, and support for modded factions.
 
-Each successful build updates `jars/StarLords.jar` and creates an installable ZIP. See [TESTING.md](TESTING.md) for a brief new-campaign test using Console Commands and Nexerelin. This fork may require new campaigns between development phases.
+**Start with the original README:** [Star Lords README](https://github.com/Alaricdragon/Starlords_Temp#readme) (a copy as of version 0.3.78 is in [README_ORIGINAL.md](README_ORIGINAL.md)). It explains what Star Lords is: commanders with fleets and personalities, holdings, the council and its politics, campaigns, defection, prisoners. Everything in it still applies. This README only covers **what this fork changes or adds**.
 
-Phase 2 provides space-naval terminology (holdings, expeditions, raves, tournaments), per-faction rank ladders, a hand-written dialogue pass and safe dialogue tokens. Phase 3 adds faction profiles, so the Hegemony grants commands, Tri-Tachyon concessions and pirates turf, each with its own council, office and policy names. [PRESENTATION.md](PRESENTATION.md) explains the runtime JSON files and what the next phases add. The original feature and authoring documentation below retains upstream terminology and screenshots.
+## Install
 
-Star Lords attempts to bring the world of [Starsector](https://fractalsoftworks.com/) to life with many character-centric features. No longer will your only allies be nameless faction fleets who you'll meet once and never again. The core mechanic is the addition of dozens of Lords to the game, each with their own personality, fleet composition, backstory, and agendas.
+1. Download the latest ZIP from [Releases](https://github.com/junikka/Starlords_immersionPatches/releases).
+2. Remove any older Star Lords folder from `Starsector/mods`, then extract the ZIP there. Keep one copy.
+3. Recommended: [Nexerelin](https://github.com/Histidine91/Nexerelin), [LunaLib](https://github.com/Lukas22041/LunaLib) (settings) and [Console Commands](https://github.com/LazyWizard/console-commands) (testing). Star Lords itself has no dependencies.
+4. Start a new campaign for the cleanest result. The fork works in existing saves, but some things, such as commanders and starting policies, are only set up when a campaign begins.
 
-![](example/starlords_readme1.PNG)
+Updates are announced through Version Checker.
 
-Lords will roam the map alongside the player-- raiding, trading, feasting, expanding, and more. Lords follow their own economic system, requiring them to physically visit their fiefs to levy taxes and purchase new ships. They operate persistently and without requiring any interference from the player. When the Marshal raises the banners, the Lords will muster to war in organized interplanetary campaigns of unprecedented scale.
+## What's different
 
-![](example/starlords_readme5.PNG)
+### Words and ranks that fit the Sector
+- **Space-opera vocabulary** instead of medieval terms: *holdings*, *expeditions*, *raves*, *tournaments*, the *Fleet Commander*, and the policies *Central Authority*, *Privilege of Rank*, *Revenue Policy* and *Rave Licensing*.
+- **Faction wording profiles:** each faction names its own institutions.
 
-A Lord's behavior is heavily dependent on their personality and interpersonal relations with other Lords. Inter-lord relations are fully modeled, culminating in a brand new political system where Lords will politick, scheme, form alliances, and backstab while jockeying for wealth and influence within the realm.
+  | Faction | Holding | Council | Office | Expedition | Policies |
+  |---|---|---|---|---|---|
+  | Hegemony, independents | Command | Admiralty Board | Fleet Commander | Expedition | Chain of Command, Seniority, Levy Policy |
+  | Sindrian Diktat | Prefecture | Executive Council | Marshal of the Fleet | Expedition | as Hegemony |
+  | Tri-Tachyon | Concession | Board | Director of Operations | Operation | Executive Control, Executive Privilege, Margin Policy |
+  | Persean League | Seat | League Council | Strategos | Expedition | Crown Prerogative, Privilege of Rank, Tribute Policy |
+  | Luddic Church | Parish | Synod | Knight-Commander | Crusade | Doctrine of Obedience, Clerical Privilege, Tithes |
+  | Luddic Path | Cell | Conclave | Knight-Commander | Purge | as Church |
+  | Pirates | Turf | Captains' Table | Warmaster | Armada | Boss's Word, Captains' Share, Cut of the Take |
 
-![](example/starlords_readme3.PNG)
+  Your own faction uses the house words; LunaLib → *Other* → *Your faction's wording* switches it to any profile.
+- **Rank ladders per faction:** Commodore / Admiral / Fleet Admiral for the Hegemony, Vice President up to Executive Vice President for Tri-Tachyon, Deacon-Captain / Bishop / Archbishop for the Church, Captain / Warlord / Kingpin for pirates, and so on. The comm panel's *Rank* line shows the same title.
+- **A hand-written dialogue pass** and safe dialogue tokens, so names containing odd characters display correctly.
 
-Curry favor with Lords by completing their quests, fighting alongside them in battle, or supporting their political agenda. Form a core of close allies and leverage their support to seize de-facto power in your faction's political system. Or convince them to join your own faction and support your claim to unite the sector.
+### Earning a place on the council
+- A commission no longer hands you a council seat. You start as a **Commissioned officer** and climb **seat → tier 1 → tier 2**. The seat comes with time and reputation (Welcoming). Each promotion after that needs time in rank, reputation (Friendly, then Cooperative) and a track record, and is decided by a real council vote that a friendly commander sponsors. You can also ask a commander in person to sponsor you.
+- If your reputation slips, the council treats you as a lower rank until it recovers. Locked proposal buttons say what they need.
+- **Ordinary fleets of your faction greet you by rank** once you hold a seat.
+- **Per-faction starting policies:** the Church starts strict about raves, the Path bans them, Tri-Tachyon favours free trade, and so on.
 
-Star Lords is heavily inspired by campaign mechanics of Mount and Blade. The goal is to eventually add all major campaign mechanics from Warband. This mod aims to have minimal side-effects on the game. There are no changes to in-battle gameplay, and no direct effects on campaign balance aside from the actions of the Lords themselves.
+### Raves: elite parties
+- Raves are gatherings of the faction's elite: admirals, ministers, House heads, executives, kingpins and high clergy. **A seat on the host faction's council gets you in.** Without one, a bodyguard blocks the door. You can try to slip in behind a minister's entourage, but you may be caught and thrown out for the rest of the night. Everything rave-related, including the original mod's options, sits behind **Join the rave.**
+- Inside: **the rave's own music**, a **venue picture** and a **gonzo arrival scene** written for each faction. The Church's scene gets wilder as its Rave Licensing loosens, and the Luddic Path has its own scene, which involves wrenches. You also get **crowd lines**, **Hit the dance floor** (a scene per personality and a relationship boost), the **tournament** and courtship.
+- The *Ongoing rave* intel shows the venue.
 
-### Disclaimer
-This mod is currently in early development. Expect plenty of bugs, crashes, questionable balancing, etc. Please report any crash logs or balance feedback to the forums. Thank you for your cooperation.
+### Weddings
+- Accepting a proposal makes you **engaged**. Your fiancé names a venue: their own holding, otherwise their faction's largest world. **Dock there and choose "Attend your wedding"** from the market menu. Weddings are no longer held at raves.
 
-### Installation
-Download the latest release [here](https://github.com/Deluth-git/Starlords/releases) and unzip in your Starsector mod folder.
+### Support for modded factions
+- Every Star Lords data file can carry entries for faction mods **without making them a dependency**. Players who don't have a faction mod lose nothing and crash nothing: its settings and commanders are skipped with a log line, and everything else is simply never used.
+- **Hazard Mining Incorporated** is supported as the first example: claims instead of holdings, Foreman / Director / Board Director, Company greetings, an ore-hold rave, and one commander.
 
-This mod may be added to existing savegames, but may not be removed after being added. Make sure to back up your save game first in case of unexpected issues.
+### Fixes to the original
+- Values the mod stores for a limited time (text and yes/no flags) no longer expire the moment they're set.
+- New campaigns no longer crash when Star Lords data mentions a faction that isn't installed.
 
-### Full Feature List
-* Adds __48 unique Lords__ spread among all the base major factions.
-* Adds fief system, where each market is a fiefdom which can be owned by a Lord. 
-* Custom __Economic system__ for Lords
-  * Lords collect taxes from their own fiefs and participate in business ventures in friendly markets. 
-  * Income is used to expand their fleet, hire marines, and maintain existing ships.
-* Custom fleet constructor for Lords, which allows each Lord to have their own __distinctive fleet composition__.
-* Lords are __active on the map__, collecting income and waging war.
-  * Lord actions are heavily dependent on Lord's personality and relations with other Lords
-  * Lord's officer corps slowly level up from fighting in battles
-* __Player-Lord Interactions__- If a Lord trusts you sufficiently, they may follow the player's military orders, offer quests, participate in scheming, and share sensitive intel about their operations.
-* __Feast system__- Take a reprieve from braving the sector and join the lords of the realm in a night of feasting and revelry. Feasts are an excellent chance to meet all the lords and build rapport with them.
-* __Campaign system__- Campaigns may be started by a faction's appointed marshal. All lords of the realm will gather to launch a grand invasion into enemy territory or defend against an enemy's invasion. If Nexerelin is enabled, lords may also use the Nexerelin ground combat system to capture markets.
-* __Defection system__- Lords who are dissatisfied with their faction may defect to another. Or you can speed along the process and persuade or bribe Lords to join your own faction as your subordinates.
-* __Prisoner system__- Lords may be captured in battle and either ransomed for credits or released for future goodwill.
-* __Political system__- The cornerstone of all lord relations, the new political system is where all Lords of the realm gather to propose and vote on legislation. Appoint new marshals, squabble for newly conquered fiefs, conduct foreign policy, and more, as long as you can control the political situation.
+### New console commands (testing)
+- `promoteplayer [status|vote|commissioned|0|1|2]`: inspect or set your council standing.
+- `startrave [first name|ID]`: the nearest commander, or the one you name, throws a rave right away.
+- `engagelord <first name|ID>`: skip the courtship and get engaged.
 
+### New settings (LunaLib → Other)
+- *Your faction's wording*: the wording profile for your own faction.
+- *Rave music*: on or off.
 
+## Add a faction mod, step by step
 
-### Major Planned Features
-Most of these are inspired by Mount & Blade.
-* Continued Lord AI improvement and optimization.
-* Political marriage/courtship system for forming marriage alliances.
-* Expanded subterfuge system involving scheming with friendly lords to increase your status in the realm or discredit mutual rivals.
-* Flesh out feast system, with feast tournaments as friendly competition with fellow Lords
-* Better integration with Nexerelin invasions and base game crises.
-*  Custom questlines for certain lords, e.g. allowing AI-sympathizing lords to field [REDACTED] fleets.
+Short version below. The full guide, with every field, its defaults and a complete worked example (Hazard Mining), is [docs/FACTION_INTEGRATION.md](docs/FACTION_INTEGRATION.md).
 
+1. **Read the faction mod.** Note its exact faction ID (case matters), the path of its `.faction` file (from its `data/world/factions/factions.csv`), its markets (market ID = the first entity of each market in its `data/campaign/econ/*.json`, or check with Console Commands `list markets`), its ships and variant IDs, portraits, and its own named characters (don't duplicate them).
+2. **Gameplay:** in `data/lords/faction.json`, add an entry keyed by the faction ID. Every field is optional: starting policies, council progression, leader, and what the faction may do (diplomacy, raves, holdings…).
+3. **Ranks:** in `data/lords/presentation/titles.json`, add three titles under `factions`. If the mod's faction file name differs from its ID, map it under `factionFiles`. Then run `python tools/sync_ranks.py` to generate the comm-panel rank file.
+4. **Words:** in `data/lords/presentation/profiles.json`, bind the faction to a profile (`naval`, `corporate`, `aristocratic`, `religious`, `pirate`), or add a profile that `extends` one and overrides only what differs. Check the result with `python tools/preview_profiles.py`.
+5. **Fleet greetings:** in `data/lords/presentation/greetings.json`, add three lines, one per council rank.
+6. **Rave:** in `data/lords/presentation/raves.json`, add a venue picture, an arrival scene and optional crowd lines. Follow [the writing guide](docs/immersion-audit/WRITING_GUIDE.md): what you see, gonzo-style, elite guests.
+7. **Commanders:** see the next section.
+8. **Check:** run `python -m unittest discover -s tools/tests -v`. Start the game once **without** the faction mod (it must load cleanly, and the log shows the skip lines) and once **with** it.
 
-### Dependencies/Compatibility
-This mod has no dependencies, though it's recommended to play with [Nexerelin](https://github.com/Histidine91/Nexerelin/tree/master) for planet capture mechanics. This mod should work with faction/ship/weapon mods which don't impact base campaign mechanics. Any kind of mod that only affects in-battle gameplay is also fine. All specific compatibilities are not yet tested.
+Another mod can also ship these entries in its own copies of the same files. Starsector merges them.
 
+## Add a commander, step by step
 
-### Adding your own Lords
-If you're a modder or just want to put your own characters into the game, all you have to do is add another entry to the [lords.json](https://github.com/Deluth-git/Starlords/blob/master/data/lords/lords.json) file. A few notes:
-* "portrait" should be a valid image. By default, the mod will check for .PNGs in `data/graphics/portraits/` of the base game or any mod folder. If your portraits are located in an unusual location, you can specify the path directly e.g. `graphics/my_folder/my_portraits/my_portrait.png`. This portrait must also be registered in any faction config in `data/world/factions`. You may register it under the `starlords_nobility` faction if you want a lord-exclusive portrait.
-* "faction" should be a valid [faction id](https://fractalsoftworks.com/starfarer.api/constant-values.html#com.fs.starfarer.api.impl.campaign.ids.Factions.DIKTAT)
-* "fief" should be a valid market id or null
-* "ranking" is the lord's rank, which affects their political weight and base income. It should be between 0 and 2, where 2 is highest.
-* "customSkills" adds a valid skill to the lord upon generation, which can be used to give specific fleet or piloting modifiers to the character. Each skill must have a value correlated to its level e.g. "field_modulation": 2 for elite-level field modulation on creation
-* "customFleetSMods" sets which custom hullmods should be built into the Lord's fleet. Any number can be selected. The value of each hullmod indicates the odds of the hullmod being selected when applying a smod to a given ship. default value is 100. 
-* "customLordSMods" sets which custom hullmods should be built into the Lord's flagship. Any number can be selected. The value of each hullmod indicates the odds of the hullmod being selected when applying a smod to the flagship. default value is 100. 
-* "fleetForceCustomSMods" set this as false to allow the 'customFleetSMods' to be used alongside the normally selected SMods. if set to true, or unset, a given ship will attempt to add every hullmod in 'customFleetSMods' first
-* "flagshipForceCustomSMods"  set this as false to allow the 'customLordSMods' to be used alongside the normally selected SMods. if set to true, or unset, the flahship will attempt to add every hullmod in 'customLordSMods' first
-* "preferredItem" can be any of `domestic_goods`, `food`, `luxury_goods`, `drugs`, `hand_weapons`, `alpha_core`, or `lobster`.
-* "executiveOfficers" for custom second in command officer layouts. It is a json object where the id is the officer's aptitude, and the value a list of his chosen skills. Skills will continue to be added at random until the executive officers are fully leveled up if they are not specified. 
-* "dialogOverride" for custom lord dialogs. Is is a json array were the id is the dialog id (matched to the id of a object in the dialog.json). will attempt to run said Dialogs, but will also run the normal dialogs if the line it is looking for does not exsist in the inputed Dialogs (or if the lord fails to meet the requirements for the wanted line)
-* "alignments" requires nexerlin to work. lords will prefer to defect to factions with alignments similar to themselfs. all values must be between -1 and 1. example as follows:
-*    "alignments": {
-     "CORPORATE": -0.5,
-     "TECHNOCRATIC": -0.5,
-     "MILITARIST": 0.5,
-     "HIERARCHICAL": 0.5,
-     "DIPLOMATIC": -0.5,
-     "IDEOLOGICAL": 0.5
-     }
-* Flagship and ship preferences must contain valid ship variant ids. You can find these under the `/data/variants` folder of `starsector-core` or any mod directories.
-* Faction and fief will be automatically converted to lower case. Ship variants are case-sensitive.
+1. Open `data/lords/lords.json` and add an entry keyed by the commander's display name.
+2. Fill in the required fields:
+   - `faction` (exact ID), `fleetName`, `isMale`
+   - `personality`: `Upstanding`, `Martial`, `Calculating` or `Quarrelsome`
+   - `battle_personality`: `Timid`, `Cautious`, `Steady`, `Aggressive` or `Reckless`
+   - `level` and `ranking` (0 to 2)
+   - `fief`: a market ID, or `null`
+   - `flagship` (a variant ID) and `shipPref` (variant ID → weight)
+   - `portrait`: a path, or a name under `graphics/portraits/`
+   - `lore`: the biography
+3. Optional fields: `preferredItem` (favourite gift), Nexerelin `alignments`, `customSkills`, S-mod settings, executive officers, `dialogOverride`. Each is described in the [original README](README_ORIGINAL.md#adding-your-own-lords).
+4. Don't duplicate a faction's own story characters, and don't give a commander a capital that one of them runs.
+5. Commanders appear when a **new campaign** starts. A commander whose faction isn't installed is skipped.
+6. Test with `warplord <first name>`, then hail them.
 
-After that, your lord should be created automatically upon starting a new game.
+A full example is in [docs/FACTION_INTEGRATION.md](docs/FACTION_INTEGRATION.md#datalordslordsjson-add-one-sample-commander).
 
-### Adding Custom SMods to lords
-If you're a modder, or just someone who likes S-Mods you might want to expand on the number of S-Mods are available in the generic starlords S-Mod pool. All you have to do is add another entry to the [SMods.json](https://github.com/Deluth-git/Starlords/blob/master/data/lords/SMods.json) file. A few notes:
-* "rules" is each requirement that must be met before this set of S-Mods can be added to a given ships pull. every condition must be met for this to happen. conditions are as follows:
-  * "hullmods" is the hullmods this set of Smods requires to meet requirements. Set to true for whitelist, and false to blacklist. To meet requirements, a ship must have at least one 'true' hullmod (if any are created in this rule), and no 'false' hullmods
-  * "manufacture" is the manufactures this set requires to meet requirements. set to true for whitelist, and false for blacklist. To meet requirements, a ship must have a manufacture of one of the 'true'  manufacture (if any are created in this rule), and must not have a manufacture of the 'false' manufactures.
-  * "lordTags" is the starlord tags this set requires to meet requirements. set to true for whitelist, and false for blacklist. To meet requirements, a lord must have a tag of one of the 'true' tag (if any are created in this rule), and must not have a tag of the 'false' tags.
-  * "system" is the shipSystem this set requires to meet requirements. set to true for whitelist, and false for blacklist. To meet requirements, a ship must have a system of one of the 'true' systems (if any are created in this rule), and must not have a system of the 'false' systems.
-  * "startingFaction" is the starting faction required to meet requirements. starting faction is the faction a lord was part of when they first spawned. set to true for whitelist, and false for blacklist. To meet requirements, a lord must have a starting faction of one of the 'true' factions (if any are created in this rule), and must not have a stating faction of the 'false' factions.
-  * "currentFaction" is the current faction required to meet requirements. set to true for whitelist, and false for blacklist. To meet requirements, a lord must have a current faction of one of the 'true' factions (if any are created in this rule), and must not have a current faction of the 'false' factions.
-  * "hullID" is the hull required to meet requirements. set to true for whitelist, and false for blacklist. To meet requirements, a ship must have a hull id of one of the 'true' hulls (if any are created in this rule), and must not have a hull id of the 'false' hulls.
-  * "defenseType" is the defense type this set requires to meet requirements. set 'true' to all defense types you want this modification to effect. 
-    * "NONE"
-    * "PHASE"
-    * "FRONT"
-    * "OMNI" 
-  * "fighterBays" is the number of fighter bays this set requires to meet requirements. set between a "min" and "max" value. to get all ships with fighter bays, set "min" to one. to get all ships without figher bays, set "max" to 0
-  * "size" is the size this set requires to meet requirements. options are:
-    * "FRIGATE"
-    * "DESTROYER" 
-    * "CRUISER"
-    * "CAPITAL_SHIP"
-* "S-Mods" are the S-Mods that you want to have present when the groups rules are met. so mods must contain a hull mod ID, and a integer. this value is the amount of weight the Smod has in the pull. default value should be 100
+## For writers and developers
 
+- [docs/immersion-audit/WRITING_GUIDE.md](docs/immersion-audit/WRITING_GUIDE.md): tone and style for new text.
+- [PRESENTATION.md](PRESENTATION.md): the wording, title, profile, greeting, rave and music files.
+- [BUILDING.md](BUILDING.md): reproducible build. [TESTING.md](TESTING.md): in-game checks.
+- [docs/immersion-audit/](docs/immersion-audit/): the overhaul's design, plans and progress.
 
-### Adding Custom dialog to lords
-If you're a modder, or just someone who loves to write dialog for every starlord in your lords.json, you might want to create custom dialog lines with custom conditions for your starlords. All you have to do is add another entry to the [dialog.json](https://github.com/Alaricdragon/Starlords_Temp/tree/master/data/lords/dialog/dialog.json) file.
-please keep in mind: this is a highly complicated topic, so I have divided this into 5 readmes. (it was complicated, ok?) you should start with the base [DIALOG_BASE.md](https://github.com/Alaricdragon/Starlords_Temp/tree/master/theManyReadmes/DIALOG_BASE.md)
-      
+## Credits
 
-### Credits
-Starsector team for developing the game\
-[Nexerelin](https://github.com/Histidine91/Nexerelin/tree/master) team's codebase for providing excellent references to many obscure parts of the Starsector API \
-Interestio for Lord [portraits](https://fractalsoftworks.com/forum/index.php?topic=17066.0)
-the many contubuters:
-  * "Deluth" for making this mod possible in the first place, as well as doing most of the impossible magic in the internals.
-  * "alaricdragon" for the starlords generator and many random small upgrades and fixes
-  * "(forum)Erlkönig / (discord)Zeilon" for random fixes, random upgrades and some other things?
-  * "Aleksandros" for obscure fixes, an upgraded system for defection, and allow lords to defect to the player faction without breaking everything
-  * 
-  * "DeadFinder" for minor assistance with a single crash
+Everyone credited in the [original README](README_ORIGINAL.md#credits): Deluth, Alaricdragon and the Star Lords contributors, the Starsector and Nexerelin teams, and Interestio for the portraits. Immersion patches by Julie ([junikka](https://github.com/junikka)).

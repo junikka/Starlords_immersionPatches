@@ -1,3 +1,10 @@
+V1.2 (immersion patches):
+    raves are elite gatherings behind a door: a council seat gets you in, otherwise sneak past the bodyguard (and maybe get thrown out).
+    rave scenes rewritten from your point of view for every faction; dance floor in the Join the rave menu.
+    weddings are held at a venue the fiance names (their holding or their faction's largest world), from the market menu.
+    support for faction mods without depending on them: settings and commanders of uninstalled factions are skipped.
+    Hazard Mining Incorporated supported as the first faction mod.
+    new console commands: engagelord. README rewritten as a diff against the original Star Lords README.
 V1.1 (immersion patches):
     raves: venue picture and an arrival scene per host faction (the Church follows its Rave Licensing), crowd lines,
            a Join the rave menu with the dance floor and the rave courtship options, venue picture in the rave intel.
