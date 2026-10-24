@@ -194,7 +194,7 @@ def compile_sources(source_root, work, javac, release, jars=(), processors=()):
 
 
 # rules.csv resolves rule commands by simple name from the vanilla rulecmd package
-RULE_COMMANDS = {'LordsOpenCommCmd', 'StarlordsRankGreeting'}
+RULE_COMMANDS = {'LordsOpenCommCmd', 'StarlordsRankGreeting', 'StarlordsWedding'}
 
 
 def owned_class(name):

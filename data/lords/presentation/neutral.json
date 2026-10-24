@@ -410,6 +410,11 @@
     "warp_lord.lord_not_found": "Commander not found.",
     "warp_lord.to_player": " to player.",
     "warp_lord.warped_lord": "Warped commander ",
-    "warp_lord.warplord_requires_1_argument": "WarpLord requires 1 argument."
+    "warp_lord.warplord_requires_1_argument": "WarpLord requires 1 argument.",
+    "wedding.cancelled": "Your engagement to {commander} is over: the wedding can no longer take place.",
+    "wedding.ceremony": "Word of the wedding reaches {venue} before you do. By the time your shuttle touches down, the governor has cleared the grandest hall on the colony, half the faction's elite have pulled on their finest, and somebody has found an orchestra. {commander} is waiting under the arch in full dress, looking more nervous than you've ever seen them in battle. The vows take two minutes. The reception goes on until dawn, and at some point an admiral you barely know cries on your shoulder. You have gained an ally for life.",
+    "wedding.engaged": "{commander} already has a place in mind: {venue}. Dock there when you're ready, and the ceremony will be waiting.",
+    "wedding.married": "You and {commander} are married.",
+    "wedding.option": "Attend your wedding to {commander}"
   }
 }

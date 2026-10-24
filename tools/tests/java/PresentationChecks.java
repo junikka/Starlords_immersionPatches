@@ -27,6 +27,18 @@ public class PresentationChecks {
     static FactionAPI speakerFaction;
     static Lord player, speaker, recipient, host;
     static MarketAPI market;
+    static final Map<String, MarketAPI> markets = new LinkedHashMap<>();
+    static MarketAPI venueMarket(String id, String name, String factionId, int size) {
+        SectorEntityToken[] entity = new SectorEntityToken[1];
+        MarketAPI m = proxy(MarketAPI.class, (n, a) -> switch (n) {
+            case "getId" -> id; case "getName" -> name; case "getSize" -> size;
+            case "getFaction" -> factions.get(factionId); case "getPrimaryEntity" -> entity[0];
+            default -> null;
+        });
+        entity[0] = proxy(SectorEntityToken.class, (n, a) -> n.equals("getMarket") ? m : null);
+        markets.put(id, m);
+        return m;
+    }
 
     @SuppressWarnings("unchecked")
     static <T> T proxy(Class<T> type, BiFunction<String, Object[], Object> handler) {
@@ -130,7 +142,13 @@ public class PresentationChecks {
             case "getId" -> "kestrel"; case "getName" -> "Kestrel $5\\Dock";
             case "getFaction" -> factions.get("naval"); default -> null;
         });
-        EconomyAPI economy = proxy(EconomyAPI.class, (m,a) -> m.equals("getMarket") && a[0].equals("kestrel") ? market : null);
+        markets.put("kestrel", market);
+        EconomyAPI economy = proxy(EconomyAPI.class, (m,a) -> switch (m) {
+            case "getMarket" -> markets.get(a[0]);
+            case "getMarketsCopy" -> new ArrayList<>(markets.values());
+            default -> null;
+        });
+        CampaignUIAPI campaignUI = proxy(CampaignUIAPI.class, (m,a) -> null);
         Global.setSector(proxy(SectorAPI.class, (m,a) -> switch(m) {
             case "getFaction" -> factions.get(a[0]);
             case "getPlayerFaction" -> factions.get("player");
@@ -138,6 +156,7 @@ public class PresentationChecks {
             case "getCharacterData" -> character;
             case "getClock" -> clock;
             case "getEconomy" -> economy;
+            case "getCampaignUI" -> campaignUI;
             case "getPersistentData" -> persistent;
             case "getAllFactions", "getScripts" -> new ArrayList<>();
             default -> null;
@@ -422,20 +441,46 @@ public class PresentationChecks {
                 eq(RaveAccess.sneak(attempt), RaveAccess.Outcome.TURNED_AWAY);
             }
         }
-        // a rave hosting your wedding lets you in, even after you were thrown out of it
-        LordEvent wedding = new LordEvent(LordEvent.FEAST, host);
-        while (RaveAccess.sneak(wedding) != RaveAccess.Outcome.CAUGHT_SNEAKING) wedding = new LordEvent(LordEvent.FEAST, host);
-        eq(RaveAccess.join(wedding), RaveAccess.Outcome.TURNED_AWAY);
-        wedding.setWeddingCeremonyTarget(recipient);
-        yes(RaveAccess.hostsPlayerWedding(wedding) && RaveAccess.isInvited(wedding));
-        eq(RaveAccess.join(wedding), RaveAccess.Outcome.ADMITTED);
-        yes(RaveAccess.isInside(wedding) && !wedding.isGatecrasher());
         // your own faction's raves always let you in
         LordEvent own = new LordEvent(LordEvent.FEAST, player);
         yes(RaveAccess.isInvited(own));
         eq(RaveAccess.join(own), RaveAccess.Outcome.ADMITTED);
         yes(RaveAccess.isInside(own));
         eq(RaveAccess.join(own), RaveAccess.Outcome.ADMITTED);
+    }
+    @SuppressWarnings("unchecked")
+    static void weddings() throws Exception {
+        speakerFaction = factions.get("raider");
+        MarketAPI big = venueMarket("big", "Big Rock", "raider", 6);
+        MarketAPI small = venueMarket("small", "Small Rock", "raider", 3);
+        MarketAPI corp = venueMarket("corp", "Glass Tower", "corporate", 5);
+        // no holding: the fiance's faction's largest world
+        Weddings.engage(speaker, null);
+        yes(Weddings.isEngaged());
+        eq(Weddings.fiance(), speaker);
+        eq(Weddings.venue().getName(), "Big Rock");
+        yes(Weddings.isVenue(big)); yes(!Weddings.isVenue(small)); yes(!Weddings.isVenue(null));
+        // a holding comes first
+        ((List<SectorEntityToken>) field(Lord.class, speaker, "fiefs")).add(small.getPrimaryEntity());
+        Weddings.engage(speaker, null);
+        eq(Weddings.venue().getName(), "Small Rock");
+        ((List<SectorEntityToken>) field(Lord.class, speaker, "fiefs")).clear();
+        // the engagement ends if the fiance marries someone else
+        set(Lord.class, speaker, "married", true);
+        yes(!Weddings.isEngaged());
+        eq(Weddings.venue(), null);
+        set(Lord.class, speaker, "married", false);
+        // the ceremony marries the player and ends the engagement
+        Weddings.engage(recipient, null);
+        eq(Weddings.venue().getName(), "Glass Tower");
+        List<String> said = new ArrayList<>();
+        TextPanelAPI text = proxy(TextPanelAPI.class, (m,a) -> { if (m.equals("addPara")) said.add((String) a[0]); return null; });
+        InteractionDialogAPI dialog = proxy(InteractionDialogAPI.class, (m,a) -> m.equals("getTextPanel") ? text : null);
+        Weddings.hold(dialog);
+        yes(recipient.isMarried() && player.isMarried());
+        eq(player.getSpouse(), "recipient");
+        yes(!Weddings.isEngaged());
+        yes(said.get(0).contains("Glass Tower") && said.get(0).contains("Ira Sun"));
     }
     /** Prints faction|tier0|tier1|tier2 for the Python test that compares with tools/sync_ranks.py. */
     static void ranks() throws Exception {
@@ -462,7 +507,7 @@ public class PresentationChecks {
         switch(args[1]) {
             case "renderer" -> renderer(); case "titles" -> titles(); case "context" -> context();
             case "proposals" -> proposals(); case "dialogue" -> dialogue(); case "validation" -> validation();
-            case "profiles" -> profiles(); case "profile_validation" -> profileValidation(); case "ranks" -> ranks(); case "messages" -> messages(); case "raves" -> raves(); case "absent_factions" -> absentFactions(); case "rave_door" -> raveDoor();
+            case "profiles" -> profiles(); case "profile_validation" -> profileValidation(); case "ranks" -> ranks(); case "messages" -> messages(); case "raves" -> raves(); case "absent_factions" -> absentFactions(); case "rave_door" -> raveDoor(); case "weddings" -> weddings();
             default -> throw new IllegalArgumentException(args[1]);
         }
         System.out.println("PASS " + args[1]);

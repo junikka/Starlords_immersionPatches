@@ -51,7 +51,8 @@ class PresentationDataTests(unittest.TestCase):
             # dance-floor scenes. The question and greeting menus may be rearranged (courtship moved to the rave menu).
             menus = ('/default/lines/default/lines/optionSet_askQuestion/options/',
                      '/default/lines/default/lines/optionSet_greeting/options/')
-            new_content = ('promotion', 'rave', 'dance_floor')
+            # weddings moved from the rave to a venue: the proposal checks the engagement instead of the rave
+            new_content = ('promotion', 'rave', 'dance_floor', 'engaged')
             added = after.keys() - before.keys()
             if path.endswith('lords.json'):
                 # new commanders may be added (faction-mod support); the original roster stays as it was
@@ -59,7 +60,7 @@ class PresentationDataTests(unittest.TestCase):
                 added = {k for k in added if k.split('/')[1] in original}
             self.assertTrue(path.endswith('dialog.json') or not added, path)
             self.assertEqual({k for k in added if not any(w in k.lower() for w in new_content) and not k.startswith(menus)}, set(), path)
-            self.assertEqual({k for k in before.keys() - after.keys() if not k.startswith(menus)}, set(), path)
+            self.assertEqual({k for k in before.keys() - after.keys() if not k.startswith(menus) and 'wedding' not in k.lower()}, set(), path)
             changed = {key for key in before.keys() & after.keys() if before[key] != after[key]}
             self.assertTrue(changed)
             self.assertEqual({k for k in changed - allowed if not k.startswith(menus)}, set(), path)
@@ -302,6 +303,7 @@ class JavaPresentationTests(unittest.TestCase):
     def test_rave_scenes_follow_licensing_and_fall_back(self): self.check('raves')
     def test_data_for_uninstalled_faction_mods_is_skipped_or_inert(self): self.check('absent_factions')
     def test_rave_door_admits_invites_and_handles_gatecrashers(self): self.check('rave_door')
+    def test_weddings_pick_a_venue_cancel_and_marry(self): self.check('weddings')
 
     def test_java_profile_resolution_matches_preview_tool(self):
         result = subprocess.run([str(self.java), '-Djava.awt.headless=true', '-cp', self.classpath,

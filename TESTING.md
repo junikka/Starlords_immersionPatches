@@ -54,7 +54,7 @@ To get a rave quickly: `startrave` (nearest commander) or `startrave <first name
 **Invited (the door opens):**
 
 1. Take a commission with the host's faction and `promoteplayer` to get a seat (or use your own faction). Hail a commander at the rave: their normal greeting, no music yet, no picture, no tournament option.
-2. Choose **Join the rave.** The music starts, the venue picture and arrival scene appear (once per rave), then a grey crowd line and the rave menu: **Hit the dance floor together**, **Sign up for the tournament**, the victory dedication and wedding when they apply, **Profess your most ardent admiration**, and, once a commander accepts your admiration, **Spend some time together at the rave** and the marriage proposal. **Back** returns to the main menu.
+2. Choose **Join the rave.** The music starts, the venue picture and arrival scene appear (once per rave), then a grey crowd line and the rave menu: **Hit the dance floor together**, **Sign up for the tournament**, the victory dedication when it applies, **Profess your most ardent admiration**, and, once a commander accepts your admiration, **Spend some time together at the rave** and the marriage proposal. **Back** returns to the main menu.
 3. Leave and hail another commander at the same rave: since you're already inside, the music starts at once and their rave greeting plays. **Join the rave.** shows a new crowd line, with no repeat of the arrival scene.
 4. The Church's scene follows its current Rave Licensing: *Strict* to begin with, up to the *Anything Goes* sacrament as the Synod loosens it. A rave under *Banned* (only through `startrave`) gets the illicit scene. The Path always gets its own scene.
 
@@ -63,12 +63,20 @@ To get a rave quickly: `startrave` (nearest commander) or `startrave <first name
 5. **Join the rave.** shows the bodyguard at the door. No music, no scene. Options: **Slip in behind a minister's entourage** or **Leave it**.
 6. Sneaking in succeeds half the time: you're in, with the music, scene and rave menu. Each later **Join the rave.** at that rave has a one-in-four chance that a steward recognises you and you're escorted out (-3 relation with the commander you're talking to).
 7. If you're caught at the door (-3 relation) or escorted out, the door stays closed for the rest of that rave: the bodyguard remembers you.
-8. Exception: a rave hosting your wedding always lets you in, even after you were thrown out of it.
 
 **The music:**
 
-9. Leaving a conversation inside the rave brings the normal music back. The tournament keeps the rave track between rounds and normal combat music in the fights.
-10. Turn off LunaLib's **Other → Rave music**: joining shouldn't change the music.
+8. Leaving a conversation inside the rave brings the normal music back. The tournament keeps the rave track between rounds and normal combat music in the fights.
+9. Turn off LunaLib's **Other → Rave music**: joining shouldn't change the music.
+
+## Weddings
+
+Weddings are no longer held at raves.
+
+1. Court a commander (profess admiration and spend time together at a rave), then propose, either from the rave menu or from *Ask another question* anywhere. When they accept, they name a venue: "… already has a place in mind: <venue>". The same line appears as a campaign message. The venue is the commander's own holding, otherwise their faction's largest world, otherwise the largest world not hostile to you.
+2. While you're engaged, the proposal option disappears.
+3. Dock at the venue. Its market menu has **Attend your wedding to <name>**. Choose it: the ceremony scene plays, you're married, and the market menu returns without the option.
+4. If the fiance marries someone else or leaves the game before the ceremony, the engagement ends with a message. If the venue becomes hostile or disappears, a new one is picked automatically.
 
 ## Faction-mod pilot: Hazard Mining Incorporated
 

@@ -70,7 +70,7 @@
           "playerInsideRave": true
         },
         "lines": {
-          "accept_marriage_second": "Talk to me whenever you're ready and we'll start the ceremony.",
+          "accept_marriage_second": "Then it's settled. I'll send word ahead and have them make ready for us.",
           "greeting": "Welcome aboard, %PLAYER_NAME. Nobody draws a weapon at my rave, so relax. Make yourself at home."
         }
       },
@@ -1720,7 +1720,7 @@
           },
           "spend_time_together_after": "As the rave winds down, you prepare to part ways. This is your chance to present them with a gift.",
           "marriage_response": "Did you confuse me with someone else? I'm going to pretend that you didn't say that.",
-          "accept_marriage_second": "Let's ask our host %LORD_HOST_NAME to arrange a ceremony for us at once!",
+          "accept_marriage_second": "Then it's settled. I'll send word ahead and have them make ready for us.",
           "refuse_marriage_hint": {
             "line": "This commander expects you to do something romantic for them first.",
             "color": "YELLOW"
@@ -2092,7 +2092,7 @@
           "playerInsideRave": true
         },
         "lines": {
-          "accept_marriage_second": "Talk to me whenever you're ready and we'll start the ceremony.",
+          "accept_marriage_second": "Then it's settled. I'll send word ahead and have them make ready for us.",
           "greeting": "Welcome aboard, %PLAYER_NAME. Nobody draws a weapon at my rave, so relax. Make yourself at home."
         }
       },
@@ -3706,7 +3706,7 @@
           },
           "spend_time_together_after": "As the rave winds down, you prepare to part ways. This is your chance to present them with a gift.",
           "marriage_response": "Did you confuse me with someone else? I'm going to pretend that you didn't say that.",
-          "accept_marriage_second": "Let's ask our host %LORD_HOST_NAME to arrange a ceremony for us at once!",
+          "accept_marriage_second": "Then it's settled. I'll send word ahead and have them make ready for us.",
           "refuse_marriage_hint": {
             "line": "This commander expects you to do something romantic for them first.",
             "color": "YELLOW"
@@ -4078,7 +4078,7 @@
           "playerInsideRave": true
         },
         "lines": {
-          "accept_marriage_second": "Talk to me whenever you're ready and we'll start the ceremony.",
+          "accept_marriage_second": "Then it's settled. I'll send word ahead and have them make ready for us.",
           "greeting": "Welcome aboard, %PLAYER_NAME. Nobody draws a weapon at my rave, so relax. Make yourself at home."
         }
       },
@@ -5728,7 +5728,7 @@
           },
           "spend_time_together_after": "As the rave winds down, you prepare to part ways. This is your chance to present them with a gift.",
           "marriage_response": "Did you confuse me with someone else? I'm going to pretend that you didn't say that.",
-          "accept_marriage_second": "Let's ask our host %LORD_HOST_NAME to arrange a ceremony for us at once!",
+          "accept_marriage_second": "Then it's settled. I'll send word ahead and have them make ready for us.",
           "refuse_marriage_hint": {
             "line": "This commander expects you to do something romantic for them first.",
             "color": "YELLOW"
@@ -6100,7 +6100,7 @@
           "playerInsideRave": true
         },
         "lines": {
-          "accept_marriage_second": "Talk to me whenever you're ready and we'll start the ceremony.",
+          "accept_marriage_second": "Then it's settled. I'll send word ahead and have them make ready for us.",
           "greeting": "Welcome aboard, %PLAYER_NAME. Nobody draws a weapon at my rave, so relax. Make yourself at home."
         }
       },
@@ -7762,7 +7762,7 @@
           },
           "spend_time_together_after": "As the rave winds down, you prepare to part ways. This is your chance to present them with a gift.",
           "marriage_response": "Did you confuse me with someone else? I'm going to pretend that you didn't say that.",
-          "accept_marriage_second": "Let's ask our host %LORD_HOST_NAME to arrange a ceremony for us at once!",
+          "accept_marriage_second": "Then it's settled. I'll send word ahead and have them make ready for us.",
           "refuse_marriage_hint": {
             "line": "This commander expects you to do something romantic for them first.",
             "color": "YELLOW"
@@ -8417,7 +8417,7 @@
           },
           "spend_time_together_after": "As the rave winds down, you prepare to part ways. This is your chance to present them with a gift.",
           "marriage_response": "Did you confuse me with someone else? I'm going to pretend that you didn't say that.",
-          "accept_marriage_second": "Let's ask our host %LORD_HOST_NAME to arrange a ceremony for us at once!",
+          "accept_marriage_second": "Then it's settled. I'll send word ahead and have them make ready for us.",
           "refuse_marriage_hint": {
             "line": "This commander expects you to do something romantic for them first.",
             "color": "YELLOW"
@@ -9024,7 +9024,7 @@
               "isMarried": false,
               "isPlayerMarried": false,
               "isLordCourtedByPlayer": true,
-              "feastIsHostingWedding": false
+              "playerEngaged": false
             }
           },
           "option_ask_leave_party": {
@@ -10434,7 +10434,6 @@
               "option_dance_floor",
               "option_ask_tournament",
               "option_dedicate_tournament",
-              "option_host_wedding",
               "option_profess_admiration",
               "option_ask_date",
               "option_ask_marriage",
@@ -10674,7 +10673,7 @@
           "playerInsideRave": true
         },
         "lines": {
-          "accept_marriage_second": "Talk to me whenever you're ready and we'll start the ceremony.",
+          "accept_marriage_second": "Then it's settled. I'll send word ahead and have them make ready for us.",
           "greeting": "Welcome aboard, %PLAYER_NAME. Nobody draws a weapon at my rave, so relax. Make yourself at home."
         }
       },
@@ -12336,7 +12335,7 @@
           },
           "spend_time_together_after": "As the rave winds down, you prepare to part ways. This is your chance to present them with a gift.",
           "marriage_response": "Did you confuse me with someone else? I'm going to pretend that you didn't say that.",
-          "accept_marriage_second": "Let's ask our host %LORD_HOST_NAME to arrange a ceremony for us at once!",
+          "accept_marriage_second": "Then it's settled. I'll send word ahead and have them make ready for us.",
           "refuse_marriage_hint": {
             "line": "This commander expects you to do something romantic for them first.",
             "color": "YELLOW"

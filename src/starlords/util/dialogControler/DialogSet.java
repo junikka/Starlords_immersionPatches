@@ -1122,6 +1122,9 @@ public class DialogSet {
                 case "playerInsideRave":
                     rules.add(addRule_playerInsideRave(rulesTemp,key));
                     break;
+                case "playerEngaged":
+                    rules.add(addRule_playerEngaged(rulesTemp,key));
+                    break;
                 case "isHostingFeast":
                     rules.add(addRule_isHostingFeast(rulesTemp,key));
                     break;
@@ -1477,6 +1480,10 @@ public class DialogSet {
     @SneakyThrows
     private static DialogRule_Base addRule_isAtFeast(JSONObject json, String key){
         return new DialogRule_isAtFeast(json.getBoolean(key));
+    }
+    @SneakyThrows
+    private static DialogRule_Base addRule_playerEngaged(JSONObject json, String key){
+        return new DialogRule_playerEngaged(json.getBoolean(key));
     }
     @SneakyThrows
     private static DialogRule_Base addRule_playerInsideRave(JSONObject json, String key){

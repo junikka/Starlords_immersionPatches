@@ -51,7 +51,7 @@ Both `build` and `reproduce` update the repository runtime JAR. With `reproduce`
 
 Copy the whole repository folder, or use the clean ZIP to leave out `.git`, source, tools, local paths, and downloaded compile dependencies. The ZIP always contains the freshly compiled JAR, even if the previous repository JAR was older. Keep only one installed copy of the mod. Git retains the original runtime history; no manual JAR replacement is needed.
 
-Every archive has a fixed entry order, timestamp, permissions, and storage mode. Only Starlords packages and the mod's own rule commands (`LordsOpenCommCmd`, `StarlordsRankGreeting`) are allowed in the output.
+Every archive has a fixed entry order, timestamp, permissions, and storage mode. Only Starlords packages and the mod's own rule commands (`LordsOpenCommCmd`, `StarlordsRankGreeting`, `StarlordsWedding`) are allowed in the output.
 
 Check an existing artifact without compilation dependencies:
 

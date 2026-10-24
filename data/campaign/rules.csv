@@ -5,3 +5,9 @@ starlords_rankGreeting,OpenCommLink,"!$entity.isHostile
 StarlordsRankGreeting applies score:50","StarlordsRankGreeting print
 $menuState = fleetConvMain 0
 FireAll PopulateOptions",,,Fleets of your council faction greet you by rank; see StarlordsRankGreeting.java and data/lords/presentation/greetings.json
+starlords_weddingOpt,PopulateOptions,"$hasMarket
+$menuState == main
+$tradeMode != NONE
+StarlordsWedding here",StarlordsWedding option,,,"The ceremony at the venue your fiance named; see StarlordsWedding.java and Weddings.java"
+starlords_weddingSel,DialogOptionSelected,$option == starlords_wedding,"StarlordsWedding hold
+FireAll PopulateOptions",,,
