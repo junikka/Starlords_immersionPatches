@@ -4,6 +4,10 @@
 
 **Tone.** A rave is an elite gathering, not a public party: the guests are the faction's commanders, admirals, ministers, House heads, executives, kingpins and their favoured guests, in the spirit of the high-society party scenes in *Andor*: opulent, exclusive, hedonistic, with deals made on the dance floor. One mood: loud, glamorous and a bit mad. Write it gonzo-style, as what you see unfold, with the faction's lore smuggled into the details. See the [writing guide](WRITING_GUIDE.md). Intoxicants are implied, never named, except among pirates.
 
+## The door (Julie, 2026-10-24)
+
+Hailing a commander at a rave shows their ordinary greeting and nothing rave-related: no music, scene, crowd, rave greeting, rave relationship bonus or rave options. All of it sits behind **Join the rave.** A seat on the host faction's council (or your own faction's rave) gets you in. Anyone else meets the bodyguard and can slip in behind a minister's entourage: half the time you're in, as a gatecrasher who may be recognised and escorted out later (a quarter chance each time you rejoin); if caught, the door stays shut for that rave. Logic in `starlords.controllers.RaveAccess`, text in `dialog.json` (`rave_door`, `rave_sneak_in`, `rave_sneak_caught`, `rave_spotted_inside`, `rave_door_turned_away`).
+
 ## What a rave has today
 
 - A rave greeting per personality, plus a host greeting.
@@ -29,7 +33,7 @@ The left panel shows a picture *or* a portrait, so the recommended way is an **e
 
 ## 1. Arrival scene (S), done
 
-One paragraph the first time you talk to someone at a given rave, under the picture. Chosen by the host's faction and, for the Church, by its current Rave Licensing level (Banned, Strict, Licensed, Permissive, Anything Goes, getting wilder as licensing loosens). The Luddic Path has its own scene.
+One paragraph the first time you get into a given rave, under the picture. Chosen by the host's faction and, for the Church, by its current Rave Licensing level (Banned, Strict, Licensed, Permissive, Anything Goes, getting wilder as licensing loosens). The Luddic Path has its own scene.
 
 **Perspective (Julie, 2026-10-24):** the scene is what *you* see as it unfolds, gonzo-style, with the faction's lore smuggled into the details you notice, never stated by a narrator. The Hegemony's secrecy shows as a marine bagging your recorder and commodores shooting down a camera drone, not as "officially this never happened". The current texts live in `data/lords/presentation/raves.json`.
 

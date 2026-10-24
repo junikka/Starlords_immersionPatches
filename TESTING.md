@@ -47,20 +47,27 @@ To read every message as each faction sees it without launching the game, run `p
 
 ## Rave scenes and music
 
-The scenes:
+Raves are for the host faction's elite. Hailing a commander at a rave shows their ordinary greeting and no rave options; everything rave-related sits behind **Join the rave.** in the main menu. You're let in with a seat on the host faction's council (any standing, while your reputation honours it) or at your own faction's raves.
 
-1. Run `startrave` near a Hegemony commander (or any faction), wait for the fleet to arrive, and hail any commander at the rave. Above the greeting you should see the venue picture (the Hegemony's officers' bar) and the arrival scene. Below it, one grey crowd line.
-2. Hail another commander at the same rave: no picture or arrival scene this time, but a new crowd line.
-3. Open the *Ongoing rave* intel: the venue picture sits under the location line.
-4. Hail a commander at the rave: the main menu has **Join the rave.** (only at raves). It opens the rave menu: **Hit the dance floor together** (a scene per personality, small relation gain, once per commander per rave), **Profess your most ardent admiration** (once per rave), and, once a commander accepts your admiration, **Spend some time together at the rave** and the marriage proposal. **Back** returns to the main menu. *Ask another question* no longer lists admiration or the date.
-5. The Church's scene follows its current Rave Licensing. It starts at *Strict* (the Litany of Restraint). Take a Church commission, use `promoteplayer 2`, and propose looser licensing; once the Synod passes it, `startrave` a Church commander and the scene should match the new level, up to the *Anything Goes* sacrament. Under *Banned*, only `startrave` can make a rave, and it gets the whispered illicit scene. The Path always gets its own scene.
+To get a rave quickly: `startrave` (nearest commander) or `startrave <first name>`, then wait for the fleet to arrive. The *Ongoing rave* intel shows the host, location and venue picture.
 
-The music:
+**Invited (the door opens):**
 
-1. Go to a rave: the intel screen lists it as **Ongoing rave**, with the host and location. To skip the wait, run `startrave` (or `startrave <first name>`): the nearest commander throws one at the nearest friendly world, ignoring Rave Licensing, the cooldown and the cost. Hail a commander who is at it: within a second the music should switch to the rave track.
-2. Leave the conversation: the normal music should come back.
-3. Enter the tournament from a rave conversation: the rave track keeps playing, the fight has normal combat music, and the rave track returns after each round. Leaving the tournament restores the normal music.
-4. Turn off LunaLib's **Other → Rave music** and hail a raving commander again: the music shouldn't change.
+1. Take a commission with the host's faction and `promoteplayer` to get a seat (or use your own faction). Hail a commander at the rave: their normal greeting, no music yet, no picture, no tournament option.
+2. Choose **Join the rave.** The music starts, the venue picture and arrival scene appear (once per rave), then a grey crowd line and the rave menu: **Hit the dance floor together**, **Sign up for the tournament**, the victory dedication and wedding when they apply, **Profess your most ardent admiration**, and, once a commander accepts your admiration, **Spend some time together at the rave** and the marriage proposal. **Back** returns to the main menu.
+3. Leave and hail another commander at the same rave: since you're already inside, the music starts at once and their rave greeting plays. **Join the rave.** shows a new crowd line, with no repeat of the arrival scene.
+4. The Church's scene follows its current Rave Licensing: *Strict* to begin with, up to the *Anything Goes* sacrament as the Synod loosens it. A rave under *Banned* (only through `startrave`) gets the illicit scene. The Path always gets its own scene.
+
+**Not invited (commissioned without a seat, or another faction's rave):**
+
+5. **Join the rave.** shows the bodyguard at the door. No music, no scene. Options: **Slip in behind a minister's entourage** or **Leave it**.
+6. Sneaking in succeeds half the time: you're in, with the music, scene and rave menu. Each later **Join the rave.** at that rave has a one-in-four chance that a steward recognises you and you're escorted out (-3 relation with the commander you're talking to).
+7. If you're caught at the door (-3 relation) or escorted out, the door stays closed for the rest of that rave: the bodyguard remembers you.
+
+**The music:**
+
+8. Leaving a conversation inside the rave brings the normal music back. The tournament keeps the rave track between rounds and normal combat music in the fights.
+9. Turn off LunaLib's **Other → Rave music**: joining shouldn't change the music.
 
 ## Faction-mod pilot: Hazard Mining Incorporated
 

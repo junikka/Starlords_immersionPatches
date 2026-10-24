@@ -60,6 +60,13 @@ public class LordEvent {
     // rave only: whether the player has seen the venue and arrival scene (RaveScenes)
     @Setter
     private boolean arrivalShown;
+    // rave only: the player is past the door (RaveAccess); got in by sneaking; was thrown out for this rave
+    @Setter
+    private boolean playerInside;
+    @Setter
+    private boolean gatecrasher;
+    @Setter
+    private boolean thrownOut;
     @Setter
     private boolean defensive; // factions are rate-limited in offensive campaigns, but not defensive ones
     @Setter

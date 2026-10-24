@@ -61,6 +61,7 @@ public class PresentationChecks {
         FactionAPI f = proxy(FactionAPI.class, (m, a) -> switch(m) {
             case "getId" -> id;
             case "getDisplayName", "getDisplayNameWithArticle" -> id;
+            case "isPlayerFaction" -> id.equals("player");
             case "getBaseUIColor", "getBrightUIColor", "getDarkUIColor" -> Color.WHITE;
             default -> null;
         });
@@ -398,6 +399,36 @@ public class PresentationChecks {
         Presentation.reload(); RaveScenes.reload();
         eq(Presentation.textFor("hegemony", "laws.award_fief"), "Grant command");
     }
+    static void raveDoor() throws Exception {
+        commission = null;
+        // a stranger to the host faction meets the bodyguard; nothing changes until they act
+        LordEvent rave = new LordEvent(LordEvent.FEAST, host);
+        yes(!RaveAccess.isInvited(rave));
+        eq(RaveAccess.join(rave), RaveAccess.Outcome.AT_THE_DOOR);
+        yes(!RaveAccess.isInside(rave));
+        // sneaking either gets you in as a gatecrasher, or out for the rest of this rave
+        for (int i = 0; i < 20; i++) {
+            LordEvent attempt = new LordEvent(LordEvent.FEAST, host);
+            RaveAccess.Outcome sneak = RaveAccess.sneak(attempt);
+            if (sneak == RaveAccess.Outcome.SNUCK_IN) {
+                yes(RaveAccess.isInside(attempt) && attempt.isGatecrasher());
+                RaveAccess.Outcome again = RaveAccess.join(attempt);
+                yes(again == RaveAccess.Outcome.ADMITTED || again == RaveAccess.Outcome.SPOTTED_INSIDE);
+                if (again == RaveAccess.Outcome.SPOTTED_INSIDE) yes(!RaveAccess.isInside(attempt));
+            } else {
+                eq(sneak, RaveAccess.Outcome.CAUGHT_SNEAKING);
+                yes(!RaveAccess.isInside(attempt));
+                eq(RaveAccess.join(attempt), RaveAccess.Outcome.TURNED_AWAY);
+                eq(RaveAccess.sneak(attempt), RaveAccess.Outcome.TURNED_AWAY);
+            }
+        }
+        // your own faction's raves always let you in
+        LordEvent own = new LordEvent(LordEvent.FEAST, player);
+        yes(RaveAccess.isInvited(own));
+        eq(RaveAccess.join(own), RaveAccess.Outcome.ADMITTED);
+        yes(RaveAccess.isInside(own));
+        eq(RaveAccess.join(own), RaveAccess.Outcome.ADMITTED);
+    }
     /** Prints faction|tier0|tier1|tier2 for the Python test that compares with tools/sync_ranks.py. */
     static void ranks() throws Exception {
         Set<String> ids = new TreeSet<>();
@@ -423,7 +454,7 @@ public class PresentationChecks {
         switch(args[1]) {
             case "renderer" -> renderer(); case "titles" -> titles(); case "context" -> context();
             case "proposals" -> proposals(); case "dialogue" -> dialogue(); case "validation" -> validation();
-            case "profiles" -> profiles(); case "profile_validation" -> profileValidation(); case "ranks" -> ranks(); case "messages" -> messages(); case "raves" -> raves(); case "absent_factions" -> absentFactions();
+            case "profiles" -> profiles(); case "profile_validation" -> profileValidation(); case "ranks" -> ranks(); case "messages" -> messages(); case "raves" -> raves(); case "absent_factions" -> absentFactions(); case "rave_door" -> raveDoor();
             default -> throw new IllegalArgumentException(args[1]);
         }
         System.out.println("PASS " + args[1]);

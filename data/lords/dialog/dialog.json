@@ -29,7 +29,8 @@
         "priority": 5,
         "rules": {
           "isHostingFeast": false,
-          "isAtFeast": true
+          "isAtFeast": true,
+          "playerInsideRave": true
         },
         "lines": {
           "greeting": "Welcome, %PLAYER_NAME. The war will keep until morning. The rave won't."
@@ -65,7 +66,8 @@
         "priority": 3,
         "rules": {
           "isHostingFeast": true,
-          "isAtFeast": true
+          "isAtFeast": true,
+          "playerInsideRave": true
         },
         "lines": {
           "accept_marriage_second": "Talk to me whenever you're ready and we'll start the ceremony.",
@@ -2049,7 +2051,8 @@
         "priority": 5,
         "rules": {
           "isHostingFeast": false,
-          "isAtFeast": true
+          "isAtFeast": true,
+          "playerInsideRave": true
         },
         "lines": {
           "greeting": "Hey %PLAYER_NAME, can you believe the quality of the drinks here? I've found better wine in the cellar of a Luddic nun."
@@ -2085,7 +2088,8 @@
         "priority": 3,
         "rules": {
           "isHostingFeast": true,
-          "isAtFeast": true
+          "isAtFeast": true,
+          "playerInsideRave": true
         },
         "lines": {
           "accept_marriage_second": "Talk to me whenever you're ready and we'll start the ceremony.",
@@ -4033,7 +4037,8 @@
         "priority": 5,
         "rules": {
           "isHostingFeast": false,
-          "isAtFeast": true
+          "isAtFeast": true,
+          "playerInsideRave": true
         },
         "lines": {
           "greeting": "Fancy seeing you here, %PLAYER_NAME. Up for a round in the tournament after this?"
@@ -4069,7 +4074,8 @@
         "priority": 3,
         "rules": {
           "isHostingFeast": true,
-          "isAtFeast": true
+          "isAtFeast": true,
+          "playerInsideRave": true
         },
         "lines": {
           "accept_marriage_second": "Talk to me whenever you're ready and we'll start the ceremony.",
@@ -6053,7 +6059,8 @@
         "priority": 5,
         "rules": {
           "isHostingFeast": false,
-          "isAtFeast": true
+          "isAtFeast": true,
+          "playerInsideRave": true
         },
         "lines": {
           "greeting": "Good evening %PLAYER_NAME. I must say I'm impressed at the generosity of our host. This decor can't have been cheap."
@@ -6089,7 +6096,8 @@
         "priority": 3,
         "rules": {
           "isHostingFeast": true,
-          "isAtFeast": true
+          "isAtFeast": true,
+          "playerInsideRave": true
         },
         "lines": {
           "accept_marriage_second": "Talk to me whenever you're ready and we'll start the ceremony.",
@@ -8687,10 +8695,7 @@
               "addons_default",
               "setData_default",
               "option_avoid_battle",
-              "option_ask_tournament",
               "option_join_rave",
-              "option_dedicate_tournament",
-              "option_host_wedding",
               "option_ask_current_task",
               "option_ask_question",
               "option_suggest_action",
@@ -10331,7 +10336,8 @@
                 "rules": {
                   "hasInteractedThisFeast": false,
                   "LordAndTargetAtSameFeast": true,
-                  "isHostingFeast": false
+                  "isHostingFeast": false,
+                  "playerInsideRave": true
                 },
                 "addons": {
                   "repChange": 2,
@@ -10347,7 +10353,8 @@
                 "rules": {
                   "hasInteractedThisFeast": false,
                   "LordAndTargetAtSameFeast": true,
-                  "isHostingFeast": true
+                  "isHostingFeast": true,
+                  "playerInsideRave": true
                 },
                 "addons": {
                   "repChange": 3,
@@ -10423,7 +10430,11 @@
           "join_rave": "%LORD_NAME nods toward the floor, raising their voice over the bass. \"Well? You didn't come all this way to stand by the door.\"",
           "optionSet_join_rave": {
             "options": [
+              "addons_default",
               "option_dance_floor",
+              "option_ask_tournament",
+              "option_dedicate_tournament",
+              "option_host_wedding",
               "option_profess_admiration",
               "option_ask_date",
               "option_ask_marriage",
@@ -10455,6 +10466,42 @@
                 }
               }
             }
+          },
+          "rave_door": "%LORD_NAME waves you toward the doors, but the bodyguard filling them doesn't move. He is built like a cargo pod and wears a suit tailored to prove it. His eyes go to your collar, find no council insignia there, and come back to your face. He says nothing at all. Past his shoulder you catch a sliver of chandelier light and a fleet admiral carrying her shoes.",
+          "rave_sneak_in": "You fall into step behind a minister's entourage, lift a glass off a passing tray and do your best impression of someone who is bored by all of this. The bodyguard's eyes slide over you and on to the next guest. You're in.",
+          "rave_sneak_caught": {
+            "line": "You make it three steps past the doors before a hand the size of a docking clamp settles on your shoulder. The bodyguard walks you back out without a word, past %LORD_NAME, who watches the whole thing over the rim of a glass. The doors close behind you, and stay closed.",
+            "addons": {
+              "repChange": -3
+            }
+          },
+          "rave_spotted_inside": {
+            "line": "Halfway across the floor a steward checks a slate, checks your face, and nods to someone behind you. The bodyguard from the door escorts you out at a slow, dignified pace that every guest in the room has time to enjoy. On your way past, %LORD_NAME raises a glass to you.",
+            "addons": {
+              "repChange": -3
+            }
+          },
+          "rave_door_turned_away": "The bodyguard sees you coming and folds his arms. He remembers you. So, judging by the laughter from inside, does everyone else.",
+          "option_rave_sneak": {
+            "line": "Slip in behind a minister's entourage.",
+            "optionData": "rave_sneak",
+            "hint": "If you're caught, you're out for the rest of this rave, and even once inside, a steward may still recognise you."
+          },
+          "option_rave_door_back": {
+            "line": "Leave it.",
+            "optionData": "optionSet_beginning",
+            "shortcut": "ESCAPE"
+          },
+          "optionSet_rave_door": {
+            "options": [
+              "option_rave_sneak",
+              "option_rave_door_back"
+            ]
+          },
+          "optionSet_rave_door_closed": {
+            "options": [
+              "option_rave_door_back"
+            ]
           }
         }
       },
@@ -10586,7 +10633,8 @@
         "priority": 5,
         "rules": {
           "isHostingFeast": false,
-          "isAtFeast": true
+          "isAtFeast": true,
+          "playerInsideRave": true
         },
         "lines": {
           "greeting": "Good evening %PLAYER_NAME. I must say I'm impressed at the generosity of our host. This decor can't have been cheap."
@@ -10622,7 +10670,8 @@
         "priority": 3,
         "rules": {
           "isHostingFeast": true,
-          "isAtFeast": true
+          "isAtFeast": true,
+          "playerInsideRave": true
         },
         "lines": {
           "accept_marriage_second": "Talk to me whenever you're ready and we'll start the ceremony.",

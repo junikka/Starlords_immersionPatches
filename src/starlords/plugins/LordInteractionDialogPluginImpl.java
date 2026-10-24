@@ -7,6 +7,7 @@ import com.fs.starfarer.api.campaign.econ.MarketAPI;
 import com.fs.starfarer.api.campaign.rules.MemoryAPI;
 import com.fs.starfarer.api.combat.EngagementResultAPI;
 import com.fs.starfarer.api.impl.campaign.FleetInteractionDialogPluginImpl;
+import starlords.controllers.RaveAccess;
 import starlords.presentation.RaveScenes;
 import starlords.util.RaveMusic;
 import starlords.controllers.*;
@@ -73,8 +74,8 @@ public class LordInteractionDialogPluginImpl implements InteractionDialogPlugin 
             DATA_HOLDER = new DialogDataHolder();
             DATA_HOLDER.setTargetID(targetLord.getLordAPI().getId());
         }
-        // commanders at a rave talk over the rave's own music
-        if (targetLord.getCurrAction() == LordAction.FEAST) RaveMusic.start();
+        // the rave's music only plays once the player is past the door (RaveAccess)
+        if (RaveAccess.isInside(RaveAccess.raveOf(targetLord))) RaveMusic.start();
         DialogType = setDialogType();
         startingDialogSet = setStartingDialogSet();
         hasGreeted = false;
@@ -221,6 +222,10 @@ public class LordInteractionDialogPluginImpl implements InteractionDialogPlugin 
                     case "spend_time_together":
                         optionSelected_suggestDate(selectedOption,secondLord,targetMarket);
                         break;
+                    case "join_rave":
+                    case "rave_sneak":
+                        optionSelected_raveDoor(selectedOption,secondLord,targetMarket);
+                        break;
                     default:
                         DialogSet.addParaWithInserts(selectedOption,targetLord,secondLord,targetMarket,textPanel,options,dialog);
                         break;
@@ -236,11 +241,8 @@ public class LordInteractionDialogPluginImpl implements InteractionDialogPlugin 
         if (log.isDebugEnabled()) log.debug("RUNNING THE CORRECT GREETING OPTION DATA");
         boolean isFeast = targetLord.getCurrAction() == LordAction.FEAST;
         LordEvent feast = isFeast ? EventController.getCurrentFeast(targetLord.getLordAPI().getFaction()) : null;
-        // the venue and arrival scene once per rave, then the greeting and a glimpse of the crowd
-        if (feast != null) RaveScenes.showArrival(textPanel, feast);
         //only run greetings if player has not yet heard them this conversation
         DialogSet.addParaWithInserts(selectedOption,targetLord,secondLord,targetMarket,textPanel,options,dialog);
-        if (feast != null) RaveScenes.showCrowdLine(textPanel, feast);
         if (!hasGreeted){
             hasGreeted = true;
         }
@@ -283,6 +285,39 @@ public class LordInteractionDialogPluginImpl implements InteractionDialogPlugin 
     private void optionSelected_suggestDate(String selectedOption,Lord secondLord,MarketAPI targetMarket){
         int dateType = 1 + Utils.rand.nextInt(36);
         DialogSet.addParaWithInserts(selectedOption+dateType,targetLord,secondLord,targetMarket,textPanel,options,dialog);
+    }
+    // the door of the rave: inside, the venue, crowd and music; outside, the bodyguard (see RaveAccess)
+    private void optionSelected_raveDoor(String selectedOption,Lord secondLord,MarketAPI targetMarket){
+        LordEvent rave = RaveAccess.raveOf(targetLord);
+        if (rave == null) {
+            DialogSet.addParaWithInserts("optionSet_beginning",targetLord,secondLord,targetMarket,textPanel,options,dialog);
+            return;
+        }
+        RaveAccess.Outcome outcome = selectedOption.equals("rave_sneak") ? RaveAccess.sneak(rave) : RaveAccess.join(rave);
+        String line;
+        switch (outcome) {
+            case ADMITTED: line = "join_rave"; break;
+            case SNUCK_IN: line = "rave_sneak_in"; break;
+            case AT_THE_DOOR: line = "rave_door"; break;
+            case CAUGHT_SNEAKING: line = "rave_sneak_caught"; break;
+            case SPOTTED_INSIDE: line = "rave_spotted_inside"; break;
+            default: line = "rave_door_turned_away"; break;
+        }
+        boolean inside = outcome == RaveAccess.Outcome.ADMITTED || outcome == RaveAccess.Outcome.SNUCK_IN;
+        if (inside) {
+            RaveMusic.start();
+            if (outcome == RaveAccess.Outcome.SNUCK_IN) {
+                DialogSet.addParaWithInserts(line,targetLord,secondLord,targetMarket,textPanel,options,dialog);
+                RaveScenes.showArrival(textPanel, rave);
+                RaveScenes.showCrowdLine(textPanel, rave);
+                return;
+            }
+            RaveScenes.showArrival(textPanel, rave);
+            RaveScenes.showCrowdLine(textPanel, rave);
+        } else {
+            RaveMusic.stop();
+        }
+        DialogSet.addParaWithInserts(line,targetLord,secondLord,targetMarket,textPanel,options,dialog);
     }
     private void optionSelected_exitDialog(){
         RaveMusic.stop();

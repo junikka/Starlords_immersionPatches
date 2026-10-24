@@ -5,6 +5,11 @@
   "ask_question": "optionSet_askQuestion",
   "join_rave": "optionSet_join_rave",
   "dance_floor": "optionSet_join_rave",
+  "rave_door": "optionSet_rave_door",
+  "rave_sneak_in": "optionSet_join_rave",
+  "rave_sneak_caught": "optionSet_rave_door_closed",
+  "rave_spotted_inside": "optionSet_rave_door_closed",
+  "rave_door_turned_away": "optionSet_rave_door_closed",
   "admiration_response": "optionSet_admiration_response",
 
 

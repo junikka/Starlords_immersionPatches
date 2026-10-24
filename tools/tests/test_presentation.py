@@ -58,7 +58,7 @@ class PresentationDataTests(unittest.TestCase):
                 original = {k.split('/')[1] for k in before}
                 added = {k for k in added if k.split('/')[1] in original}
             self.assertTrue(path.endswith('dialog.json') or not added, path)
-            self.assertEqual({k for k in added if not any(w in k for w in new_content) and not k.startswith(menus)}, set(), path)
+            self.assertEqual({k for k in added if not any(w in k.lower() for w in new_content) and not k.startswith(menus)}, set(), path)
             self.assertEqual({k for k in before.keys() - after.keys() if not k.startswith(menus)}, set(), path)
             changed = {key for key in before.keys() & after.keys() if before[key] != after[key]}
             self.assertTrue(changed)
@@ -301,6 +301,7 @@ class JavaPresentationTests(unittest.TestCase):
     def test_profile_schema_errors_name_the_path(self): self.check('profile_validation')
     def test_rave_scenes_follow_licensing_and_fall_back(self): self.check('raves')
     def test_data_for_uninstalled_faction_mods_is_skipped_or_inert(self): self.check('absent_factions')
+    def test_rave_door_admits_invites_and_handles_gatecrashers(self): self.check('rave_door')
 
     def test_java_profile_resolution_matches_preview_tool(self):
         result = subprocess.run([str(self.java), '-Djava.awt.headless=true', '-cp', self.classpath,
