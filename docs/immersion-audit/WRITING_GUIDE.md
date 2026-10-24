@@ -6,6 +6,10 @@ How new text for this mod should read: scenes, dialogue, arrival texts, crowd li
 
 Loud, joyful, a bit mad. The Sector is grim, and everybody knows it, which is exactly why a rave is the one night they get to forget it. Don't import the grimness into the party: no trembling hands, no confessions, no quiet tragedy at the edge of the dance floor. The grim universe stays outside the door, or shows up only as what people are leaving behind.
 
+## Raves are for the elite
+
+The people at a rave are the faction's elite: commanders, admirals, ministers, House heads, executives, kingpins, high clergy, and the guests they choose. Think of the high-society party scenes in *Andor*: opulent, exclusive, hedonistic, with politics happening on the dance floor. No dockhands, no ordinary crews; the crowd is made of very important people letting go.
+
 ## Gonzo: tell what happens
 
 Write like a participant reporting from the middle of it, not like a narrator profiling a character.

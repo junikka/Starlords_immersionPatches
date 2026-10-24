@@ -2,7 +2,7 @@
 
 **Status: approved by Julie (2026-10-20); step 1 implemented.** Decisions: the picture is an establishing shot in the text; the Church keeps vanilla's Luddic teahouse; the Luddic Path gets its own scene, "even more ridiculous than the Church and a bit violent"; the order below stands. Step 1 (arrival scenes, establishing shot, crowd lines, intel picture) lives in `data/lords/presentation/raves.json`; the texts there are the current ones. Step 2 is done too: a **Join the rave** menu at the top level of every rave conversation, holding the dance floor and the rave's courtship options, which used to hide under *Ask another question* where Julie never found them.
 
-**Tone.** One mood, everywhere: a real party, loud, joyful and a bit mad, in a grim Sector that this one night gets to forget. Write it gonzo-style: what you see happen, in order, as it escalates; not descriptions of who people are. See the [writing guide](WRITING_GUIDE.md). Intoxicants are implied, never named, except among pirates.
+**Tone.** A rave is an elite gathering, not a public party: the guests are the faction's commanders, admirals, ministers, House heads, executives, kingpins and their favoured guests, in the spirit of the high-society party scenes in *Andor*: opulent, exclusive, hedonistic, with deals made on the dance floor. One mood: loud, glamorous and a bit mad. Write it gonzo-style, as what you see unfold, with the faction's lore smuggled into the details. See the [writing guide](WRITING_GUIDE.md). Intoxicants are implied, never named, except among pirates.
 
 ## What a rave has today
 
@@ -35,33 +35,18 @@ One paragraph the first time you talk to someone at a given rave, under the pict
 
 ## 2. Hit the dance floor (M), done
 
-In the **Join the rave** menu. +3 relation, once per commander per rave. The picture Julie had in mind: a serious, buttoned-up officer who turns into a beast on the dance floor, so good you'd never have guessed. Told as events you witness, ending on the snap back to formality:
+In the **Join the rave** menu. +3 relation, once per commander per rave. A serious, buttoned-up officer turns into a beast on the dance floor in front of the faction's elite, told as events you witness and ending on the snap back to formality. Current texts: `dance_floor` in `data/lords/dialog/dialog.json` (default and each personality).
 
-- *Default*: "One moment %LORD_NAME is standing at the edge of the floor with their hands clasped behind their back, looking like they're about to inspect your fleet. Then the bass drops and something in them comes loose. You lose them in the crowd, then find them again at the centre of a ring of screaming strangers, spinning on one heel, conducting the room with a glowstick somebody handed them. When the track ends they straighten their uniform, nod to you once, and ask if you'd like a drink, as if none of it happened."
-- *Martial*: "%LORD_NAME walks onto the floor like it's a parade ground: back straight, jaw set, not a flicker of expression. Then the beat kicks in, and there is no warning at all. One second you're standing next to a decorated officer, the next you're standing next to something built for this, all footwork and fury, hitting every drop like a broadside. A pilot tries to keep up and gives up halfway through the track. The crowd starts chanting a name, and it takes you a full minute to realise it's theirs. Afterwards %LORD_NAME is barely winded. "Adequate," they say."
-- *Upstanding*: "%LORD_NAME spends the first song politely apologising to everyone they bump into. Somewhere in the second song the apologising stops. By the third they're up on a cargo crate, leading a hundred strangers through a routine none of them knew five minutes ago, and the strangers are loving it, and so are you, and somewhere a commanding officer is going to hear about this. When you finally talk them down, they're grinning like a cadet on first leave. "Academy shore leave," they say. "Don't ask.""
-- *Calculating*: "%LORD_NAME watches the floor for a full track without moving, the way they'd watch a battle readout. You assume they've decided against it. Then the DJ shifts tempo and they're gone, sliding through the crowd with terrifying precision, every move landing exactly where the beat is about to be. People stop dancing to watch. Mid-spin, you catch them glancing at their chronometer. When it's over they step back to their spot at the bar, adjust their cuffs and pick up their drink exactly where they left it. "Timing," they say, and nothing else."
-- *Quarrelsome*: "%LORD_NAME announces, loudly and to anyone in earshot, that they do not dance. Ten minutes later you find them in the middle of the floor, sleeves rolled up, in a full-blown dance-off with three marines from somebody else's fleet, and winning. Every time a challenger falls back the crowd roars, and %LORD_NAME points at the next one. When the music finally breaks they find you, still breathing hard, and deny the whole thing. "I don't dance," they say again. Somebody behind you was recording."
+## 3. Crowd lines (S), done
 
-## 3. Crowd lines (S)
-
-One line of background life in rave conversations, from a shared pool plus optional faction pools. People actually having fun and forgetting the war for a while. Warm rather than silly; the war is only there in what they're letting go of:
-
-- "A dockhand and a commodore are trading dance moves by the speakers, and for once nobody is checking anyone's rank."
-- "A crew in from the frontier cheers every time the bass drops, like it's the first time they've heard music this loud. It might be."
-- "Someone started a chant three songs ago. Half the room still doesn't know the words, and it hasn't slowed anyone down."
-- "A pilot hoists her wingmate onto her shoulders so he can see the lights. He spends the whole song pointing at them."
-- "Two crews who nearly came to blows over a docking slot last week are sharing a table, arguing happily about whose ship is the worst."
-- "The DJ drops an old Domain-era anthem, and a whole corner of the hall sings it back word for word, grinning at each other."
-- "A rating from an engine crew, barely old enough to be here, dances like nobody ever told them how. Nobody does."
-- "Someone has projected a sky from a world most of the room has never seen across the ceiling. People keep looking up and smiling."
+One line of background life in every rave conversation, from the shared pool plus the host faction's own: the elite letting their hair down (a governor finishing a song barefoot on the bar, rivals laughing too hard at the same joke). Current texts: `crowd` in `data/lords/presentation/raves.json`.
 
 ## 4. Raise a toast (M)
 
-Once per rave, small relation gains through the existing addons. Same mood as the dance floor:
+Once per rave, small relation gains through the existing addons. Drafts in the elite register:
 
-- *To absent friends* (relation with the commander you're talking to): "You raise your glass and shout a toast to absent friends. It turns out to be either a mistake or the best idea you've had all year, because the whole room picks it up. Somebody starts naming ships. Somebody else names theirs louder. Within a minute three hundred spacers are bellowing the names of every hull they ever lost and loved, glasses in the air, until the DJ gives up, kills the track, and drops the chant back in as a sample under the next beat."
-- *To the host* (relation with the host): "'To %LORD_HOST_NAME!' you yell, and it comes out a lot louder than you meant. The host hears it from across the hall, climbs onto the bar and toasts you back. Then everyone toasts everyone. Glasses are emptied, refilled and emptied again, and by the end nobody can remember who started it, except the host, who will remember it for a very long time."
+- *To absent friends* (relation with the commander you're talking to): "You raise your glass and call a toast to absent friends. It carries further than you meant. An admiral picks it up and names a ship. A minister names a world. Within a minute the whole hall is on its feet, glasses raised, calling out the names of every hull and colony the faction ever lost, until the DJ gives up, kills the track and drops the chant back in as a sample under the next beat."
+- *To the host* (relation with the host): "'To %LORD_HOST_NAME!' you call, louder than you meant. The host hears it across the hall, climbs onto the banquet table and toasts you back. Then every admiral toasts every minister, and every minister toasts somebody they're plotting against. Glasses are emptied and refilled and emptied again, and by the end nobody can remember who started it, except the host, who will remember it for a very long time."
 - *To the faction*: flavour, with a reply per personality.
 
 ## 5. Request a track (S–M)
@@ -70,9 +55,9 @@ You ask the DJ for something. Pure flavour now. With several files in `sounds.js
 
 ## 6. Buy a round for the room (L)
 
-Costs credits that scale with the guest count, +1 or +2 relation with every commander at the rave:
+Costs a lot of credits, scaling with the guest count, and gives +1 or +2 relation with every commander at the rave. At an elite party, a round is a statement everyone remembers:
 
-"You slap your chit on the bar and tell the keeper the next round is yours. The keeper looks at you, looks at the crowd, and rings a bell you hadn't noticed. The noise that follows is something you feel in your ribs. Drinks start moving hand over hand toward the back of the hall, and strangers start moving hand over hand toward you. By the time it's over you've been hugged by a quartermaster, hoisted by three marines and proposed to at least once. Your chit is noticeably lighter. Nobody here will forget your name tonight."
+"You catch the steward's eye and tell him the next case is on you, the good one. He looks at you, looks at the room, and rings a little silver bell you hadn't noticed. The noise that follows starts at the bar and rolls across the hall. Bottles older than the Collapse start moving from hand to hand, and so do the guests, toward you. By the time it's over you've been embraced by a minister, toasted by three admirals and proposed to by an heir to one of the great Houses at least once. Your credit balance is noticeably lighter. Nobody in this room will forget your name tonight."
 
 ## 7. Gossip (L)
 

@@ -235,10 +235,10 @@ HMI has no bar art of its own, so it borrows vanilla's pirate bar, which suits a
 ```json
 "HMI": {
   "image": "pirate_bar",
-  "arrival": "A clerk at the door of the ore hold scans your ID and stamps your hand with the Company logo. Inside, the deck still smells of slag. Mining drones hang from the ceiling with their cutting lasers dialled down to strobe, and by the door a quarterly bonus is being paid out in cash from a cargo crate, to a queue that is dancing. In the middle of the floor a Director in a pressed suit is doing a frankly alarming impression of a mass driver. Nobody films it.",
+  "arrival": "A clerk at the boardroom door scans your ID and stamps your hand with the Company logo. The Board has cleared its boardroom for the night, though the deck still smells faintly of slag from the ore hold below. Mining drones hang from the ceiling with their cutting lasers dialled down to strobe, and by the door the quarterly dividend is being paid out in cash from a cargo crate, to a queue of Directors who are dancing. In the middle of the floor a Board Director in a pressed suit is doing a frankly alarming impression of a mass driver. Nobody films it.",
   "crowd": [
-    "A shift crew still in their hardsuits stomps out a rhythm on the deck plates. The DJ considers it for a moment, then builds the next track around it.",
-    "Someone has parked a mining tug in the middle of the dance floor and painted the Company logo on it. People are dancing on the roof."
+    "Two Directors are settling a claim dispute with a dance-off. The rest of the Board is taking bets.",
+    "Someone has parked a mining tug in the middle of the dance floor and painted the Company logo on it. The shareholders are dancing on the roof."
   ]
 }
 ```

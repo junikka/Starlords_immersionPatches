@@ -4,58 +4,58 @@
   "factions": {
     "default": {
       "image": "space_bar",
-      "arrival": "You step through the hatch into a cargo hold stripped to the bulkheads, and the bass hits you in the sternum before your eyes adjust. Strobes catch a crowd in rolled-up uniform sleeves. Someone hands you a drink you didn't order. Three bodies away, a captain you last saw down a gun sight is dancing with her eyes shut. Over the door, somebody has taped a hand-lettered sign across the duty roster: OFF SHIFT.",
+      "arrival": "Two guards in ceremonial armour find your name on a list and open a door you would never have found on your own. Beyond it, the faction's elite are dancing: admirals with their collars open, system governors in silk, a council member you've only ever seen on a broadcast, now with a drink in each hand. The music is loud enough to make every conversation private. You watch a governor lean close to an admiral, say three words, and the admiral nod without missing a step.",
       "crowd": [
-        "A dockhand and a commodore are trading dance moves by the speakers, and for once nobody is checking anyone's rank.",
-        "A crew in from the frontier cheers every time the bass drops, like it's the first time they've heard music this loud. It might be.",
-        "Someone started a chant three songs ago. Half the room still doesn't know the words, and it hasn't slowed anyone down.",
-        "A pilot hoists her wingmate onto her shoulders so he can see the lights. He spends the whole song pointing at them.",
-        "Two crews who nearly came to blows over a docking slot last week are sharing a table, arguing happily about whose ship is the worst.",
-        "The DJ drops an old Domain-era anthem, and a whole corner of the hall sings it back word for word, grinning at each other.",
-        "A rating from an engine crew, barely old enough to be here, dances like nobody ever told them how. Nobody does.",
-        "Someone has projected a sky from a world most of the room has never seen across the ceiling. People keep looking up and smiling."
+        "An admiral and a pirate kingpin are dancing together near the speakers. You recognise them both from opposite sides of last month's war reports.",
+        "A system governor loses a bet, kicks off her shoes and finishes the song barefoot on the bar.",
+        "Someone started a chant three songs ago. Half the council still doesn't know the words, and it hasn't slowed anyone down.",
+        "The heir to one of the great Houses is teaching a Hegemony commodore to dance. The commodore is a fast learner.",
+        "The DJ drops an old Domain-era anthem, and a corner of the hall full of very important people sings it back word for word, grinning at each other.",
+        "A trade minister is handing out shares in a mining venture to anyone who can keep up with him on the floor. So far, two people have.",
+        "Someone has projected the sky of a lost Domain world across the ceiling. Every so often an admiral looks up and raises a glass to it.",
+        "Two executives who tried to bankrupt each other last cycle are sharing a booth and laughing too hard at the same joke."
       ]
     },
     "luddic_church": {
       "image": "teahouse",
       "arrival": {
-        "banned": "Someone who won't give their name leads you down to a chapel bay. The icons have been turned to face the wall. The music is low and the dancing lower, and every few minutes a figure at the hatch raises a hand and the whole room goes still until the footsteps outside have passed.",
-        "strict": "A curate stands at the speaker stacks reading the Litany of Restraint over the opening bars, and the censer smoke is so thick it swallows the lights. The faithful dance in slow, careful rows. Knights stand at the door, and you notice the dancers keep one eye on them, and the Knights keep both eyes on the dancers.",
-        "licensed": "A deacon blesses the speakers before the first track. You time it: eleven seconds. Then the bass drops and the faithful sway in hooded rows, while the same deacon walks the edge of the floor with a slate, writing down the names of those who sway too freely.",
-        "permissive": "The censers are smoking, and whatever is in them isn't incense. A bishop in full vestments is preaching at the speaker stacks, and the congregation shouts every response on the beat. Near the altar you spot a Knight with his helm under his arm. As you watch, he sets it down on a pew and walks away from it.",
-        "anything_goes": "The icons are wearing glowsticks. The choir gave up on hymns an hour ago and now sings over the drops. An archbishop rides a reliquary across the heads of the crowd, blessing everyone he passes with both hands, and when he passes you somebody presses a holy medal and a drink into your palm at the same time. Every preacher you can hear is shouting that this is what Ludd always wanted."
+        "banned": "A masked acolyte leads you down a stairwell under the cathedral to a chapel bay where the icons have been turned to face the wall. The bishops are here. So is an archbishop you'd have sworn was away on retreat. The music is low and the dancing lower, and every few minutes someone at the hatch raises a hand and the whole room, mitres and all, goes still until the footsteps outside have passed.",
+        "strict": "A curate stands at the speaker stacks reading the Litany of Restraint over the opening bars, and the censer smoke is so thick it swallows the lights. The Synod's bishops dance in slow, careful rows, each with a Knight at their shoulder. You notice the bishops keep one eye on the Knights, and the Knights keep both eyes on the bishops.",
+        "licensed": "A deacon blesses the speakers before the first track. You time it: eleven seconds. Then the bass drops and the Synod's bishops sway in silk vestments among their honoured guests, while the same deacon walks the edge of the floor with a slate, writing down the names of those who sway too freely. Two of the names on his slate are archbishops.",
+        "permissive": "The censers are smoking, and whatever is in them isn't incense. An archbishop in full vestments is preaching at the speaker stacks, and a congregation of bishops and Knight-Commanders shouts every response on the beat. Near the altar a Knight-Commander sets her helm down on a pew, looks at it for a moment, and walks away from it.",
+        "anything_goes": "The icons are wearing glowsticks. The choir gave up on hymns an hour ago and now sings over the drops. An archbishop rides a reliquary across the heads of the Synod, blessing everyone he passes with both hands, and when he passes you somebody presses a holy medal and a glass of something sacramental into your palm at the same time. Every bishop you can hear is shouting that this is what Ludd always wanted."
       }
     },
     "luddic_path": {
       "image": "teahouse",
-      "arrival": "You smell the smoke before you see the hold. Every speaker in the system seems to have been dragged in here, all of them playing at full volume while Pathers beat them apart with wrenches, in time. The congregation dances on the wreckage. A Brother-Captain stands on a burning synthesizer, preaching, and when two of the faithful start headbutting a subwoofer he blesses them both. The subwoofer is still playing."
+      "arrival": "You smell the smoke before you see the hold. The Path's elders have had every speaker in the system dragged in here, and all of them are playing at full volume while the elders beat them apart with wrenches, in time. Cell leaders with prices on their heads dance on the wreckage. A Herald of Ludd stands on a burning synthesizer, preaching, and when two Brother-Captains start headbutting a subwoofer he blesses them both. The subwoofer is still playing."
     },
     "sindrian_diktat": {
       "image": "bar_diktat",
-      "arrival": "The first thing you see is Andrada: ten metres tall on every screen in the hall, smiling down at the dance floor. The bass is so deep your teeth hum, and a brass plaque by the speaker stacks informs you that it is officially the deepest in human space. Credit chits flutter down from the balconies like snow. Below, Lion's Guard officers catch them without breaking step. Between tracks a voice announces that tonight's playlist was personally approved, and the crowd is cheering before it finishes the sentence."
+      "arrival": "The first thing you see is Andrada: ten metres tall on every screen in the palace ballroom, smiling down at the floor. The bass is so deep your teeth hum, and a brass plaque by the speakers certifies it the deepest in human space. Ministers on the balconies throw credit chits by the fistful; below, Lion's Guard generals catch them without breaking step. Between tracks a voice announces that tonight's playlist was personally approved, and every minister in the room is applauding before it finishes the sentence."
     },
     "tritachyon": {
       "image": "tritachyon_bar",
-      "arrival": "A drone checks your credit rating at the door and waves you through. Something gold is running in a channel cut into the bar, and people are drinking it straight from the channel. The light show is doing things you're fairly sure light isn't supposed to do. An executive in a suit worth more than your flagship leans over to tell you the venue was bought this afternoon and will be written off by morning, then vanishes into the crowd before you can ask who it was bought from."
+      "arrival": "A drone checks your credit rating at the door and, after a pause just long enough to be insulting, lets you in. The boards of three subsidiaries are on the dance floor. Something gold runs in a channel cut into the bar, and vice presidents drink it straight from the channel. An executive in a suit worth more than your flagship leans over to tell you the station was bought this afternoon and will be written off by morning, then vanishes into the crowd before you can ask who it was bought from."
     },
     "hegemony": {
       "image": "hegemony_bar",
-      "arrival": "A marine at the hangar door takes your personal recorder, seals it in a bag and writes your name on the bag. Inside, the lights are low, the music is loud, and the room is full of Hegemony officers in dress uniform dancing like nobody is watching, because nobody is allowed to. At the bar a COMSEC lieutenant drinks with one hand and holds a blank incident report in the other. When a camera drone drifts in through a vent, three commodores shoot it down without missing a beat."
+      "arrival": "A marine at the door of the officers' club takes your personal recorder, seals it in a bag and writes your name on the bag. Inside, under crystal chandeliers and old Domain flags, the Hegemony's high command is dancing in dress uniform, among them an aide to the High Hegemon who was on a broadcast this morning denouncing decadence. A COMSEC director at the bar drinks with one hand and holds a blank incident report in the other. When a camera drone drifts in through a vent, three fleet admirals shoot it down without missing a beat."
     },
     "pirates": {
       "image": "pirate_bar",
-      "arrival": "You hear it two decks before you see it. Then the hatch opens and the heat hits you: a dark hold packed shoulder to shoulder, bass shaking rust out of the ceiling, a man working through the crowd with a rattling bag and a fistful of credits. Half the faces you pass have pupils like reactor cores. On the drop somebody fires a flare at the ceiling, and the whole hold cheers like it has already won."
+      "arrival": "The hatch is guarded by two men with shotguns and a woman with a guest list, and the guest list has warlords on it. Inside it's hot, dark and gilded: stolen chandeliers over a floor of kingpins, fixers and their people, bass shaking rust out of the ceiling, a man working the room with a rattling bag. Half the faces you pass have pupils like reactor cores, and you recognise at least three from bounty boards. On the drop a warlord fires a flare at the ceiling, and the room cheers like it has already won the war."
     },
     "persean": {
       "image": "space_bar",
-      "arrival": "Two sound systems face each other across the hall, each draped in a different House's colours, each playing a different track at full volume. In the middle the songs collide into something nobody planned. A pair of Doux in brocade are dancing a duel along the seam between them, and the guests on either side cheer for their own."
+      "arrival": "Two Houses have each brought their own orchestra, their own sound system and their own grudge, and set them up at opposite ends of the hall. In the middle the music collides into something nobody planned. A pair of Doux in brocade are dancing a duel along the seam, while the Archons on either side pretend not to be keeping score, and keep score."
     },
     "HMI": {
       "image": "pirate_bar",
-      "arrival": "A clerk at the door of the ore hold scans your ID and stamps your hand with the Company logo. Inside, the deck still smells of slag. Mining drones hang from the ceiling with their cutting lasers dialled down to strobe, and by the door a quarterly bonus is being paid out in cash from a cargo crate, to a queue that is dancing. In the middle of the floor a Director in a pressed suit is doing a frankly alarming impression of a mass driver. Nobody films it.",
+      "arrival": "A clerk at the boardroom door scans your ID and stamps your hand with the Company logo. The Board has cleared its boardroom for the night, though the deck still smells faintly of slag from the ore hold below. Mining drones hang from the ceiling with their cutting lasers dialled down to strobe, and by the door the quarterly dividend is being paid out in cash from a cargo crate, to a queue of Directors who are dancing. In the middle of the floor a Board Director in a pressed suit is doing a frankly alarming impression of a mass driver. Nobody films it.",
       "crowd": [
-        "A shift crew still in their hardsuits stomps out a rhythm on the deck plates. The DJ considers it for a moment, then builds the next track around it.",
-        "Someone has parked a mining tug in the middle of the dance floor and painted the Company logo on it. People are dancing on the roof."
+        "Two Directors are settling a claim dispute with a dance-off. The rest of the Board is taking bets.",
+        "Someone has parked a mining tug in the middle of the dance floor and painted the Company logo on it. The shareholders are dancing on the roof."
       ]
     }
   }
