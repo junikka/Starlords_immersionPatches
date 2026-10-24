@@ -53,6 +53,10 @@ class PresentationDataTests(unittest.TestCase):
                      '/default/lines/default/lines/optionSet_greeting/options/')
             new_content = ('promotion', 'rave', 'dance_floor')
             added = after.keys() - before.keys()
+            if path.endswith('lords.json'):
+                # new commanders may be added (faction-mod support); the original roster stays as it was
+                original = {k.split('/')[1] for k in before}
+                added = {k for k in added if k.split('/')[1] in original}
             self.assertTrue(path.endswith('dialog.json') or not added, path)
             self.assertEqual({k for k in added if not any(w in k for w in new_content) and not k.startswith(menus)}, set(), path)
             self.assertEqual({k for k in before.keys() - after.keys() if not k.startswith(menus)}, set(), path)
@@ -207,7 +211,7 @@ class ProfileDataTests(unittest.TestCase):
     def test_generated_rank_files_are_current(self):
         neutral, resolved = sync_ranks.resolver()
         for faction, names in resolved.items():
-            text = (ROOT/'data/world/factions'/(faction + '.faction')).read_text(encoding='utf-8')
+            text = sync_ranks.faction_file(faction).read_text(encoding='utf-8')
             data = json.loads(text[text.index('\n') + 1:])
             self.assertEqual([data['ranks']['ranks']['starlords_tier_%d' % i]['name'] for i in range(3)], names, faction)
 

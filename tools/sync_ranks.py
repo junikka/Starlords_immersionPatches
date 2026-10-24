@@ -7,7 +7,10 @@ this script names those ids per faction so the panel matches titles.json.
     python tools/sync_ranks.py
 
 Writes data/world/factions/default_ranks.json (fallback names) and one partial
-<faction>.faction per faction named in titles.json or bound in profiles.json.
+.faction per faction named in titles.json or bound in profiles.json. The file is
+named after the faction ID unless titles.json's "factionFiles" maps the ID to the
+faction mod's own file name (HMI's ID is "HMI", its file is hmi.faction); the
+partial file only merges when its path matches the faction's own file exactly.
 Titles resolve as in Java's TitleResolver: titles.json, then legacy faction.json
 rank_N, then the faction's profile chain, then neutralRanks. Starsector merges the
 output into the real faction files. Re-run after editing titles.json or profiles.json.
@@ -69,11 +72,17 @@ def resolver():
     return titles['neutralRanks'], {faction: resolve(faction) for faction in factions}
 
 
+def faction_file(faction):
+    """The partial .faction path for a faction: its mod's own file name, from titles.json factionFiles."""
+    files = load('data/lords/presentation/titles.json').get('factionFiles', {})
+    return FACTIONS / (files.get(faction, faction) + '.faction')
+
+
 def main():
     neutral, resolved = resolver()
     write(FACTIONS / 'default_ranks.json', {'ranks': ranks(neutral)})
     for faction, names in resolved.items():
-        target = FACTIONS / (faction + '.faction')
+        target = faction_file(faction)
         if target.exists() and MARKER not in target.read_text(encoding='utf-8'):
             raise SystemExit('Refusing to overwrite hand-written ' + str(target))
         write(target, {'ranks': {'ranks': ranks(names)}})

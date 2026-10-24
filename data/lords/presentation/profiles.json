@@ -494,6 +494,37 @@
         "request.excellent_which_shall_be_my_new_demesne": "Agreed. Which cell will be mine?",
         "request.holding.offer": "{player}, my name is {commander}. I've given {faction} years of service, and all I have to show for it is a dead-end posting. Grant me a cell of my own and my fleet will fly under your colours."
       }
+    },
+    "hmi": {
+      "extends": "corporate",
+      "messages": {
+        "fief.to_your_fiefs": " to your claims.",
+        "holding.assign": "Grant {market} to {commander} as a claim",
+        "holding.revoke": "Revoke {commander}'s claim of {market}",
+        "laws.award_fief": "Grant claim",
+        "laws.revoke_fief": "Revoke claim",
+        "laws.select_whom_to_transfer_fief_to": "Select a commander to receive the claim: ",
+        "laws.transfer_fief": "Transfer claim",
+        "laws.unclaimed_fief": "Unassigned claim:",
+        "laws.you_are_going_to_transfer_one_of_your_fiefs_to_another_lord_sele": "Select one of your claims to transfer to another commander.",
+        "laws.you_are_proposing_new_legislation_select_the_fief_to_revoke": "Select the claim you propose to revoke.",
+        "lord_request.fief_for_defection": "Claim for defection",
+        "lords.fiefs": "Claims: ",
+        "lords.fiefs_none": "Claims: None",
+        "policy.description.trade_law": "How commanders fund their fleets: squeezing their claims, or running trade ventures. Higher levels raise claim revenue and cut trade income. Market tariffs and your colony income are unaffected.",
+        "policy.level.trade_law.0": "Free Trade|-50% claim revenue |+150% trade income",
+        "policy.level.trade_law.1": "Light Levies|-25% claim revenue |+75% trade income",
+        "policy.level.trade_law.3": "Heavy Levies|+50% claim revenue |-25% trade income",
+        "policy.level.trade_law.4": "Extortionate|+100% claim revenue |-50% trade income",
+        "politics.no_fiefs_to_tax": " No claims to tax",
+        "politics.recipient_has_few_fiefs": " Recipient has few claims",
+        "politics.recipient_has_many_fiefs": " Recipient has many claims",
+        "politics.recipient_has_no_fiefs": " Recipient has no claims",
+        "politics.recipient_has_too_many_fiefs": " Recipient has too many claims",
+        "progression.need_holding_or_battles": "hold a claim, or win {battles} battles alongside faction fleets (so far {current})",
+        "request.excellent_which_shall_be_my_new_demesne": "Agreed. Which claim will be mine?",
+        "request.holding.offer": "{player}, my name is {commander}. I've given {faction} years of service, and all I have to show for it is a dead-end posting. Grant me a claim of my own and my fleet will fly under your colours."
+      }
     }
   },
   "factions": {
@@ -504,6 +535,7 @@
     "persean": "persean",
     "luddic_church": "religious",
     "luddic_path": "luddic_path",
-    "pirates": "pirate"
+    "pirates": "pirate",
+    "HMI": "hmi"
   }
 }

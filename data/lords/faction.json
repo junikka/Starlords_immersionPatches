@@ -106,5 +106,13 @@
     "canStarlordsJoin": false,
     "canHaveCampaigns": false,
     "canAttack": false
+  },
+  "HMI": {
+    "startingPolicies": {
+      "crown_authority": "MEDIUM",
+      "noble_authority": "HIGH",
+      "trade_law": "HIGH",
+      "feast_law": "VERY_LOW"
+    }
   }
 }

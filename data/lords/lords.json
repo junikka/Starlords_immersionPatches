@@ -1294,5 +1294,37 @@
       "paragon_Escort": 20,
       "paragon_Elite": 20
     }
+  },
+  "Tamsin Okoro-Vance": {
+    "portrait": "graphics/portraits/portrait_mercenary05.png",
+    "personality": "Calculating",
+    "battle_personality": "Steady",
+    "preferredItem": "luxury_goods",
+    "level": 9,
+    "isMale": false,
+    "fief": "fuyutsuki",
+    "ranking": 1,
+    "lore": "Tamsin Okoro-Vance started on Fuyutsuki's ore docks as a claims assessor, the person who decided which wrecks and asteroids the Company would 'discover' first. She was very good at it. Twelve cycles later she sits on the Board as Director of Outer Claims, commands a fleet of techmined cruisers bought cheap and refitted expensively, and has never once filed a claim she couldn't defend with guns. Rival directors call her the Auditor. Nobody who has been audited calls her anything at all.",
+    "fleetName": "Okoro-Vance's Claim Jumpers",
+    "faction": "HMI",
+    "flagship": "scarecrow_std",
+    "shipPref": {
+      "marlin_std": 10,
+      "brasher_attack": 10,
+      "category_std": 10,
+      "ascendate_std": 10,
+      "sulemain_std": 15,
+      "scarecrow_std": 15,
+      "weaver_std": 10,
+      "hmi_herakles_brawl": 5
+    },
+    "alignments": {
+      "CORPORATE": 0.5,
+      "TECHNOCRATIC": 0.5,
+      "MILITARIST": 0.0,
+      "HIERARCHICAL": -0.5,
+      "DIPLOMATIC": -0.5,
+      "IDEOLOGICAL": -0.5
+    }
   }
 }

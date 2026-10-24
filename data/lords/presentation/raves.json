@@ -49,6 +49,14 @@
     "persean": {
       "image": "space_bar",
       "arrival": "Every House brought its own sound system and its own grudge. The two compete across the hall until the songs collide into something nobody planned, and the dancing turns into a war of attrition fought in fine clothes."
+    },
+    "HMI": {
+      "image": "pirate_bar",
+      "arrival": "The Company doesn't do venues. It requisitions an ore hold on Fuyutsuki, hoses the slag off the deck and calls it a party. Mining drones hang from the ceiling with their cutting lasers dialled down to strobe. A quarterly bonus is being paid out in cash from a cargo crate by the door, and the queue for it is dancing. In the middle of the floor a Director in a pressed suit is doing a frankly alarming impression of a mass driver, and not one person in this hold will ever mention it to the shareholders.",
+      "crowd": [
+        "A shift crew still in their hardsuits stomps out a rhythm on the deck plates. The DJ considers it for a moment, then builds the next track around it.",
+        "Someone has parked a mining tug in the middle of the dance floor and painted the Company logo on it. People are dancing on the roof."
+      ]
     }
   }
 }

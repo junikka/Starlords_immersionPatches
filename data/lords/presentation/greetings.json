@@ -41,6 +41,11 @@
       "\"Well, if it isn't {title} {lastName}.\" The captain waves off someone off-screen. \"Relax, nobody here is dumb enough to shake down one of ours.\"",
       "The captain grins, showing too many metal teeth. \"{title} {lastName}! Word gets around. You want a cut of something, you just say so, boss.\"",
       "The pirate on the screen suddenly remembers how to sit up straight. \"{title} {lastName}. We, uh, didn't know it was you. Whatever you need, it's yours. No charge.\""
+    ],
+    "HMI": [
+      "The captain looks up from a manifest. \"{title} {lastName}. Company business or pleasure? Either way, the meter isn't running for you.\"",
+      "\"{title} {lastName}, {sirOrMadam}.\" The captain kills the hold music. \"The Board says you're good for it. What does the Company need?\"",
+      "The bridge crew stops pretending to work. \"{title} {lastName}. Executive priority, {sirOrMadam}. Name the claim and we'll jump it.\""
     ]
   }
 }

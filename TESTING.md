@@ -62,6 +62,24 @@ The music:
 3. Enter the tournament from a rave conversation: the rave track keeps playing, the fight has normal combat music, and the rave track returns after each round. Leaving the tournament restores the normal music.
 4. Turn off LunaLib's **Other → Rave music** and hail a raving commander again: the music shouldn't change.
 
+## Faction-mod pilot: Hazard Mining Incorporated
+
+Starlords now ships support for HMI as data only (see `docs/FACTION_INTEGRATION.md`). Test it both ways.
+
+**Without HMI** (disable it in the launcher):
+
+1. Start Starsector and a new campaign. It should load normally.
+2. In `starsector.log`, look for `Skipping commander Tamsin Okoro-Vance: faction HMI is not installed`, and no errors mentioning HMI, `hmi.faction`, profiles or raves.
+3. Nothing about HMI should appear anywhere in game.
+
+**With HMI** (enable it; it needs LazyLib and MagicLib, already installed):
+
+1. **Existing save, after a restart:** take a commission with H.M.I. (or use `setcommission HMI`), then `promoteplayer 2`. The Politics screen should talk about claims ("Grant claim", "Claims:", "Unassigned claim:"), with corporate words for the rest (Board, Director of Operations, Executive Control, Margin Policy). (Starting policies only apply when HMI's laws are first created: a new campaign, or a save that never had HMI.)
+2. Your title as an HMI council member should read Foreman, then Director and Board Director as you climb (`promoteplayer 0/1/2`), in Politics and in the comm panel's rank line.
+3. Hail an ordinary HMI patrol with your transponder on: a Company-style greeting for your rank ("Name the claim and we'll jump it" at the top).
+4. **New campaign:** HMI's policies start at Executive Privilege HIGH, Margin Policy HIGH and Rave Licensing Anything Goes. Director Tamsin Okoro-Vance ("the Auditor") exists, holds Fuyutsuki and flies a Scarecrow with HMI's techmined fleet. `warplord Tamsin` brings her to you; hail her, check her title (Director) in the dialogue, intel and comm panel, and read her biography.
+5. `startrave Tamsin`: when her fleet arrives, hail her. The pirate-bar picture and the ore-hold arrival scene should appear, with HMI's crowd lines mixed into the shared ones.
+
 ## Optional: prove faction-specific ranks
 
 In the **installed** `data/lords/presentation/titles.json`, temporarily set:

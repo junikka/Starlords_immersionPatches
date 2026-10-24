@@ -50,6 +50,14 @@
       "Captain",
       "Commodore",
       "Fleet Commander"
+    ],
+    "HMI": [
+      "Foreman",
+      "Director",
+      "Board Director"
     ]
+  },
+  "factionFiles": {
+    "HMI": "hmi"
   }
 }
