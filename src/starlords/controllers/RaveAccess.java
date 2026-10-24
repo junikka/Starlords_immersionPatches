@@ -31,8 +31,15 @@ public final class RaveAccess {
         return rave != null && rave.isPlayerInside() && !rave.isThrownOut();
     }
 
-    /** A seat on the host faction's council, or rule over it. */
+    /** The rave is hosting the player's wedding: the target is set and not married yet (as feastIsHostingWedding). */
+    public static boolean hostsPlayerWedding(LordEvent rave) {
+        Lord target = rave == null ? null : rave.getWeddingCeremonyTarget();
+        return target != null && !target.isMarried();
+    }
+
+    /** A seat on the host faction's council, rule over it, or it's your wedding. */
     public static boolean isInvited(LordEvent rave) {
+        if (hostsPlayerWedding(rave)) return true;
         FactionAPI host = rave == null ? null : rave.getFaction();
         if (host == null) return false;
         if (host.isPlayerFaction()) return true;
@@ -43,6 +50,13 @@ public final class RaveAccess {
 
     /** "Join the rave." */
     public static Outcome join(LordEvent rave) {
+        // nobody turns you away from your own wedding, whatever happened at the door before
+        if (hostsPlayerWedding(rave)) {
+            rave.setThrownOut(false);
+            rave.setPlayerInside(true);
+            rave.setGatecrasher(false);
+            return Outcome.ADMITTED;
+        }
         if (rave.isThrownOut()) return Outcome.TURNED_AWAY;
         if (rave.isPlayerInside()) {
             if (rave.isGatecrasher() && !isInvited(rave) && roll(SPOTTED_CHANCE)) {

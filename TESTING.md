@@ -63,11 +63,12 @@ To get a rave quickly: `startrave` (nearest commander) or `startrave <first name
 5. **Join the rave.** shows the bodyguard at the door. No music, no scene. Options: **Slip in behind a minister's entourage** or **Leave it**.
 6. Sneaking in succeeds half the time: you're in, with the music, scene and rave menu. Each later **Join the rave.** at that rave has a one-in-four chance that a steward recognises you and you're escorted out (-3 relation with the commander you're talking to).
 7. If you're caught at the door (-3 relation) or escorted out, the door stays closed for the rest of that rave: the bodyguard remembers you.
+8. Exception: a rave hosting your wedding always lets you in, even after you were thrown out of it.
 
 **The music:**
 
-8. Leaving a conversation inside the rave brings the normal music back. The tournament keeps the rave track between rounds and normal combat music in the fights.
-9. Turn off LunaLib's **Other → Rave music**: joining shouldn't change the music.
+9. Leaving a conversation inside the rave brings the normal music back. The tournament keeps the rave track between rounds and normal combat music in the fights.
+10. Turn off LunaLib's **Other → Rave music**: joining shouldn't change the music.
 
 ## Faction-mod pilot: Hazard Mining Incorporated
 

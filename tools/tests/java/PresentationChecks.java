@@ -422,6 +422,14 @@ public class PresentationChecks {
                 eq(RaveAccess.sneak(attempt), RaveAccess.Outcome.TURNED_AWAY);
             }
         }
+        // a rave hosting your wedding lets you in, even after you were thrown out of it
+        LordEvent wedding = new LordEvent(LordEvent.FEAST, host);
+        while (RaveAccess.sneak(wedding) != RaveAccess.Outcome.CAUGHT_SNEAKING) wedding = new LordEvent(LordEvent.FEAST, host);
+        eq(RaveAccess.join(wedding), RaveAccess.Outcome.TURNED_AWAY);
+        wedding.setWeddingCeremonyTarget(recipient);
+        yes(RaveAccess.hostsPlayerWedding(wedding) && RaveAccess.isInvited(wedding));
+        eq(RaveAccess.join(wedding), RaveAccess.Outcome.ADMITTED);
+        yes(RaveAccess.isInside(wedding) && !wedding.isGatecrasher());
         // your own faction's raves always let you in
         LordEvent own = new LordEvent(LordEvent.FEAST, player);
         yes(RaveAccess.isInvited(own));
