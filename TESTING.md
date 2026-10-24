@@ -73,6 +73,8 @@ To get a rave quickly: `startrave` (nearest commander) or `startrave <first name
 
 Weddings are no longer held at raves.
 
+Quick way: `engagelord <first name>` skips the courtship and tells you the venue; then go to step 3.
+
 1. Court a commander (profess admiration and spend time together at a rave), then propose, either from the rave menu or from *Ask another question* anywhere. When they accept, they name a venue: "… already has a place in mind: <venue>". The same line appears as a campaign message. The venue is the commander's own holding, otherwise their faction's largest world, otherwise the largest world not hostile to you.
 2. While you're engaged, the proposal option disappears.
 3. Dock at the venue. Its market menu has **Attend your wedding to <name>**. Choose it: the ceremony scene plays, you're married, and the market menu returns without the option.
