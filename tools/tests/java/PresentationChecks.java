@@ -385,6 +385,12 @@ public class PresentationChecks {
         LordTemplate absent = new LordTemplate("Absent", new JSONObject(victor.toString()).put("faction", "not_installed_mod"));
         set(LordController.class, null, "lordTemplates", new HashMap<>(Map.of("Installed", installed, "Absent", absent)));
         eq(LordController.templatesOfInstalledFactions(), List.of(installed));
+        // faction.json settings for an absent faction are skipped instead of crashing game load
+        legacyData.put("not_installed_mod", new JSONObject().put("startingPolicies", new JSONObject().put("trade_law", "HIGH")));
+        starlords.util.factionUtils.FactionTemplateController.init();
+        Map<String, ?> built = (Map<String, ?>) field(starlords.util.factionUtils.FactionTemplateController.class, null, "templates");
+        yes(!built.containsKey("not_installed_mod"));
+        yes(built.containsKey("hegemony"));
         // presentation data for an absent faction is inert: nothing asks for it, and asking falls back
         profileData.getJSONObject("factions").put("not_installed_mod", "corporate");
         titleData.getJSONObject("factions").put("not_installed_mod", new JSONArray(List.of("A", "B", "C")));

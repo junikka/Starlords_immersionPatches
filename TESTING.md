@@ -69,7 +69,7 @@ Starlords now ships support for HMI as data only (see `docs/FACTION_INTEGRATION.
 **Without HMI** (disable it in the launcher):
 
 1. Start Starsector and a new campaign. It should load normally.
-2. In `starsector.log`, look for `Skipping commander Tamsin Okoro-Vance: faction HMI is not installed`, and no errors mentioning HMI, `hmi.faction`, profiles or raves.
+2. In `starsector.log`, look for `Skipping faction settings for HMI: faction is not installed` and `Skipping commander Tamsin Okoro-Vance: faction HMI is not installed`, and no errors mentioning HMI, `hmi.faction`, profiles or raves.
 3. Nothing about HMI should appear anywhere in game.
 
 **With HMI** (enable it; it needs LazyLib and MagicLib, already installed):

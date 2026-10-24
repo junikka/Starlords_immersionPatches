@@ -8,7 +8,8 @@ Yes. Everything below is safe to commit, and players without the faction mod los
 
 | File | Without the faction mod | With it |
 |---|---|---|
-| `faction.json`, `titles.json`, `profiles.json`, `greetings.json`, `raves.json`, faction rules in `dialog.json` | Ignored: looked up by faction ID and never asked for | Active after a restart, even in an existing save |
+| `faction.json` | Skipped at game load, with a log line "Skipping faction settings for …: faction is not installed" (before 2026-10-24 this crashed game load) | Active after a restart |
+| `titles.json`, `profiles.json`, `greetings.json`, `raves.json`, faction rules in `dialog.json` | Ignored: looked up by faction ID and never asked for | Active after a restart, even in an existing save |
 | `data/world/factions/<file>.faction` (comm-panel ranks) | Never loaded: Starsector only reads faction files that a mod's `factions.csv` lists. HMI and Nexerelin both ship partial `.faction` files for factions they don't own. | Merged into the faction's own file |
 | `lords.json` commanders | Skipped at new game, with a log line "Skipping commander …: faction … is not installed" | Created at the start of a new campaign only |
 

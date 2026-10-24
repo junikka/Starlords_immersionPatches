@@ -21,6 +21,13 @@ public class FactionTemplateController {
         templates = new HashMap<>();
         for (Iterator it2 = jsonObject.keys(); it2.hasNext();) {
             String key2 = (String) it2.next();
+            // settings for a faction mod the player hasn't installed are skipped: building a template asks the
+            // game (and Nexerelin) about the faction, which doesn't exist
+            if (Global.getSector() != null && Global.getSector().getFaction(key2) == null) {
+                Global.getLogger(FactionTemplateController.class).info(
+                        "Skipping faction settings for " + key2 + ": faction is not installed");
+                continue;
+            }
             JSONObject json2 = jsonObject.getJSONObject(key2);
             if (key2.equals("player")){
                 new FactionTemplate_player(key2,json2);
