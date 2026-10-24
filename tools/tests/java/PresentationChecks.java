@@ -354,10 +354,10 @@ public class PresentationChecks {
     static void raves() throws Exception {
         RaveScenes.reload();
         // the Church's scene follows its Rave Licensing: 0 is Anything Goes, 3 Strict, 4 Banned
-        yes(RaveScenes.arrival("luddic_church", 3).startsWith("The Synod permits one gathering a year"));
-        yes(RaveScenes.arrival("luddic_church", 0).contains("sacrament"));
-        yes(RaveScenes.arrival("luddic_church", 4).startsWith("There should be no rave"));
-        yes(RaveScenes.arrival("luddic_church", 99).startsWith("There should be no rave"));
+        yes(RaveScenes.arrival("luddic_church", 3).startsWith("A curate stands at the speaker stacks"));
+        yes(RaveScenes.arrival("luddic_church", 0).startsWith("The icons are wearing glowsticks"));
+        yes(RaveScenes.arrival("luddic_church", 4).startsWith("Someone who won't give their name"));
+        yes(RaveScenes.arrival("luddic_church", 99).startsWith("Someone who won't give their name"));
         // a single text serves every level; unknown factions get the default venue
         eq(RaveScenes.arrival("hegemony", 0), RaveScenes.arrival("hegemony", 4));
         eq(RaveScenes.arrival("unknown_mod", 2), RaveScenes.arrival("default", 2));

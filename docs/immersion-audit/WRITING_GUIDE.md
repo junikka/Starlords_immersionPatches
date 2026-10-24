@@ -18,6 +18,15 @@ Write like a participant reporting from the middle of it, not like a narrator pr
 - **Concrete spacer detail.** Chits, glowsticks, cargo crates, chronometers, transponders, marines from somebody else's fleet, a bell behind the bar. Specific things, not adjectives.
 - **Present tense**, as vanilla's bar and encounter descriptions use, with short past-tense asides where natural.
 
+## Show the lore, don't state it
+
+Scene text (the rave screen above all) is what the player sees, hears and is handed, in the order it happens. Lore goes into those details, never into a narrator's summary:
+
+- Not: "Officially this is a morale exercise, and officially it never took place."
+- But: "A marine at the hangar door takes your personal recorder, seals it in a bag and writes your name on the bag."
+
+If a sentence explains what something means, turn it into something the player notices that implies it.
+
 ## Humour
 
 - It comes from situations and contrast, and from faction character: Andrada's ego, Tri-Tachyon's excess, the Hegemony's secrecy, the Church sliding into a sanctified frenzy as its licensing loosens, the Path smashing speakers as penance.
