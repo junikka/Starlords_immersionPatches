@@ -9,6 +9,7 @@ import com.fs.starfarer.api.impl.campaign.missions.academy.GACelestialObject;
 import com.fs.starfarer.api.util.Misc;
 import com.sun.source.tree.CaseTree;
 import exerelin.campaign.DiplomacyManager;
+import exerelin.campaign.SectorManager;
 import exerelin.campaign.alliances.Alliance;
 import exerelin.utilities.*;
 import lombok.Setter;
@@ -36,6 +37,10 @@ public class NexerlinUtilitys {
         }
         //NexConfig.invasionGracePeriod;
         areInvasionsEnabled = true;
+    }
+    /** A market changing hands without an invasion (a defecting commander takes their holding along). */
+    public static void transferMarket(MarketAPI market, FactionAPI newOwner, FactionAPI oldOwner){
+        SectorManager.transferMarket(market, newOwner, oldOwner, false, false, null, 0f, false);
     }
     public static void declarePeace(FactionAPI proposer,FactionAPI propose){
         DiplomacyManager.adjustRelations(proposer,propose,0.51f,null,null,RepLevel.INHOSPITABLE);

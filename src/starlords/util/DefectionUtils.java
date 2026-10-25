@@ -272,6 +272,14 @@ public class DefectionUtils {
         if (includeFiefs && FactionTemplateController.getTemplate(oldFaction).isCanLordsTakeFiefsWithDefection() && !FactionTemplateController.getTemplate(faction).isCanLordsTakeFiefsWithDefection()) {
             for (SectorEntityToken fief : new ArrayList<>(lord.getFiefs())) {
                 if (fief.getMarket().getStabilityValue() < MIN_STABILITY_TO_PREVENT_FIEF_DEFECTION) {
+                    if (Utils.nexEnabled()) {
+                        // Nexerelin's transfer moves admins, comm-board people and stations properly;
+                        // its transfer listener clears the holder, so the defector takes the world back
+                        MarketAPI market = fief.getMarket();
+                        NexerlinUtilitys.transferMarket(market, faction, oldFaction);
+                        FiefController.setOwner(market, lord.getLordAPI().getId());
+                        continue;
+                    }
 	                fief.getMarket().setFactionId(faction.getId());
 	                fief.setFaction(faction.getId());
 
